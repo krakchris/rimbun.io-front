@@ -16,7 +16,6 @@ import Register from '../pages/register';
 import { logoutUser } from '../actions/user';
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
-  console.log('=======>',isLoggedIn()); 
   if (!isLoggedIn()) {
       dispatch(logoutUser());
       return <Redirect to="/login" />;
@@ -35,7 +34,6 @@ const CloseButton = ({closeToast}) => <i onClick={closeToast} className="la la-c
 
 class App extends React.PureComponent {
   render() {
-    console.log('appp is there');
     return (
         <div>
             <ToastContainer

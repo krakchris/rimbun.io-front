@@ -134,7 +134,6 @@ export function createUser(payload) {
         dispatch(receiveCreateUser(response));
       })
       .catch(error => {
-        console.log(error.response);
         const errorMessage = error.response
           ? error.response.data.message
           : "Server error Occurred";
