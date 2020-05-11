@@ -15,8 +15,7 @@ import s from './Login.module.scss';
 import Widget from '../../components/Widget';
 import Footer from "../../components/Footer";
 import { loginUser } from '../../actions/user';
-import jwt from 'jsonwebtoken';
-import config from '../../config'
+import logo from "../../images/rimbun_colored_logo.png";
 
 class Login extends React.Component {
   static propTypes = {
@@ -75,7 +74,7 @@ class Login extends React.Component {
           <div className={s.root}>
           <Row>
             <Col xs={{size: 10, offset: 1}} sm={{size: 6, offset: 3}} lg={{size:4, offset: 4}}>
-                <h1 className="text-center">Rimbun.io</h1>
+                <img className={s.logo} src={logo} alt="" height="70" />
               <Widget className={s.widget}>
                 <h4 className="mt-0">Login to your Web App</h4>
                 <p className="fs-sm text-muted">

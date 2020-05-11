@@ -38,7 +38,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-console.log('===================');
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);

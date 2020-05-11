@@ -50,6 +50,7 @@
  $brand-info:            #5d80f9 !default;
  $brand-warning:         #f3c363 !default;
  $brand-danger:          #eb3349 !default;
+ $global-theme-color:    #0ce67d !default;
  
  $theme-colors: (
    primary: $brand-primary,
@@ -58,6 +59,7 @@
    info: $brand-info,
    warning: $brand-warning,
    danger: $brand-danger,
+   global-theme-color: $global-theme-color,
    light: $gray-300,
    dark: $gray-800,
    inverse: $gray-700,
@@ -99,7 +101,9 @@
  //== Gradients
  //
  
- $logo-gradient: linear-gradient(to right, $brand-danger, #f45c43);
+ $logo-gradient: linear-gradient(to right, $global-theme-color, $global-theme-color);
+
+
  
  //== Iconography
  //
