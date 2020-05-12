@@ -5,8 +5,11 @@ import {
   LOGOUT_SUCCESS,
   USER_CREATE_REQUEST,
   USER_CREATE_FAILURE,
-  USER_CREATE_SUCCESS
+  USER_CREATE_SUCCESS,
+  SET_USER_DETAILS
 } from "../actions/user";
+
+
 
 const token = localStorage.getItem('token');
 export default function auth(state = {
@@ -52,6 +55,10 @@ export default function auth(state = {
         isLoading: false,
         isError: false,
     });
+    case SET_USER_DETAILS:
+      return Object.assign({},state,{
+        fetchData:action.payload
+      })
     default:
       return state;
   }

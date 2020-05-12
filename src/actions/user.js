@@ -12,6 +12,14 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
 export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
 export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
+export const SET_USER_DETAILS = 'SET_USER_DETAILS'
+
+function setUserDetails(payload) {
+  return {
+      type: SET_USER_DETAILS,
+      payload
+  }
+}
 
 function requestCreateUser(payload){
   return {
@@ -149,7 +157,14 @@ export function createUser(payload) {
 
   };
 
-
-
 }
 
+export function fetchUsers() {
+  return dispatch => {
+      api(endPoints.createUser)
+          .get({})
+          .then(reponse => {
+              dispatch(setUserDetails(reponse.data.data.data))
+          })
+  }
+}

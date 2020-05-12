@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import api,{endPoints} from '../../api';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -45,20 +46,20 @@ class Dashboard extends Component {
     isDropdownOpened: false
   };
 
-  componentDidMount() {
-    if(process.env.NODE_ENV === "development") {
-      this.props.dispatch(fetchPosts());      
-    }
-  }
+  
 
   formatDate = (str) => {
-    return str.replace(/,.*$/,"");
+    return str.replace(/,.*$/, "");
   }
 
   toggleDropdown = () => {
     this.setState(prevState => ({
       isDropdownOpened: !prevState.isDropdownOpened,
     }));
+  }
+
+  createUser = () => {
+    this.props.history.push('/app/profile')
   }
 
   render() {
