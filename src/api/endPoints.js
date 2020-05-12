@@ -1,5 +1,5 @@
 
 export default {
   login: "user/login",
-  createUser: "/user"
+  createUser: "user"
 };

@@ -28,6 +28,7 @@ import Tables from '../../pages/tables'
 import Notifications from '../../pages/notifications'
 import Posts from '../../pages/posts'
 import Profile from '../../pages/profile'
+import userList from '../../pages/userlist/userList'
 import Privacy from '../../pages/privacy'
 
 class Layout extends React.Component {
@@ -60,6 +61,7 @@ class Layout extends React.Component {
               <Route path="/app/tables" exact component={Tables} />
               <Route path="/app/posts" component={Posts} />
               <Route path="/app/privacy" exact component={Privacy} />
+              <Route path="/app/userList" exact component={userList}/>
               <Route path="/app/profile" exact component={Profile} />
               <Route path="/app/notifications" exact component={Notifications} /> 
               <Route path="/app/components/buttons" exact component={Buttons} />

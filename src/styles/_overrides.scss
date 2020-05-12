@@ -32,8 +32,8 @@
         color: $text-color;
 
         &.active {
-          background-color: theme-color('danger');
-          border-color: theme-color('danger');
+          background-color: theme-color('global-theme-color');
+          border-color: theme-color('global-theme-color');
           color: white;
         }
       }

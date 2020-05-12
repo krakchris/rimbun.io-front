@@ -15,8 +15,7 @@ import s from './Login.module.scss';
 import Widget from '../../components/Widget';
 import Footer from "../../components/Footer";
 import { loginUser } from '../../actions/user';
-import jwt from 'jsonwebtoken';
-import config from '../../config'
+import logo from "../../images/rimbun_colored_logo.png";
 
 class Login extends React.Component {
   static propTypes = {
@@ -73,54 +72,61 @@ class Login extends React.Component {
 
         return (
           <div className={s.root}>
-          <Row>
-            <Col xs={{size: 10, offset: 1}} sm={{size: 6, offset: 3}} lg={{size:4, offset: 4}}>
-                <h1 className="text-center">Rimbun.io</h1>
-              <Widget className={s.widget}>
-                <h4 className="mt-0">Login to your Web App</h4>
-                <p className="fs-sm text-muted">
-                  User your username and password to sign in<br />
-                </p>
-                <Form className="mt" onSubmit={this.doLogin}>
-                  {this.props.errorMessage && (
-                    <Alert size="sm" color="danger">
-                      {this.props.errorMessage}
-                    </Alert>
-                  )}
-                  <FormGroup className="form-group">
-                    <Input
-                      className="no-border"
-                      value={this.state.login}
-                      onChange={this.changeLogin}
-                      type="email"
-                      required
-                      name="username"
-                      placeholder="Username"
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Input
-                      className="no-border"
-                      value={this.state.password}
-                      onChange={this.changePassword}
-                      type="password"
-                      required
-                      name="password"
-                      placeholder="Password"
-                    />
-                  </FormGroup>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <Button color="success" size="sm" type="submit">
-                        {this.props.isFetching ? 'Loading...' : 'Login'}
-                      </Button>
+            <Row>
+              <Col
+                xs={{ size: 10, offset: 1 }}
+                sm={{ size: 6, offset: 3 }}
+                lg={{ size: 4, offset: 4 }}
+              >
+                <div className="text-center">
+                  <img src={logo} alt="" height="80" />
+                </div>
+                <Widget className={s.widget}>
+                  <h4 className="mt-0">Login to your Web App</h4>
+                  <p className="fs-sm text-muted">
+                    User your username and password to sign in
+                    <br />
+                  </p>
+                  <Form className="mt" onSubmit={this.doLogin}>
+                    {this.props.errorMessage && (
+                      <Alert size="sm" color="danger">
+                        {this.props.errorMessage}
+                      </Alert>
+                    )}
+                    <FormGroup className="form-group">
+                      <Input
+                        className="no-border"
+                        value={this.state.login}
+                        onChange={this.changeLogin}
+                        type="email"
+                        required
+                        name="username"
+                        placeholder="Username"
+                      />
+                    </FormGroup>
+                    <FormGroup>
+                      <Input
+                        className="no-border"
+                        value={this.state.password}
+                        onChange={this.changePassword}
+                        type="password"
+                        required
+                        name="password"
+                        placeholder="Password"
+                      />
+                    </FormGroup>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <Button color="success" size="sm" type="submit">
+                          {this.props.isFetching ? "Loading..." : "Login"}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Form>
-              </Widget>
-            </Col>
-          </Row>
-          <Footer className="text-center" />
+                  </Form>
+                </Widget>
+              </Col>
+            </Row>
+            <Footer className="text-center" />
           </div>
         );
     }

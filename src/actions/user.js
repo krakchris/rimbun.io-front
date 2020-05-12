@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
@@ -8,6 +9,44 @@ export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
+export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
+export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
+export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
+
+function fetchUserSuccess(payload) {
+  return {
+    type: FETCH_USER_SUCCESS,
+    payload
+  }
+}
+
+function requestCreateUser(payload) {
+  return {
+    type: USER_CREATE_REQUEST,
+    isLoading: true,
+    isError: false,
+    payload
+  };
+}
+
+function receiveCreateUser(payload) {
+  return {
+    type: USER_CREATE_SUCCESS,
+    isLoading: false,
+    isError: false,
+    payload
+  };
+}
+
+function createUserError(message) {
+  return {
+    type: USER_CREATE_FAILURE,
+    isLoading: false,
+    isError: true,
+    message
+  };
+}
 
 function requestLogin(creds) {
   return {
@@ -62,7 +101,7 @@ export function logoutUser() {
 }
 
 export function loginUser(creds) {
-  
+
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds));
@@ -74,12 +113,58 @@ export function loginUser(creds) {
         dispatch(receiveLogin({ token: response.data.token }));
       })
       .catch(error => {
-        const errorMessage = error.response.data.message;
+        const errorMessage = (error.response) ? error.response.data.message : 'Server error Occurred';
         dispatch(loginError(errorMessage));
       });
 
   };
-        
-  
 
+
+
+}
+
+
+export function createUser(payload) {
+
+  return dispatch => {
+
+    dispatch(requestCreateUser(payload));
+    api(endPoints.createUser)
+      .post(payload)
+      .then(response => {
+        toast.success('User created Sucessfully.', {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(receiveCreateUser(response));
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(createUserError(errorMessage));
+      });
+
+  };
+
+}
+
+export function fetchUsers() {
+  return dispatch => {
+    api(endPoints.createUser)
+      .get({})
+      .then(reponse => {
+        dispatch(fetchUserSuccess(reponse.data.data.data))
+      })
+  }
 }
