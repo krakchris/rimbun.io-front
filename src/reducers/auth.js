@@ -6,7 +6,7 @@ import {
   USER_CREATE_REQUEST,
   USER_CREATE_FAILURE,
   USER_CREATE_SUCCESS,
-  SET_USER_DETAILS
+  FETCH_USER_SUCCESS
 } from "../actions/user";
 
 
@@ -55,7 +55,7 @@ export default function auth(state = {
         isLoading: false,
         isError: false,
     });
-    case SET_USER_DETAILS:
+    case FETCH_USER_SUCCESS:
       return Object.assign({},state,{
         fetchData:action.payload
       })

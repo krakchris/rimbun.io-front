@@ -1,18 +1,15 @@
 import React, { PureComponent } from 'react';
-import cx from 'classnames';
+
 import {
   Row,
   Col,
   Button,
-  Breadcrumb,
-  BreadcrumbItem
+
 } from 'reactstrap';
-import PropTypes from "prop-types";
+
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import api, { endPoints } from '../../api'
 import Widget from '../../components/Widget';
-import { toast } from "react-toastify";
 import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
 import s from './Userlist.module.scss';

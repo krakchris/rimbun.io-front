@@ -2,7 +2,7 @@
 import React from 'react';
 import cx from 'classnames';
 import {
-    Table
+    Table as TableView 
 } from 'reactstrap';
 import s from './Userlist.module.scss'
 
@@ -37,7 +37,7 @@ const TableComponent = (props) => {
     <>
       {(data.length !== 0)
         ? (
-            <Table responsive borderless className={cx('mb-0', s.usersTable)}>
+            <TableView responsive borderless className={cx('mb-0', s.usersTable)}>
             <thead>
               <tr>{getHeader()} <th>Status</th></tr>
             </thead>
@@ -45,7 +45,7 @@ const TableComponent = (props) => {
               {getRowsData()}
               
             </tbody>
-          </Table>
+          </TableView>
         ) : null}
     </>
   );

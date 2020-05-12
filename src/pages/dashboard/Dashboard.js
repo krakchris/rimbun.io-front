@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import api,{endPoints} from '../../api';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -58,9 +57,7 @@ class Dashboard extends Component {
     }));
   }
 
-  createUser = () => {
-    this.props.history.push('/app/profile')
-  }
+ 
 
   render() {
     return (

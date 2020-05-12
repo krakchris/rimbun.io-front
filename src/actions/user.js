@@ -12,16 +12,16 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
 export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
 export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
-export const SET_USER_DETAILS = 'SET_USER_DETAILS'
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
 
-function setUserDetails(payload) {
+function fetchUserSuccess(payload) {
   return {
-      type: SET_USER_DETAILS,
-      payload
+    type: FETCH_USER_SUCCESS,
+    payload
   }
 }
 
-function requestCreateUser(payload){
+function requestCreateUser(payload) {
   return {
     type: USER_CREATE_REQUEST,
     isLoading: true,
@@ -101,7 +101,7 @@ export function logoutUser() {
 }
 
 export function loginUser(creds) {
-  
+
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds));
@@ -118,8 +118,8 @@ export function loginUser(creds) {
       });
 
   };
-        
-  
+
+
 
 }
 
@@ -161,10 +161,10 @@ export function createUser(payload) {
 
 export function fetchUsers() {
   return dispatch => {
-      api(endPoints.createUser)
-          .get({})
-          .then(reponse => {
-              dispatch(setUserDetails(reponse.data.data.data))
-          })
+    api(endPoints.createUser)
+      .get({})
+      .then(reponse => {
+        dispatch(fetchUserSuccess(reponse.data.data.data))
+      })
   }
 }
