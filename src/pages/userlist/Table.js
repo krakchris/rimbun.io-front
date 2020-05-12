@@ -23,7 +23,7 @@ const TableComponent = (props) => {
     const items = data;
     const keys = getKeys();
     return items.map((row, index) => (
-      <tr key={row.Units}>
+      <tr key={index}>
         <RenderRow data={row} keys={keys} />
         <td>
         <span className="py-0 px-1 bg-success rounded text-white">active</span>
@@ -34,20 +34,19 @@ const TableComponent = (props) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       {(data.length !== 0)
         ? (
             <TableView responsive borderless className={cx('mb-0', s.usersTable)}>
             <thead>
-              <tr>{getHeader()} <th>Status</th></tr>
+              <tr>{getHeader()}<th>Status</th></tr>
             </thead>
             <tbody>
               {getRowsData()}
-              
             </tbody>
           </TableView>
-        ) : null}
-    </>
+        ) : null }
+    </React.Fragment>
   );
 };
 

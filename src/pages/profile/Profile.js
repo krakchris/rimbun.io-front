@@ -103,7 +103,6 @@ class Profile extends PureComponent {
             const { name, role, email, password, passwordConfirm } = this.state;
             this.props.dispatch(createUser({ name, role, email, password, passwordConfirm }));
             this.setState(this.initialState);
-            this.props.history.push("/app/userList");
         }
     };
 
@@ -114,7 +113,6 @@ class Profile extends PureComponent {
             passwordErr,
             passwordConfirmErr
         } = this.state.formErrors;
-
         return (
             <div className={s.root}>
                 <Loader visible={this.props.isLoading} />
