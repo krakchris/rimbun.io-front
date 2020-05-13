@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
+import { OFFICIAL_ROLE_TAG } from '../constants';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -12,8 +13,16 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
 export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
 export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
 
-function requestCreateUser(payload){
+function fetchUserSuccess(payload) {
+  return {
+    type: FETCH_USER_SUCCESS,
+    payload
+  }
+}
+
+function requestCreateUser(payload) {
   return {
     type: USER_CREATE_REQUEST,
     isLoading: true,
@@ -93,7 +102,7 @@ export function logoutUser() {
 }
 
 export function loginUser(creds) {
-  
+
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds));
@@ -110,8 +119,8 @@ export function loginUser(creds) {
       });
 
   };
-        
-  
+
+
 
 }
 
@@ -149,7 +158,15 @@ export function createUser(payload) {
 
   };
 
-
-
 }
 
+export function fetchUsers() {
+  return dispatch => {
+    const paramEndpoint = `${endPoints.createUser}?where[role]=${OFFICIAL_ROLE_TAG}`;
+    api(paramEndpoint)
+      .get({})
+      .then(reponse => {
+        dispatch(fetchUserSuccess(reponse.data.data.data));
+      });
+  }
+}
