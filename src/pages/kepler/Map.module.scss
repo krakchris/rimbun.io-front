@@ -1,0 +1,22 @@
+
+@import '../../styles/app';
+
+.MapContainer {
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+}
+
+/* to  hide add button*/
+.shaRW {
+  display:none;
+}
+
+/* to customize 3-d panel, split view*/
+.GZqxj {
+  margin-right:249px;
+}
+

@@ -20,7 +20,7 @@ import Sidebar from '../Sidebar';
 import Dashboard from '../../pages/dashboard'
 import Buttons from '../../pages/buttons'
 import Charts from '../../pages/charts'
-import Maps from '../../pages/google'
+import Maps from '../../pages/kepler/Map'
 import NotFound from '../../pages/notFound'
 import Icons from '../../pages/icons'
 import Typography from '../../pages/typography'
@@ -67,7 +67,7 @@ class Layout extends React.Component {
               <Route path="/app/components/buttons" exact component={Buttons} />
               <Route path="/app/components/charts" exact component={Charts} />
               <Route path="/app/components/icons" exact component={Icons} />
-              <Route path="/app/components/maps" exact component={Maps} />
+              <Route path="/app/maps" exact component={Maps} />
               <Route component={NotFound} />
             </Switch>
           </main>
