@@ -166,5 +166,17 @@ export function fetchUsers() {
       .then(reponse => {
         dispatch(fetchUserSuccess(reponse.data.data.data))
       })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+      })
   }
 }
