@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
+  Nav,
+  NavItem,
+  NavLink,
   Row,
+  TabContent,
+  TabPane,
   Col,
   Alert,
   Button,
@@ -19,57 +24,89 @@ import {
   DropdownToggle,
   DropdownItem,
   Table
-} from 'reactstrap';
-import { mock } from './mock'
-
+} from "reactstrap";
+import classnames from "classnames";
 import Widget from '../../components/Widget';
 
 import { fetchPosts } from '../../actions/posts';
 import s from './Dashboard.module.scss';
 
 class Dashboard extends Component {
-  /* eslint-disable */
-  static propTypes = {
-    posts: PropTypes.any,
-    isFetching: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired,
-  };
-  /* eslint-enable */
 
-  static defaultProps = {
-    posts: [],
-    isFetching: false,
-  };
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      activeTab: '1',
+    };
+  }
 
-  state = {
-    isDropdownOpened: false
-  };
-
-  componentDidMount() {
-    if(process.env.NODE_ENV === "development") {
-      this.props.dispatch(fetchPosts());      
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+      });
     }
-  }
-
-  formatDate = (str) => {
-    return str.replace(/,.*$/,"");
-  }
-
-  toggleDropdown = () => {
-    this.setState(prevState => ({
-      isDropdownOpened: !prevState.isDropdownOpened,
-    }));
   }
 
   render() {
     return (
-      <div className={s.root}>
-        <Breadcrumb>
-          <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-          <BreadcrumbItem active>Dashboard</BreadcrumbItem>
-        </Breadcrumb>
-        <h1 className="mb-lg">Dashboard</h1>
-      </div>
+      <section className={s.root}>
+        <h1 className="page-title mb-lg">
+          Dashboard
+        </h1>
+
+        {/* tabs */}
+        <Nav className="mb-lg" tabs>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === "1" })}
+              onClick={() => {
+                this.toggle("1");
+              }}
+            >
+              <span>Maps</span>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === "2" })}
+              onClick={() => {
+                this.toggle("2");
+              }}
+            >
+              <span>Charts</span>
+            </NavLink>
+          </NavItem>
+        </Nav>
+
+        {/* tab content */}
+
+        <TabContent activeTab={this.state.activeTab}>
+          <TabPane tabId="1">
+            <div>
+              <h5>
+                No Maps Available
+              </h5>
+              <Row className="icon-list">
+               
+              </Row>
+            </div>
+          </TabPane>
+        </TabContent>
+        <TabContent activeTab={this.state.activeTab}>
+          <TabPane tabId="2">
+            <div>
+              <h5>
+                No Charts Available
+              </h5>
+              <Row className="icon-list">
+
+              </Row>
+            </div>
+          </TabPane>
+        </TabContent>
+      </section>
     );
   }
 }
