@@ -40,6 +40,7 @@ class Userlist extends PureComponent {
       <div className={s.root}>
       
         <h1 className="mb-lg">User List</h1>
+       
         <Row>
           <Col sm={12} md={6}>
             <Widget
@@ -60,8 +61,8 @@ class Userlist extends PureComponent {
             >
               {
                this.props.fetchData ? <TableComponent data={this.props.fetchData}/>:null
-
               }
+             
             </Widget>
           </Col>
         </Row>
