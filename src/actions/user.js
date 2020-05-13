@@ -58,12 +58,13 @@ function requestLogin(creds) {
   };
 }
 
-export function receiveLogin(user) {
+export function receiveLogin(data) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    token: auth.getToken()
+    token: auth.getToken(),
+    context: data
   };
 }
 
@@ -72,6 +73,7 @@ function loginError(message) {
     type: LOGIN_FAILURE,
     isFetching: false,
     isAuthenticated: false,
+    context: {},
     message,
   };
 }
@@ -111,7 +113,7 @@ export function loginUser(creds) {
       .post(payload)
       .then(response => {
         auth.setToken(response.data.token);
-        dispatch(receiveLogin({ token: response.data.token }));
+        dispatch(receiveLogin(response.data));
       })
       .catch(error => {
         const errorMessage = (error.response) ? error.response.data.message : 'Server error Occurred';

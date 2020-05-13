@@ -8,15 +8,15 @@ import {
   USER_CREATE_SUCCESS,
   FETCH_USER_SUCCESS
 } from "../actions/user";
+import * as auth from "../lib/token";
 
-
-
-const token = localStorage.getItem('token');
-export default function auth(state = {
+const token = auth.getToken();
+export default function (state = {
   isFetching: false,
   isAuthenticated: !!token,
   isLoading: false,
-  isError: false
+  isError: false,
+  context: {}
 }, action) {
   switch (action.type) {
     case LOGIN_REQUEST:
@@ -28,7 +28,7 @@ export default function auth(state = {
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: true,
-        errorMessage: ""
+        errorMessage: "",
       });
     case LOGIN_FAILURE:
       return Object.assign({}, state, {
