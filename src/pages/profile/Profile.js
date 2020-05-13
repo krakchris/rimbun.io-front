@@ -46,7 +46,8 @@ class Profile extends PureComponent {
             email: "",
             password: "",
             passwordConfirm: "",
-            formErrors: {}
+            formErrors: {},
+
         };
 
         this.initialState = this.state;
@@ -97,6 +98,7 @@ class Profile extends PureComponent {
         this.setState({ [name]: value });
     };
 
+
     onSubmit = e => {
         e.preventDefault();
         if (this.handleFormValidation()) {
@@ -105,6 +107,10 @@ class Profile extends PureComponent {
             this.setState(this.initialState);
         }
     };
+
+    handleBack = () => {
+        this.props.history.push("/app/userList");
+    }
 
     render() {
         const {
@@ -116,7 +122,19 @@ class Profile extends PureComponent {
         return (
             <div className={s.root}>
                 <Loader visible={this.props.isLoading} />
-                <h1>Create User</h1>
+                <Row>
+                    <Col sm={12} md={6}>
+                        <div>
+                            <div className="pull-right mt-3 mb-3 middle">
+                                <span className="glyphicon glyphicon-arrow-left" style={{ fontSize: '18px' }} onClick={this.handleBack}></span>
+                            </div>
+                            <h1 className="mt-0 mb-3">
+                                Create User
+                            </h1>
+                        </div>
+                    </Col>
+                </Row>
+
                 <Row>
                     <Col sm={6}>
                         <Widget
