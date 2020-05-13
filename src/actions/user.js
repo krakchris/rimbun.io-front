@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
+import { OFFICIAL_ROLE_TAG } from '../constants';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -161,7 +162,8 @@ export function createUser(payload) {
 
 export function fetchUsers() {
   return dispatch => {
-    api(endPoints.createUser)
+    const paramEndpoint = `${endPoints.createUser}?where[role]=${OFFICIAL_ROLE_TAG}`;
+    api(paramEndpoint)
       .get({})
       .then(reponse => {
         dispatch(fetchUserSuccess(reponse.data.data.data))

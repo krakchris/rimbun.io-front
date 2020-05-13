@@ -98,15 +98,13 @@ class Profile extends PureComponent {
         this.setState({ [name]: value });
     };
 
-    
+
     onSubmit = e => {
         e.preventDefault();
         if (this.handleFormValidation()) {
             const { name, role, email, password, passwordConfirm } = this.state;
             this.props.dispatch(createUser({ name, role, email, password, passwordConfirm }));
-            this.setState({state:this.initialState},() => {setTimeout(()=>{
-                this.props.history.push('/app/userList')
-            },1000)})    
+            this.setState(this.initialState);
         }
     };
 
@@ -121,7 +119,6 @@ class Profile extends PureComponent {
             passwordErr,
             passwordConfirmErr
         } = this.state.formErrors;
-
         return (
             <div className={s.root}>
                 <Loader visible={this.props.isLoading} />
