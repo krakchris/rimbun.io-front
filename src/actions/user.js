@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
+import * as context from "../lib/localData";
 import { OFFICIAL_ROLE_TAG } from '../constants';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -63,8 +64,7 @@ export function receiveLogin(data) {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    token: auth.getToken(),
-    context: data
+    token: auth.getToken()
   };
 }
 
@@ -73,7 +73,6 @@ function loginError(message) {
     type: LOGIN_FAILURE,
     isFetching: false,
     isAuthenticated: false,
-    context: {},
     message,
   };
 }
@@ -99,6 +98,7 @@ export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
     auth.clearToken();
+    context.clearLoggedInUser();
     dispatch(receiveLogout());
   };
 }
@@ -113,6 +113,7 @@ export function loginUser(creds) {
       .post(payload)
       .then(response => {
         auth.setToken(response.data.token);
+        context.setLoggedInUser(JSON.stringify(response.data));
         dispatch(receiveLogin(response.data));
       })
       .catch(error => {

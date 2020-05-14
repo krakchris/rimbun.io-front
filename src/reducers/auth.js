@@ -15,8 +15,7 @@ export default function (state = {
   isFetching: false,
   isAuthenticated: !!token,
   isLoading: false,
-  isError: false,
-  context: {}
+  isError: false
 }, action) {
   switch (action.type) {
     case LOGIN_REQUEST:
