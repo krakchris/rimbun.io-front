@@ -1,6 +1,6 @@
 export const CONTEXT = 'context';
 
-export const getLoggedInUser = () => JSON.parse(localStorage.getItem(CONTEXT));
+export const getLoggedInUser = () =>  ( localStorage.getItem(CONTEXT) ) ? JSON.parse(localStorage.getItem(CONTEXT)) : null;
 
 export const setLoggedInUser = userDetails =>
     localStorage.setItem(CONTEXT, userDetails);

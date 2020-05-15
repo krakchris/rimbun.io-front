@@ -54,60 +54,8 @@ class Dashboard extends Component {
   render() {
     return (
       <section className={s.root}>
-        <h1 className="page-title mb-lg">
-          Dashboard
-        </h1>
+        <h1 className="page-title mb-lg">Maps</h1>
 
-        {/* tabs */}
-        <Nav className="mb-lg" tabs>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === "1" })}
-              onClick={() => {
-                this.toggle("1");
-              }}
-            >
-              <span>Maps</span>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === "2" })}
-              onClick={() => {
-                this.toggle("2");
-              }}
-            >
-              <span>Charts</span>
-            </NavLink>
-          </NavItem>
-        </Nav>
-
-        {/* tab content */}
-
-        <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId="1">
-            <div>
-              <h5>
-                No Maps Available
-              </h5>
-              <Row className="icon-list">
-               
-              </Row>
-            </div>
-          </TabPane>
-        </TabContent>
-        <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId="2">
-            <div>
-              <h5>
-                No Charts Available
-              </h5>
-              <Row className="icon-list">
-
-              </Row>
-            </div>
-          </TabPane>
-        </TabContent>
       </section>
     );
   }
