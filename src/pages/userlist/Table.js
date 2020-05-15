@@ -45,7 +45,7 @@ const TableComponent = (props) => {
                             {getRowsData()}
                         </tbody>
                     </TableView>
-                ) : null}
+                ) : <h5>No Users Available.</h5>}
         </React.Fragment>
     );
 };
