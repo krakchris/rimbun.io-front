@@ -35,33 +35,37 @@ class Userlist extends PureComponent {
   }
 
   render() {
-
     return (
       <div className={s.root}>
-      
-        <h1 className="mb-lg">User List</h1>
+        {/*<h3 className="mb-lg">
+          <span className="glyphicon glyphicon-user" />
+            User List:
+        </h3>*/}
+
         <Row>
           <Col sm={12} md={6}>
             <Widget
               title={
                 <div>
                   <div className="pull-right mt-0 mb-3">
-                    <Button size="sm"  className="mr-sm mb-xs bg-success text-white" onClick={this.createUser}>
+                    <Button
+                      size="sm"
+                      className="mr-sm mb-xs bg-success text-white"
+                      onClick={this.createUser}
+                    >
                       {/* <span className="glyphicon glyphicon-plus" /> */}
-                  Create User
-                </Button>
+                      Create User
+                    </Button>
                   </div>
                   <h5 className="mt-0 mb-3">
-                    <i className="fa fa-user mr-xs opacity-70" />{' '}
-                    Users
+                    <i className="fa fa-user mr-xs opacity-70" /> Users
                   </h5>
                 </div>
               }
             >
-              {
-               this.props.fetchData ? <TableComponent data={this.props.fetchData}/>:null
-
-              }
+              {this.props.fetchData ? (
+                <TableComponent data={this.props.fetchData} />
+              ) : null}
             </Widget>
           </Col>
         </Row>

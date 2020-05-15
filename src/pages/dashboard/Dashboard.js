@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
+  Nav,
+  NavItem,
+  NavLink,
   Row,
+  TabContent,
+  TabPane,
   Col,
   Alert,
   Button,
@@ -19,55 +24,39 @@ import {
   DropdownToggle,
   DropdownItem,
   Table
-} from 'reactstrap';
-import { mock } from './mock'
-
+} from "reactstrap";
+import classnames from "classnames";
 import Widget from '../../components/Widget';
 
 import { fetchPosts } from '../../actions/posts';
 import s from './Dashboard.module.scss';
 
 class Dashboard extends Component {
-  /* eslint-disable */
-  static propTypes = {
-    posts: PropTypes.any,
-    isFetching: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired,
-  };
-  /* eslint-enable */
 
-  static defaultProps = {
-    posts: [],
-    isFetching: false,
-  };
-
-  state = {
-    isDropdownOpened: false
-  };
-
-  
-
-  formatDate = (str) => {
-    return str.replace(/,.*$/, "");
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      activeTab: '1',
+    };
   }
 
-  toggleDropdown = () => {
-    this.setState(prevState => ({
-      isDropdownOpened: !prevState.isDropdownOpened,
-    }));
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+      });
+    }
   }
 
  
 
   render() {
     return (
-      <div className={s.root}>
-        <Breadcrumb>
-          <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-          <BreadcrumbItem active>Dashboard</BreadcrumbItem>
-        </Breadcrumb>
-        <h1 className="mb-lg">Dashboard</h1>
-      </div>
+      <section className={s.root}>
+        <h1 className="page-title mb-lg">Maps</h1>
+
+      </section>
     );
   }
 }
