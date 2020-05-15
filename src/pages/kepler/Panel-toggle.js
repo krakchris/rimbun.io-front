@@ -28,7 +28,6 @@ const PanelToggleWrapper = props => (
         <Icons.Files height="12px" />
         Save Config
       </Button>
-
     </ButtonWrapper>
 
   </StyledPanelToggleWrapper>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, Provider } from 'react-redux';
-import { processKeplerglJSON } from 'kepler.gl/processors';
+import { processCsvData } from 'kepler.gl/processors';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { toast } from 'react-toastify';
 import KeplerGlSchema from 'kepler.gl/schemas';
@@ -41,12 +41,10 @@ const RemoveUploadedData = () => {
     // // returns uploaded Data on map
     const dataToSave =
         KeplerGlSchema.getDatasetToSave(store.getState().keplerGl.waterBodies);
-    console.log('dataToSave', dataToSave);
 
     // // returns uploaded layer config on map
     const configToSave =
         KeplerGlSchema.getConfigToSave(store.getState().keplerGl.waterBodies);
-    console.log('configToSave', configToSave);
 
     var layerConfigs = configToSave.config.visState.layers;
 
@@ -73,15 +71,31 @@ function BasicMap() {
     }
 
     const updatedMap = () => {
-        { console.log('upadte Map') }
         wrapTo('waterBodies',
             dispatch(
                 updateMap({ zoom: 9.77291649068545 })
             ));
     }
 
+    const uploadCSV = (sampledata) => {
+        wrapTo('waterBodies',dispatch(
+            addDataToMap({
+              datasets: {
+                info: {
+                  label: 'waterBodies.csv',
+                  id: 'test_data'
+                },
+                data: sampledata
+              },
+              options: {
+                centerMap: true,
+                readOnly: false
+              },
+              config: {}
+            })
+          ));
+    }
 
-       
     React.useEffect(() => {
         let localData = JSON.parse(localStorage.getItem('data'));
         if (!localData) {
@@ -89,16 +103,18 @@ function BasicMap() {
         }
         let initialdata;
         if (selectValue === 'water_bodies') {
-            initialdata = processKeplerglJSON(localData);
+            localData ? initialdata = { 
+             rows:localData.datasets[0].data.allData,
+             fields:localData.datasets[0].data.fields
+            }
+            : initialdata = processCsvData(localData);
         }
 
         { RemoveUploadedData() }
         isEmpty(initialdata) ?
             toast.warning("No file is loaded !", {
                 position: toast.POSITION.TOP_RIGHT,
-            }) : wrapTo('waterBodies', dispatch(
-                addDataToMap(initialdata)
-            ));
+            }) : uploadCSV(initialdata)
 
 
         { updatedMap() }

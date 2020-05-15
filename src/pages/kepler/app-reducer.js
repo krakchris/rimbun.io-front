@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import KeplerGlSchema from 'kepler.gl/schemas';
+import {setExportFiltered} from 'kepler.gl/actions'
 import { toast } from 'react-toastify';
 // CONSTANTS
 export const SAVE_CONFIG = 'SAVE_CONFIG';
@@ -16,7 +17,7 @@ export const setMapConfig = (payload) => {
     toast.success("Config is saved !", { 
       position: toast.POSITION.TOP_RIGHT,
     });
-    //dispatch(addNotification({ message: 'config is saved', type: 'success' }));
+    dispatch(setExportFiltered(true));
   }
 }
 
@@ -33,6 +34,7 @@ const appReducer = handleActions(
       ...state,
       mapConfig:
         localStorage.setItem('data', JSON.stringify(KeplerGlSchema.save(action.payload))),
+      
     }),
 
 
