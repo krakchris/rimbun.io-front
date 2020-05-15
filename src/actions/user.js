@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
+import * as context from "../lib/localData";
 import { OFFICIAL_ROLE_TAG } from '../constants';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -58,7 +59,7 @@ function requestLogin(creds) {
   };
 }
 
-export function receiveLogin(user) {
+export function receiveLogin(data) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
@@ -97,6 +98,7 @@ export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
     auth.clearToken();
+    context.clearLoggedInUser();
     dispatch(receiveLogout());
   };
 }
@@ -111,7 +113,8 @@ export function loginUser(creds) {
       .post(payload)
       .then(response => {
         auth.setToken(response.data.token);
-        dispatch(receiveLogin({ token: response.data.token }));
+        context.setLoggedInUser(JSON.stringify(response.data));
+        dispatch(receiveLogin(response.data));
       })
       .catch(error => {
         const errorMessage = (error.response) ? error.response.data.message : 'Server error Occurred';
