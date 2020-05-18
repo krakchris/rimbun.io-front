@@ -6,17 +6,11 @@ import {
   Navbar,
   Nav,
   NavItem,
-  Button,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Input,
-  InputGroup,
-  InputGroupAddon,
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-
 import * as context from '../../lib/localData';
 
 import photo from '../../images/user.png';

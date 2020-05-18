@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import { PanelToggleFactory, Button, Icons, withState } from 'kepler.gl/components';
 import { visStateLens } from 'kepler.gl/reducers';
-import { setMapConfig } from './app-reducer';
+import { setMapConfig } from '../../reducers/kepler';
 
 
 
@@ -13,6 +13,7 @@ const StyledPanelToggleWrapper = styled.div`
   padding-right: 16px;
   background-color: ${props => props.theme.sidePanelHeaderBg};
 `;
+
 
 const ButtonWrapper = styled.div`
   margin-bottom: 4px;
@@ -38,7 +39,7 @@ const CustomPanelToggleFactory = () =>
     // lenses
     [visStateLens],
     // mapStateToProps
-    state => ({ mapState: state.keplerGl.waterBodies }),
+    state => ({ mapState: state.keplerGl.adminMap }),
     {
       onClickSaveConfig: setMapConfig
     }

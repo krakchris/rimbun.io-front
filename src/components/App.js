@@ -13,6 +13,7 @@ import LayoutComponent from '../components/Layout';
 import { isLoggedIn } from '../lib/token';
 import Login from "../pages/login";
 import Register from '../pages/register';
+import Maps from '../pages/maps/Map';
 import { logoutUser } from '../actions/user';
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
@@ -52,6 +53,7 @@ class App extends React.PureComponent {
                     <Route path="/register" exact component={Register}/>
                     <Route path="/login" exact component={Login}/>
                     <Route path="/error" exact component={ErrorPage}/>
+                    <Route path="/maps" exact component={Maps}/>
                 </Switch>
             </HashRouter>
         </div>

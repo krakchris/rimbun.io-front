@@ -1,34 +1,5 @@
 import React, { Component } from 'react';
-import cx from 'classnames';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-  Col,
-  Alert,
-  Button,
-  ButtonGroup,
-  Breadcrumb,
-  BreadcrumbItem,
-  Progress,
-  Badge,
-  ListGroup,
-  ButtonDropdown,
-  DropdownMenu,
-  DropdownToggle,
-  DropdownItem,
-  Table
-} from "reactstrap";
-import classnames from "classnames";
-import Widget from '../../components/Widget';
-
-import { fetchPosts } from '../../actions/posts';
 import s from './Dashboard.module.scss';
 
 class Dashboard extends Component {
