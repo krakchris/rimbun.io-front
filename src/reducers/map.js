@@ -1,7 +1,4 @@
 import {
-  TAG_REQUEST,
-  TAG_SUCCESS,
-  TAG_FAILURE,
   MAP_REQUEST,
   MAP_SUCCESS,
   MAP_FAILURE
@@ -17,22 +14,6 @@ export default function (state = {
     
 }, action) {
     switch (action.type) {
-        case TAG_REQUEST:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-        case TAG_SUCCESS:
-            return Object.assign({}, state, {
-                isFetching: false,
-                tagNames: action.data,
-                errorMessage: null
-            });
-        case TAG_FAILURE:
-            return Object.assign({}, state, {
-              isFetching: false,
-              isError: true,
-              errorMessage: action.message
-            });
         case MAP_REQUEST:
             return Object.assign({}, state, {
                 isFetching: true

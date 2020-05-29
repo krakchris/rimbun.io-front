@@ -10,7 +10,9 @@
  @import '../../styles/app';
 
  .root {
-   // styles here
+   .alignEnd{
+     text-align: end;
+   }
  }
  
  .usersTable {

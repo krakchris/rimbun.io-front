@@ -165,7 +165,7 @@ export function createUser(payload) {
 
 export function fetchUsers() {
   return dispatch => {
-    const paramEndpoint = `${endPoints.createUser}?role=${OFFICIAL_ROLE_TAG}`;
+    const paramEndpoint = `${endPoints.getAllUsers}?role=${OFFICIAL_ROLE_TAG}`;
     api(paramEndpoint)
       .get({})
       .then(reponse => {

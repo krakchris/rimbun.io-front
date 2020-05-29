@@ -5,12 +5,13 @@ import { withRouter } from "react-router-dom";
 import { processCsvData } from "kepler.gl/processors";
 import { toast } from "react-toastify";
 import KeplerGlSchema from "kepler.gl/schemas";
-import { visStateUpdaters } from "kepler.gl/reducers";
+import { visStateUpdaters, visStateLens } from "kepler.gl/reducers";
 import { wrapTo, addDataToMap, updateMap } from "kepler.gl/actions";
 import {
   injectComponents,
   PanelToggleFactory,
-  PanelHeaderFactory
+  PanelHeaderFactory,
+  withState
 } from "kepler.gl/components";
 import CustomPanelToggleFactory from "./Panel-toggle";
 import CustomPanelHeaderFactory from "./Panel-header";
@@ -18,16 +19,16 @@ import './App.css';
 import s from './Map.module.scss';
 import { MAPBOX_ACCESS_TOKEN } from '../../constants';
 import {
-    ButtonDropdown,
+    Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
     Row,
-    Button,
-    Label
+    Button
 } from "reactstrap";
 import { getTagNames, getMapDataByTag } from "../../actions/map";
 import Loader from "../../components/Loader";
+import { generateMapImage } from 'kepler.gl/actions';
 
 const KeplerGl = injectComponents([
   [PanelHeaderFactory, CustomPanelHeaderFactory],
@@ -58,16 +59,17 @@ class Map extends React.Component {
     this.state = {
       dropdownOpen: false,
       selectValue: "Select Tag Name",
-      selectedTagId: ""
+      selectedTagId: "",
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getTagNames());
+    // this.props.dispatch(getTagNames());
   }
 
   toggle = () => {
     this.setState((prevState, props) => {
+      console.log("dropdpwn state===>", prevState.dropdownOpen);
       return { dropdownOpen: !prevState.dropdownOpen };
     });
 }
@@ -80,7 +82,8 @@ class Map extends React.Component {
   };
 
     handleBack = () => {
-        this.props.history.push("/app/main");
+        // this.props.history.push("/app/main");
+      console.log('features', this.props.mapState.visState.editor);
     }
 
  loadMapData = () => {
@@ -92,8 +95,17 @@ class Map extends React.Component {
          });
  }
 
+  generateImage = () => {
+    this.props.dispatch(generateMapImage({
+      dmension: { width: 500, height: 500, resolution: 2 },
+      onUpdate: (dataUrl) => console.log(dataUrl)
+    })
+    );
+  }
+
   render() {
     const { tagNames } = this.props;
+    console.log("tagNames===>", tagNames);
 
       const dropdownItem = (tagNames) ? tagNames.map(ele => {
         return (
@@ -116,26 +128,29 @@ class Map extends React.Component {
             mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
             width={window.innerWidth}
             height={window.innerHeight - 100}
-            theme="light"
           />
         </Row>
         <Row>
-        <div className="mt-3 mb-3 ml-5" >
-            <ButtonDropdown
-              color="primary"
-              isOpen={this.state.dropdownOpen}
-              toggle={this.toggle}
-              className="mr-xs"
-            >
-              <DropdownToggle caret color="danger">
-                {this.state.selectValue}
-              </DropdownToggle>
+          <div className="mt-3 mb-3 ml-5">
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+              <DropdownToggle caret>{this.state.selectValue}</DropdownToggle>
               <DropdownMenu>{dropdownItem}</DropdownMenu>
-            </ButtonDropdown>
+            </Dropdown>
           </div>
           <div>
-            <Button color="success" className="mt-3 mb-3 ml-1" onClick={this.loadMapData}>Load Data</Button>
-            <Button onClick={this.handleBack} className="pull-right mt-3 mb-3 ml-2 ">Back</Button>
+            <Button
+              color="success"
+              className="mt-3 mb-3 ml-1"
+              onClick={this.loadMapData}
+            >
+              Load Data
+            </Button>
+            <Button
+              onClick={this.handleBack}
+              className="pull-right mt-3 mb-3 ml-2 "
+            >
+              Back
+            </Button>
           </div>
         </Row>
       </div>
@@ -153,5 +168,17 @@ function mapStateToProps(state) {
     };
 }
 
-export default withRouter(connect(mapStateToProps)(Map));
+export default withRouter(
+  connect(mapStateToProps)(
+    withState(
+      // lenses
+      [visStateLens],
+      // mapStateToProps
+      state => ({ mapState: state.keplerGl.adminMap })
+    )(Map)
+  )
+);
+
+
+// export default withRouter(connect(mapStateToProps)(Map));
 

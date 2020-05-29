@@ -3,65 +3,11 @@ import api, { endPoints } from "../api";
 import {  addDataToMap } from "kepler.gl/actions";
 import { processCsvData } from "kepler.gl/processors";
 
-
-export const TAG_REQUEST = "TAG_REQUEST";
-export const TAG_SUCCESS = "TAG_SUCCESS";
-export const TAG_FAILURE = "TAG_FAILURE";
-
 export const MAP_REQUEST = "MAP_REQUEST";
 export const MAP_SUCCESS = "MAP_SUCCESS";
 export const MAP_FAILURE = "MAP_FAILURE";
 
-function requestTagNames() {
-    return {
-        type: TAG_REQUEST,
-        isFetching: true,
-        isError: false,
-    };
-}
 
-export function tagNamesSucess(data) {
-    return {
-    type: TAG_SUCCESS,
-    isFetching: false,
-    isError: false,
-    data
-    };
-}
-
-function tagNamesFail(message) {
-  return {
-    type: TAG_FAILURE,
-    isFetching: false,
-    isError: true,
-    message
-  };
-}
-
-export function getTagNames() {
-
-    return dispatch => {
-        dispatch(requestTagNames());
-        api(endPoints.getTagNames)
-          .get({})
-            .then(response => {
-            dispatch(tagNamesSucess(response.data.data.data));
-          })
-          .catch(error => {
-            const errorMessage = error.response
-              ? error.response.data.message
-              : "Server error Occurred";
-            toast.error(errorMessage, {
-              position: "top-right",
-              autoClose: 5000,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: true
-            });
-            dispatch(tagNamesFail());
-          });
-    }
-}
 
 function requestMapData() {
     return {

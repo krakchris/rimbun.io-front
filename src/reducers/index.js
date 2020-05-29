@@ -4,6 +4,7 @@ import keplerGlReducer from "kepler.gl/reducers";
 import auth from './auth';
 import runtime from './runtime';
 import navigation from './navigation';
+import dashboard from './dashboard';
 import posts from './posts';
 import keplerReducer from './kepler';
 import map from './map';
@@ -20,6 +21,7 @@ export default combineReducers({
   auth,
   runtime,
   navigation,
+  dashboard,
   posts,
   app: keplerReducer,
   keplerGl: customizedKeplerGlReducer,
