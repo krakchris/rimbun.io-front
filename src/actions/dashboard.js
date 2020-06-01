@@ -97,11 +97,11 @@ function fetchMapsError(message) {
   };
 }
 
-export function fetchMaps() {
+export function fetchMaps(pageNo) {
   
   return dispatch => {
     dispatch(requestFetchMaps());
-    const paramEndpoint = endPoints.getMapList;
+    const paramEndpoint = pageNo ? `${endPoints.getMapList}?page=${pageNo}` : endPoints.getMapList;
     api(paramEndpoint)
       .get({})
       .then(reponse => {

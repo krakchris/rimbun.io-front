@@ -49,6 +49,7 @@ export default function dashboard(
     case FETCH_MAPS_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
+        mapCreateStatus: false,
         mapList: action.mapList
       });
     case FETCH_MAPS_FAILURE:

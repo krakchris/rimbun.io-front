@@ -16,7 +16,7 @@ class CreateMap extends Component {
       modal: false,
       mapName: "",
       selectedtagName: null,
-      formErrors: {},
+      formErrors: {}
     };
 
     this.initialState = this.state;
@@ -68,16 +68,18 @@ class CreateMap extends Component {
       return { modal: !prevState.modal };
     });
   };
- 
 
-
+  onClosed = () => {
+    this.setState(this.initialState);
+    this.props.onModalClose();
+  }
 
   render() {
     const {
       formErrors: { mapNameErr, tagNameErr },
-      selectedtagName, mapName
+      selectedtagName,
+      mapName
     } = this.state;
-    
 
     const selectOptions = this.props.tagNames.map(item => {
       return {
@@ -98,7 +100,7 @@ class CreateMap extends Component {
           backdrop={"static"}
           keyboard={false}
           unmountOnClose
-          // onClosed={() => this.props.onModalClose}
+          onClosed={this.onClosed}
         >
           <Form onSubmit={this.onSubmit}>
             <ModalHeader toggle={this.toggle}>Create Map</ModalHeader>
