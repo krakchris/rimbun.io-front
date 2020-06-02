@@ -1,12 +1,11 @@
 import React from "react";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
-const Example = props => {
+const GridPagination = props => {
   const count = props.count;
   const currentPage = props.currentPage;
-  const perPage = 10;
-  console.log(count);
-
+  const perPage = props.limit;
+  
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(count / perPage); i++) {
     pageNumbers.push(i);
@@ -14,33 +13,37 @@ const Example = props => {
 
   const renderPageNumbers = pageNumbers.map(number => {
     if (number == 1 || number == count || (number >= currentPage - 2 && number <= currentPage + 2)) {
-      console.log()
       return (
         <PaginationItem key={number} active={currentPage == number}>
-          <PaginationLink onClick={() => props.fetchMaps(number)}>{number}</PaginationLink>
+          <PaginationLink onClick={() => props.fetchMaps({ pageNo: number, limit: perPage })}>{number}</PaginationLink>
         </PaginationItem>
       );
     }
   });
 
-  let previous = 0;
-  previous = currentPage - 1;
-  previous = (previous) ? previous : 1;
-  let next = 0;
-  next = currentPage + 1;
-  console.log(next);
-  next = (pageNumbers.indexOf(next) != '-1') ? next : currentPage;
+  let previous = 0; previous = currentPage - 1 ? currentPage - 1 : 1;
+  let next = 0; next = pageNumbers.indexOf(currentPage + 1) != "-1" ? currentPage + 1 : currentPage;
   return (
-    <Pagination aria-label="Page navigation example">
-      <PaginationItem>
-        <PaginationLink previous onClick={() => props.fetchMaps(previous)} />
-      </PaginationItem>
-      {renderPageNumbers}
-      <PaginationItem>
-        <PaginationLink next onClick={() => props.fetchMaps(next)} />
-      </PaginationItem>
-    </Pagination>
+    <React.Fragment>
+      {pageNumbers.length >1 && <Pagination aria-label="Page navigation example">
+        <PaginationItem>
+          <PaginationLink
+            previous
+            onClick={() =>
+              props.fetchMaps({ pageNo: previous, limit: perPage })
+            }
+          />
+        </PaginationItem>
+        {renderPageNumbers}
+        <PaginationItem>
+          <PaginationLink
+            next
+            onClick={() => props.fetchMaps({ pageNo: next, limit: perPage })}
+          />
+        </PaginationItem>
+      </Pagination>}
+    </React.Fragment>
   );
 };
 
-export default Example;
+export default GridPagination;

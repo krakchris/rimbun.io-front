@@ -80,11 +80,11 @@ function requestFetchMaps() {
   };
 }
 
-function fetchMapsSuccess(mapList) {
+function fetchMapsSuccess(mapData) {
   return {
     type: FETCH_MAPS_SUCCESS,
     isFetching: false,
-    mapList
+    mapData
   };
 }
 
@@ -97,15 +97,15 @@ function fetchMapsError(message) {
   };
 }
 
-export function fetchMaps(pageNo) {
-  
+export function fetchMaps(paginationParam) {
+  const { pageNo, limit } = paginationParam;
   return dispatch => {
     dispatch(requestFetchMaps());
-    const paramEndpoint = pageNo ? `${endPoints.getMapList}?page=${pageNo}` : endPoints.getMapList;
+    const paramEndpoint = pageNo ? `${endPoints.getMapList}?page=${pageNo}&limit=${limit}` : endPoints.getMapList;
     api(paramEndpoint)
       .get({})
       .then(reponse => {
-        dispatch(fetchMapsSuccess(reponse.data.data.data));
+        dispatch(fetchMapsSuccess(reponse.data));
       })
       .catch(error => {
         const errorMessage = error.response

@@ -60,15 +60,26 @@ class Login extends React.Component {
     e.preventDefault();
   }
 
+  componentDidUpdate(){
+    const { from } = this.props.location.state || {
+      from: { pathname: '/app' },
+    };
+    if (this.props.isAuthenticated) {
+      console.log('this does the login redirection');
+      this.props.history.push(from);
+    }
+  }
+
   render() {
     const {from} = this.props.location.state || {
       from: {pathname: '/app'},
     };
 
-    if (this.props.isAuthenticated) {
-      // cant access login page while logged in
-      return <Redirect to={from} />;
-    }
+    // if (this.props.isAuthenticated) {
+    //   console.log('this does the redirection');
+    //   // cant access login page while logged in
+    //   return <Redirect to={from} />;
+    // }
 
         return (
           <div className={s.root}>

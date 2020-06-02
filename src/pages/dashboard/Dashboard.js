@@ -24,6 +24,7 @@ import cx from "classnames";
 import { fetchMaps, getTagNames, createMap } from "../../actions/dashboard";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
+import * as dashboardConst from './constant';
 
 class Dashboard extends PureComponent {
   static propTypes = {
@@ -44,19 +45,28 @@ class Dashboard extends PureComponent {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: "1",
-      currentPage: 1
+      currentPage: dashboardConst.CURRENT_PAGE_COUNT
     };
   }
 
   componentDidMount() {
-    console.log('componener did mount is called===>');
     this.props.dispatch(getTagNames());
-    this.fetchMapList(this.state.currentPage);
+    this.fetchMapList({
+      pageNo: this.state.currentPage,
+      limit: dashboardConst.PAGE_MAP_LIMIT
+    });
   }
 
-  fetchMapList = (currentPage) => {
-    this.setState({ currentPage });
-    this.props.dispatch(fetchMaps(currentPage));
+  fetchMapList = (PaginationParam) => {
+    const { pageNo, limit } = PaginationParam;
+    this.setState({ currentPage: pageNo });
+    this.props.dispatch(
+      fetchMaps({
+        pageNo: pageNo,
+        limit: limit
+      })
+    );
+
   }
 
   handleCreateMap = formData => {
@@ -72,13 +82,15 @@ class Dashboard extends PureComponent {
   }
 
   onModalClose = () => {
-    if (this.props.mapCreateStatus) this.props.dispatch(fetchMaps());
-    console.log("modal is closed");
+    if (this.props.mapCreateStatus) this.fetchMapList({ 
+      pageNo: this.state.currentPage, 
+      limit: dashboardConst.PAGE_MAP_LIMIT
+    });
   };
 
   render() {
-    console.log("Render of Dashboard is called");
-    const { isFetching, mapList, tagNames } = this.props;
+ 
+    const { isFetching, mapList, tagNames, totalMapCount } = this.props;
 
     const mapListComp = mapList.map(item => {
       return (
@@ -103,7 +115,6 @@ class Dashboard extends PureComponent {
         </Card>
       );
     });
-    console.log("mapCreateStatus", this.props.mapCreateStatus);
     return (
       <section className={s.root}>
         <Loader visible={isFetching} />
@@ -127,7 +138,8 @@ class Dashboard extends PureComponent {
               <React.Fragment>
                 <CardColumns className="mt-20">{mapListComp}</CardColumns>
                 <Pagination
-                  count="20"
+                  count={totalMapCount}
+                  limit={dashboardConst.PAGE_MAP_LIMIT}
                   currentPage={this.state.currentPage}
                   fetchMaps={this.fetchMapList}
                 />
@@ -149,7 +161,8 @@ function mapStateToProps(state) {
     mapList: state.dashboard.mapList,
     errorMessage: state.dashboard.errorMessage,
     tagNames: state.dashboard.tagNames,
-    mapCreateStatus: state.dashboard.mapCreateStatus
+    mapCreateStatus: state.dashboard.mapCreateStatus,
+    totalMapCount: state.dashboard.totalMapCount
   };
 }
 

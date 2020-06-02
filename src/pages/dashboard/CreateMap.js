@@ -59,7 +59,7 @@ class CreateMap extends Component {
     if (this.handleFormValidation()) {
       const { mapName, selectedtagName } = this.state;
       this.props.createMap({ mapName, selectedtagName });
-      //this.setState(this.initialState);
+      setTimeout(this.toggle, 4000);
     }
   };
 

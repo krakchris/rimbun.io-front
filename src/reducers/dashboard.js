@@ -17,7 +17,8 @@ export default function dashboard(
     isError: false,
     mapList: [],
     tagNames: [],
-    mapCreateStatus: false
+    mapCreateStatus: false,
+    totalMapCount: 0
   },
   action,
 ) {
@@ -50,7 +51,8 @@ export default function dashboard(
       return Object.assign({}, state, {
         isFetching: false,
         mapCreateStatus: false,
-        mapList: action.mapList
+        mapList: action.mapData.data.data,
+        totalMapCount: action.mapData.results
       });
     case FETCH_MAPS_FAILURE:
       return Object.assign({}, state, {
