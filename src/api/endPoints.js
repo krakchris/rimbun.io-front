@@ -5,7 +5,7 @@ export default {
   createUser: "user",
   getAllUsers: "user/getAllUsers",
   getTagNames: "masterData/getAllTags",
-  getMapDataByID: "masterData/",
+  getMapDataByID: "map/getMap",
   getMapList: "map/getUserAssocMap",
   createMap: "map"
 };

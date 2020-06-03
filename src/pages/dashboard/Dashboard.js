@@ -57,7 +57,7 @@ class Dashboard extends PureComponent {
     });
   }
 
-  fetchMapList = (PaginationParam) => {
+  fetchMapList = PaginationParam => {
     const { pageNo, limit } = PaginationParam;
     this.setState({ currentPage: pageNo });
     this.props.dispatch(
@@ -66,8 +66,7 @@ class Dashboard extends PureComponent {
         limit: limit
       })
     );
-
-  }
+  };
 
   handleCreateMap = formData => {
     this.props.dispatch(createMap(formData));
@@ -82,14 +81,20 @@ class Dashboard extends PureComponent {
   }
 
   onModalClose = () => {
-    if (this.props.mapCreateStatus) this.fetchMapList({ 
-      pageNo: this.state.currentPage, 
-      limit: dashboardConst.PAGE_MAP_LIMIT
-    });
+    if (this.props.mapCreateStatus)
+      this.fetchMapList({
+        pageNo: this.state.currentPage,
+        limit: dashboardConst.PAGE_MAP_LIMIT
+      });
   };
 
+  handleCardAction = ({id,action}) => {
+    if(action==='edit') this.props.history.push(`/map/${id}`);
+    if(action==='view') alert('In progress');
+    if (action === 'share') alert('In progress');
+  }
+
   render() {
- 
     const { isFetching, mapList, tagNames, totalMapCount } = this.props;
 
     const mapListComp = mapList.map(item => {
@@ -107,9 +112,14 @@ class Dashboard extends PureComponent {
           <CardBody>
             <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
             <div className={s.alignEnd}>
-              <i className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs" />
-              <i className="glyphicon glyphicon-pencil text-success mr-sm mb-xs" />
-              <i className="glyphicon glyphicon-share text-success mb-xs" />
+
+              <i onClick={()=>this.handleCardAction({id:item._id,action:'view'})}
+                className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs" />
+
+              <i onClick={()=>this.handleCardAction({id:item._id,action:'edit'})}            className="glyphicon glyphicon-pencil text-success mr-sm mb-xs" />
+
+              <i onClick={() => this.handleCardAction({ id: item._id, action: 'share' })} className="glyphicon glyphicon-share text-success mb-xs" />
+
             </div>
           </CardBody>
         </Card>
