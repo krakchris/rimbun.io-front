@@ -1,9 +1,9 @@
 import axios from "axios";
-import config from "../config";
 import endPoints from "./endPoints";
 
 const callServer = url  => {
-  const resourceURL = `${config.baseURLApi}/${url}`;
+  const baseURLApi = process.env.REACT_APP_BASE_URL_API;
+  const resourceURL = `${baseURLApi}/${url}`;
   return {
     getOne: ({ id }) => axios.get(`${resourceURL}/${id}`),
     get: ({ params = {} }, config = {}) =>

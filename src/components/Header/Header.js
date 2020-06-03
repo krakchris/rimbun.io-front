@@ -6,17 +6,12 @@ import {
   Navbar,
   Nav,
   NavItem,
-  Button,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Input,
-  InputGroup,
-  InputGroupAddon,
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-
+import { withRouter } from "react-router-dom";
 import * as context from '../../lib/localData';
 
 import photo from '../../images/user.png';
@@ -43,6 +38,8 @@ class Header extends React.Component {
 
   doLogout = () => {
     this.props.dispatch(logoutUser());
+    this.props.history.push({ pathname: "/login" });
+    window.location.reload();
   }
 
   render() {
@@ -83,4 +80,4 @@ function mapStateToProps(state) {
     init: state.runtime.initialNow,
   };
 }
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));

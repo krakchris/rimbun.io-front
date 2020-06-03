@@ -8,15 +8,12 @@ import {
     Input,
     Button,
     ButtonGroup,
-    Breadcrumb,
-    BreadcrumbItem,
 } from 'reactstrap';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Widget from '../../components/Widget';
-import { toast } from "react-toastify";
 import { createUser } from "../../actions/user";
 
 import s from './Profile.module.scss';

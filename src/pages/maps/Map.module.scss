@@ -1,0 +1,31 @@
+
+@import '../../styles/app';
+
+.MapContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 85%;
+  .btnMargin {
+    margin-left:5%;
+  }
+  .backFooter {
+    margin-top:70%;
+    margin-left:60%;
+  }
+}
+
+
+
+/* to  hide add button*/
+.shaRW {
+  display:none;
+}
+
+/* to customize 3-d panel, split view*/
+.GZqxj {
+  margin-right:249px;
+}
+

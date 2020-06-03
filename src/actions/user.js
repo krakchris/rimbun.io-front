@@ -113,7 +113,7 @@ export function loginUser(creds) {
       .post(payload)
       .then(response => {
         auth.setToken(response.data.token);
-        context.setLoggedInUser(JSON.stringify(response.data));
+        context.setLoggedInConfig(JSON.stringify(response.data));
         dispatch(receiveLogin(response.data));
       })
       .catch(error => {
@@ -165,7 +165,7 @@ export function createUser(payload) {
 
 export function fetchUsers() {
   return dispatch => {
-    const paramEndpoint = `${endPoints.createUser}?where[role]=${OFFICIAL_ROLE_TAG}`;
+    const paramEndpoint = `${endPoints.getAllUsers}?role=${OFFICIAL_ROLE_TAG}`;
     api(paramEndpoint)
       .get({})
       .then(reponse => {
