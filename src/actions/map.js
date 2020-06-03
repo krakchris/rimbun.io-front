@@ -36,16 +36,16 @@ function mapDataFail(message) {
 }
 
 
-export function getMapDataByTag(data) {
-    const { selectedTagId } = data;
-    const endPoint = `${endPoints.getMapDataByID}${selectedTagId}`;
+export function getMapDataById(data) {
+    const { mapId } = data;
     return dispatch => {
         dispatch(requestMapData());
-        api(endPoint)
-          .get({})
+        api(endPoints.getMapDataByID)
+          .getOne({ id: mapId })
           .then(response => {
-            const dataset = response.data.data.doc.csv;
+            const dataset = response.data.data.doc.master;
             const config = response.data.data.doc.config;
+            prepareKeplerData(dataset);
             dispatch(
             addDataToMap({
                 datasets: prepareKeplerData(dataset),
@@ -73,15 +73,19 @@ export function getMapDataByTag(data) {
 
 
 function prepareKeplerData(dataset){
-    // Use processCsvData helper to convert csv file into kepler.gl structure {fields, rows}
-    const data = processCsvData(dataset);
-    // Create dataset structure
-    return dataset = {
-        data,
-        info: {
+    const finalDatasets = dataset.map((item) => {
+        // Use processCsvData helper to convert csv file into kepler.gl structure {fields, rows}
+        const datasetItem = processCsvData(item.file);
+        return ({
+          data: datasetItem,
+          info: {
             // this is used to match the dataId defined in nyc-config.json. For more details see API documentation.
             // It is paramount that this id matches your configuration otherwise the configuration file will be ignored.
             id: "adminMap"
-        }
-    };
+          }
+        });
+
+    });
+    return finalDatasets;
+    
 }

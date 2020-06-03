@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
-import { processCsvData } from "kepler.gl/processors";
+import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
+import KeplerGl from "kepler.gl";
 import { toast } from "react-toastify";
 import KeplerGlSchema from "kepler.gl/schemas";
+import Processors from 'kepler.gl/processors';
 import { visStateUpdaters, visStateLens } from "kepler.gl/reducers";
 import { wrapTo, addDataToMap, updateMap } from "kepler.gl/actions";
 import {
@@ -13,27 +15,19 @@ import {
   PanelHeaderFactory,
   withState
 } from "kepler.gl/components";
-import CustomPanelToggleFactory from "./Panel-toggle";
-import CustomPanelHeaderFactory from "./Panel-header";
 import './App.css';
-import s from './Map.module.scss';
 import { MAPBOX_ACCESS_TOKEN } from '../../constants';
-import {
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Row,
-    Button
-} from "reactstrap";
-import { getTagNames, getMapDataByTag } from "../../actions/map";
-import Loader from "../../components/Loader";
-import { generateMapImage } from 'kepler.gl/actions';
 
-const KeplerGl = injectComponents([
-  [PanelHeaderFactory, CustomPanelHeaderFactory],
-  [PanelToggleFactory, CustomPanelToggleFactory]
-]);
+import { getTagNames, getMapDataById } from "../../actions/map";
+import Loader from "../../components/Loader";
+import sampleData from './datasets/data';
+
+
+
+// const KeplerGl = injectComponents([
+//   [PanelHeaderFactory, CustomPanelHeaderFactory],
+//   [PanelToggleFactory, CustomPanelToggleFactory]
+// ]);
 
 class Map extends React.Component {
   static propTypes = {
@@ -55,105 +49,39 @@ class Map extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      dropdownOpen: false,
-      selectValue: "Select Tag Name",
-      selectedTagId: "",
-    };
   }
 
   componentDidMount() {
-    // this.props.dispatch(getTagNames());
+    this.loadMapData();
   }
 
-  toggle = () => {
-    this.setState((prevState, props) => {
-      console.log("dropdpwn state===>", prevState.dropdownOpen);
-      return { dropdownOpen: !prevState.dropdownOpen };
-    });
-}
-  handleChange = e => {
-      const selectedTagId = e.currentTarget.getAttribute("tagid");
-      this.setState({
-        selectValue: e.currentTarget.textContent,
-        selectedTagId
-      });
-  };
-
-    handleBack = () => {
-        // this.props.history.push("/app/main");
-      console.log('features', this.props.mapState.visState.editor);
-    }
-
  loadMapData = () => {
-     const { selectedTagId } = this.state; 
-     selectedTagId
-       ? this.props.dispatch(getMapDataByTag({ selectedTagId: selectedTagId }))
-       : toast.error("Please Select Tag Name!", {
+   const mapId = this.props.match.params.id; 
+   mapId
+     ? this.props.dispatch(getMapDataById({ mapId }))
+       : toast.error("Please Specify a valid Mapid", {
            position: toast.POSITION.TOP_RIGHT
          });
  }
 
-  generateImage = () => {
-    this.props.dispatch(generateMapImage({
-      dmension: { width: 500, height: 500, resolution: 2 },
-      onUpdate: (dataUrl) => console.log(dataUrl)
-    })
-    );
-  }
-
   render() {
-    const { tagNames } = this.props;
-    console.log("tagNames===>", tagNames);
-
-      const dropdownItem = (tagNames) ? tagNames.map(ele => {
-        return (
-          <DropdownItem
-            tagid={ele._id}
-            key={ele._id}
-            onClick={this.handleChange}
-          >
-            {ele.tagName}
-          </DropdownItem>
-        );
-    }): null;
-
     return (
-      <div className={s.MapContainer}>
-        <Loader visible={this.props.isFetching} />
-        <Row>
-          <KeplerGl
-            id="adminMap"
-            mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-            width={window.innerWidth}
-            height={window.innerHeight - 100}
-          />
-        </Row>
-        <Row>
-          <div className="mt-3 mb-3 ml-5">
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <DropdownToggle caret>{this.state.selectValue}</DropdownToggle>
-              <DropdownMenu>{dropdownItem}</DropdownMenu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button
-              color="success"
-              className="mt-3 mb-3 ml-1"
-              onClick={this.loadMapData}
-            >
-              Load Data
-            </Button>
-            <Button
-              onClick={this.handleBack}
-              className="pull-right mt-3 mb-3 ml-2 "
-            >
-              Back
-            </Button>
-          </div>
-        </Row>
-      </div>
+      <React.Fragment>
+      <Loader visible={this.props.isFetching} />
+        <div style={{ position: "absolute", width: "100%", height: "100%" }}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <KeplerGl
+                mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+                id="map"
+                width={width}
+                height={height}
+              />
+            )}
+          </AutoSizer>
+        </div>
+      </React.Fragment>
+     
     );
   }
 }
@@ -179,6 +107,4 @@ export default withRouter(
   )
 );
 
-
-// export default withRouter(connect(mapStateToProps)(Map));
 

@@ -65,7 +65,6 @@ class Login extends React.Component {
       from: { pathname: '/app' },
     };
     if (this.props.isAuthenticated) {
-      console.log('this does the login redirection');
       this.props.history.push(from);
     }
   }

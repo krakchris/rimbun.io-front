@@ -53,7 +53,7 @@ class App extends React.PureComponent {
                     <Route path="/register" exact component={Register}/>
                     <Route path="/login" exact component={Login}/>
                     <Route path="/error" exact component={ErrorPage}/>
-                    <Route path="/maps" exact component={Maps}/>
+                    <Route path="/map/:id" exact component={Maps}/>
                 </Switch>
             </HashRouter>
         </div>
