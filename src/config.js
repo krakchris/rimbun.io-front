@@ -1,6 +1,21 @@
+import axios from "axios";
+import * as auth from "./lib/token";
 
-export default {
-  token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpmYWxzZSwibG9naW4iOiJ1c2VyIiwiaWF0IjoxNTczNzQ4ODI1LCJleHAiOjE2MjA0MDQ4MjV9.Jd1Trqu6izHq2R3uw4enrDlQKG4mzZdipSMdYQD_9JM",
+
+const configData = {
   baseURLApi: process.env.REACT_APP_BASE_URL_API
 };
+
+export const setApiHeaders = () => {
+  axios.defaults.baseURL = configData.baseURLApi;
+  axios.defaults.headers.common["Content-Type"] = "application/json";
+  const token = auth.getToken();
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    return true
+  }
+  return false;
+}
+
+
+export default configData;

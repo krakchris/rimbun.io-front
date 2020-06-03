@@ -113,7 +113,7 @@ export function loginUser(creds) {
       .post(payload)
       .then(response => {
         auth.setToken(response.data.token);
-        context.setLoggedInUser(JSON.stringify(response.data));
+        context.setLoggedInConfig(JSON.stringify(response.data));
         dispatch(receiveLogin(response.data));
       })
       .catch(error => {

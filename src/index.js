@@ -1,29 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'
-import ReduxThunk from 'redux-thunk'
 import * as serviceWorker from './serviceWorker';
-import axios from 'axios';
 
 import App from './components/App';
-import config from './config';
-import reducers from './reducers';
-import * as auth from './lib/token';
+import { setApiHeaders } from './config';
 import store from './store';
 
-axios.defaults.baseURL = config.baseURLApi;
-axios.defaults.headers.common['Content-Type'] = "application/json";
-const token = auth.getToken();
-if (token) {
-    axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-}
-
-// const store = createStore(
-//   reducers,
-//   applyMiddleware(ReduxThunk)
-// );
-
+setApiHeaders();
 ReactDOM.render(
     <Provider store={store}>
         <App />
