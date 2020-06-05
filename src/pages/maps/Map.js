@@ -20,7 +20,7 @@ import { MAPBOX_ACCESS_TOKEN } from '../../constants';
 
 import { getTagNames, getMapDataById } from "../../actions/map";
 import Loader from "../../components/Loader";
-import sampleData from './datasets/data';
+import { Button } from 'reactstrap'
 
 
 
@@ -55,25 +55,40 @@ class Map extends React.Component {
     this.loadMapData();
   }
 
- loadMapData = () => {
-   const mapId = this.props.match.params.id; 
-   mapId
-     ? this.props.dispatch(getMapDataById({ mapId }))
-       : toast.error("Please Specify a valid Mapid", {
-           position: toast.POSITION.TOP_RIGHT
-         });
- }
+  loadMapData = () => {
+    const mapId = this.props.match.params.id;
+    mapId
+      ? this.props.dispatch(getMapDataById({ mapId }))
+      : toast.error("Please Specify a valid Mapid", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+  };
+
+  saveMapConfig = () => {
+    // create the config object
+    const { editMap } = this.props.mapState;
+    // create the config object
+    const mapConfig = KeplerGlSchema.getConfigToSave(editMap);
+    console.log(mapConfig);
+  };
+
+  handleBack = () => {
+    this.props.history.push('/app');
+  }
 
   render() {
     return (
       <React.Fragment>
-      <Loader visible={this.props.isFetching} />
+        <Loader visible={this.props.isFetching} />
         <div style={{ position: "absolute", width: "100%", height: "100%" }}>
+          <Button onClick={this.saveMapConfig}>Save Config</Button>
+          {"   "}
+          <Button onClick={this.handleBack}>Back</Button>
           <AutoSizer>
             {({ height, width }) => (
               <KeplerGl
                 mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-                id="map"
+                id="editMap"
                 width={width}
                 height={height}
               />
@@ -81,7 +96,6 @@ class Map extends React.Component {
           </AutoSizer>
         </div>
       </React.Fragment>
-     
     );
   }
 }
@@ -102,7 +116,7 @@ export default withRouter(
       // lenses
       [visStateLens],
       // mapStateToProps
-      state => ({ mapState: state.keplerGl.adminMap })
+      state => ({ mapState: state.keplerGl })
     )(Map)
   )
 );

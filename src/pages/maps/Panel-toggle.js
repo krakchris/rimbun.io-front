@@ -39,7 +39,7 @@ const CustomPanelToggleFactory = () =>
     // lenses
     [visStateLens],
     // mapStateToProps
-    state => ({ mapState: state.keplerGl.adminMap }),
+    state => ({ mapState: state.keplerGl.editMap }),
     {
       onClickSaveConfig: setMapConfig
     }

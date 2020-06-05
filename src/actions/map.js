@@ -81,7 +81,7 @@ function prepareKeplerData(dataset){
           info: {
             // this is used to match the dataId defined in nyc-config.json. For more details see API documentation.
             // It is paramount that this id matches your configuration otherwise the configuration file will be ignored.
-            id: "adminMap"
+            id: "editMap"
           }
         });
 
