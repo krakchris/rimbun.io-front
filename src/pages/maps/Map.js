@@ -15,14 +15,12 @@ import {
   PanelHeaderFactory,
   withState
 } from "kepler.gl/components";
-import './App.css';
 import { MAPBOX_ACCESS_TOKEN } from '../../constants';
 
 import { getTagNames, getMapDataById } from "../../actions/map";
 import Loader from "../../components/Loader";
 import sampleData from './datasets/data';
-
-
+import './App.css';
 
 // const KeplerGl = injectComponents([
 //   [PanelHeaderFactory, CustomPanelHeaderFactory],
@@ -55,20 +53,21 @@ class Map extends React.Component {
     this.loadMapData();
   }
 
- loadMapData = () => {
-   const mapId = this.props.match.params.id; 
-   mapId
-     ? this.props.dispatch(getMapDataById({ mapId }))
-       : toast.error("Please Specify a valid Mapid", {
-           position: toast.POSITION.TOP_RIGHT
-         });
- }
+  loadMapData = () => {
+    const mapId = this.props.match.params.id;
+    const instance = 'map';
+    mapId
+      ? this.props.dispatch(getMapDataById({ mapId, instance }))
+      : toast.error("Please Specify a valid Mapid", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+  }
 
   render() {
     return (
       <React.Fragment>
-      <Loader visible={this.props.isFetching} />
-        <div style={{ position: "absolute", width: "100%", height: "100%" }}>
+        <Loader visible={this.props.isFetching} />
+        <div className='view' style={{ position: "absolute", width: "100%", height: "100%" }}>
           <AutoSizer>
             {({ height, width }) => (
               <KeplerGl
@@ -81,19 +80,19 @@ class Map extends React.Component {
           </AutoSizer>
         </div>
       </React.Fragment>
-     
+
     );
   }
 }
 
 function mapStateToProps(state) {
-    return {
-        tagNames: state.map.tagNames,
-        isFetching: state.map.isFetching,
-        isError: state.map.isAuthenticated,
-        errorMessage: state.map.errorMessage,
-        mapData: state.map.mapData
-    };
+  return {
+    tagNames: state.map.tagNames,
+    isFetching: state.map.isFetching,
+    isError: state.map.isAuthenticated,
+    errorMessage: state.map.errorMessage,
+    mapData: state.map.mapData
+  };
 }
 
 export default withRouter(

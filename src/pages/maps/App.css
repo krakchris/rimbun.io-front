@@ -15,10 +15,10 @@ margin-right:8px;
 margin-top:20px;
 }
 
-/* to customize 3-D, split view
-.bZDKWX .fCmSvg{
+/* to customize 3-D, split view */
+.view .bZDKWX .fCmSvg{
   width:unset;
-  padding-right:259px;
+  padding:12px;
 }
 
-*/
+

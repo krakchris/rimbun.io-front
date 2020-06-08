@@ -5,8 +5,6 @@ import { PanelToggleFactory, Button, Icons, withState } from 'kepler.gl/componen
 import { visStateLens } from 'kepler.gl/reducers';
 import { setMapConfig } from '../../reducers/kepler';
 
-
-
 const StyledPanelToggleWrapper = styled.div`
   display: flex;
   justify-content: space-between;

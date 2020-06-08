@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as auth from "./lib/token";
 
-
 const configData = {
   baseURLApi: process.env.REACT_APP_BASE_URL_API
 };
