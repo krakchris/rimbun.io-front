@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import Widget from '../../components/Widget';
 import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
+import Loader from '../../components/Loader'
 import s from './Userlist.module.scss';
 
 
@@ -27,7 +28,7 @@ class Userlist extends PureComponent {
   }
 
   componentDidMount() {
-      this.props.dispatch(fetchUsers());
+    this.props.dispatch(fetchUsers());
   }
 
   createUser = () => {
@@ -35,13 +36,15 @@ class Userlist extends PureComponent {
   }
 
   render() {
+
+    const { isFetching, fetchData } = this.props;
     return (
       <div className={s.root}>
         {/*<h3 className="mb-lg">
           <span className="glyphicon glyphicon-user" />
             User List:
         </h3>*/}
-
+        <Loader visible={isFetching} />
         <Row>
           <Col sm={12} md={6}>
             <Widget
@@ -63,9 +66,9 @@ class Userlist extends PureComponent {
                 </div>
               }
             >
-              {this.props.fetchData ? (
-                <TableComponent data={this.props.fetchData} />
-              ) : null}
+              {fetchData && fetchData.length !== 0 ? (
+                <TableComponent data={fetchData} />
+              ) : <h5>{isFetching ? `Loading....` : `No User Available!`}</h5>}
             </Widget>
           </Col>
         </Row>
@@ -77,6 +80,7 @@ class Userlist extends PureComponent {
 function mapStateToProps(state) {
   return {
     fetchData: state.auth.fetchData,
+    isFetching: state.auth.isFetching
   };
 }
 

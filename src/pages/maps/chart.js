@@ -128,7 +128,7 @@ class Chart extends React.Component {
 
         return (
             <React.Fragment>
-                <div style={{ margin: ' 25px' }}>
+                <div style={{ margin: '25px' }}>
                     <Plot
                         data={green_area_data}
                         layout={green_area_layout}

@@ -14,7 +14,6 @@ import Loader from "../../components/Loader";
 import { getMapDataById } from '../../actions/map'
 import { getChart, chartFailure } from '../../actions/chart'
 import { MAPBOX_ACCESS_TOKEN } from '../../constants';
-import {Button} from 'reactstrap';
 import './viewMap.css';
 
 
@@ -80,17 +79,20 @@ class Official extends React.Component {
                             )}
                         </AutoSizer>
                     </div>
-                    <div style={{ background: 'grey', flexGrow: 1, height: '580px', zIndex: 9999 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'grey', flexGrow: 1, width: '250px', height: '580px', zIndex: 9999 }}>
 
                         {this.props.mapState ?
                             (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
-                                ? <Chart data={this.props.mapState.visState.layerData[0].data} coord={this.props.mapState.visState.layerData[1].data} /> : 'No Chart is Available'
+                                ? <Chart data={this.props.mapState.visState.layerData[0].data} coord={this.props.mapState.visState.layerData[1].data} />
+                                : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px 25px' }}>Please draw layer on map to view data visualization on chart </span>
                             : null}
 
                         {this.props.mapState ?
                             (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
                                 ? <div style={{ background: '#ccc', textAlign: 'center' }}>
-                                    <Button onClick={this.handleBack}>Back</Button>
+                                    <button onClick={this.handleBack} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
+                                        {/* <i className="glyphicon glyphicon-refresh text-success mb-xs" style={{ marginTop: '5px' }} >*/}
+                            Back </button>
                                 </div> : null : null}
                     </div>
                 </div>

@@ -6,7 +6,8 @@ import {
   USER_CREATE_REQUEST,
   USER_CREATE_FAILURE,
   USER_CREATE_SUCCESS,
-  FETCH_USER_SUCCESS
+  FETCH_USER_SUCCESS,
+  REQUEST_USER_DETAILS
 } from "../actions/user";
 import * as auth from "../lib/token";
 
@@ -40,23 +41,28 @@ export default function (state = {
         isAuthenticated: false
       });
     case USER_CREATE_REQUEST:
-        return Object.assign({}, state, {
-            isLoading: true,
-            isError: false,
-        });
+      return Object.assign({}, state, {
+        isLoading: true,
+        isError: false,
+      });
     case USER_CREATE_FAILURE:
-    return Object.assign({}, state, {
+      return Object.assign({}, state, {
         isLoading: false,
         isError: true,
-    });
+      });
     case USER_CREATE_SUCCESS:
-    return Object.assign({}, state, {
+      return Object.assign({}, state, {
         isLoading: false,
         isError: false,
-    });
+      });
     case FETCH_USER_SUCCESS:
-      return Object.assign({},state,{
-        fetchData:action.payload
+      return Object.assign({}, state, {
+        fetchData: action.payload,
+        isFetching: false
+      })
+    case REQUEST_USER_DETAILS:
+      return Object.assign({}, state, {
+        isFetching: true
       })
     default:
       return state;
