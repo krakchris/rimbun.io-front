@@ -21,7 +21,12 @@ import PropTypes from "prop-types";
 import CreateMap from './CreateMap';
 import mapImage from "../../images/map_placeholder.png";
 import cx from "classnames";
-import { fetchMaps, getTagNames, createMap } from "../../actions/dashboard";
+import {
+  fetchMaps,
+  getTagNames,
+  createMap,
+  clearDashboardState
+} from "../../actions/dashboard";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import * as dashboardConst from './constant';
@@ -86,6 +91,8 @@ class Dashboard extends PureComponent {
         pageNo: this.state.currentPage,
         limit: dashboardConst.PAGE_MAP_LIMIT
       });
+
+    this.props.dispatch(clearDashboardState());
   };
 
   handleCardAction = ({id,action}) => {

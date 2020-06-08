@@ -8,13 +8,12 @@ import dashboard from './dashboard';
 import posts from './posts';
 import map from './map';
 
-
-// const customizedKeplerGlReducer = keplerGlReducer.initialState({
-//   uiState: {
-//     // hide all modals whtn mounted
-//     currentModal: null
-//   }
-// });
+const customizedKeplerGlReducer = keplerGlReducer.initialState({
+  uiState: {
+    // hide all modals whtn mounted
+    currentModal: null
+  }
+});
 
 export default combineReducers({
   auth,
@@ -22,6 +21,6 @@ export default combineReducers({
   navigation,
   dashboard,
   posts,
-  keplerGl: keplerGlReducer,
+  keplerGl: customizedKeplerGlReducer,
   map
 });

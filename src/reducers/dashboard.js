@@ -8,7 +8,8 @@ import {
   FETCH_MAPS_FAILURE,
   TAG_REQUEST,
   TAG_SUCCESS,
-  TAG_FAILURE
+  TAG_FAILURE,
+  CLEAR_STATE
 } from "../actions/dashboard";
 
 export default function dashboard(
@@ -18,7 +19,8 @@ export default function dashboard(
     mapList: [],
     tagNames: [],
     mapCreateStatus: false,
-    totalMapCount: 0
+    totalMapCount: 0,
+    errorMessage: null
   },
   action,
 ) {
@@ -75,6 +77,10 @@ export default function dashboard(
         isFetching: false,
         isError: true,
         errorMessage: action.message
+      });
+    case CLEAR_STATE:
+      return Object.assign({}, state, {
+        errorMessage: null
       });
     default:
       return state;
