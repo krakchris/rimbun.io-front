@@ -7,5 +7,6 @@ export default {
   getTagNames: "masterData/getAllTags",
   getMapDataByID: "map/getMap",
   getMapList: "map/getUserAssocMap",
-  createMap: "map"
+  createMap: "map",
+  saveMapConfig: "map"
 };

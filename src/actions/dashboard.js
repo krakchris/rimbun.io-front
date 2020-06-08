@@ -13,6 +13,15 @@ export const TAG_REQUEST = "TAG_REQUEST";
 export const TAG_SUCCESS = "TAG_SUCCESS";
 export const TAG_FAILURE = "TAG_FAILURE";
 
+export const CLEAR_STATE = "CLEAR_STATE";
+
+export function clearDashboardState() {
+  return {
+    type: CLEAR_STATE
+  };
+
+}
+
 function createPostInitial() {
   return {
     type: CREATE_MAP_INITIAL,
