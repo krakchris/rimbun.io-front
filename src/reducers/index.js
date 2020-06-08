@@ -10,12 +10,25 @@ import chart from './chart'
 import map from './map';
 
 
-// const customizedKeplerGlReducer = keplerGlReducer.initialState({
-//   uiState: {
-//     // hide all modals whtn mounted
-//     currentModal: null
-//   }
-// });
+const customizedKeplerGlReducer = keplerGlReducer
+  .initialState({
+    uiState: {
+      // hide side panel to disallower user customize the map
+
+    }
+  })
+  // handle additional actions
+  .plugin({
+    HIDE_SIDE_PANEL: (state, action) => ({
+      ...state,
+      uiState: {
+        ...state.uiState,
+        readOnly: true,
+        currentModal: null
+      }
+    })
+  });
+
 
 export default combineReducers({
   auth,
@@ -23,7 +36,7 @@ export default combineReducers({
   navigation,
   dashboard,
   posts,
-  keplerGl: keplerGlReducer,
+  keplerGl: customizedKeplerGlReducer,
   map,
   chart
 });

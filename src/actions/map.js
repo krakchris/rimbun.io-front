@@ -6,12 +6,18 @@ import { processCsvData } from "kepler.gl/processors";
 export const MAP_REQUEST = "MAP_REQUEST";
 export const MAP_SUCCESS = "MAP_SUCCESS";
 export const MAP_FAILURE = "MAP_FAILURE";
+export const HIDE_SIDE_PANEL = "HIDE_SIDE_PANEL"
 
 function setInitialConfig(payload) {
-  console.log('payload', payload)
   return {
     type: 'LOAD_REMOTE_RESOURCE_SUCCESS',
     payload
+  }
+}
+
+export function hideSidePanel() {
+  return {
+    type: 'HIDE_SIDE_PANEL'
   }
 }
 

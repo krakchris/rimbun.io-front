@@ -26,6 +26,7 @@ import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import * as dashboardConst from './constant';
 
+
 class Dashboard extends PureComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
