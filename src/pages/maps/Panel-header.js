@@ -5,7 +5,6 @@ import Icon from "../../components/Icon";
 import s from './Map.module.scss';
 
 const CustomHeader = (props) => {
-    console.log('props in headre--->', props);
     return (
         <div className={s.keplerLogo}>
             <Icon glyph="logo" />

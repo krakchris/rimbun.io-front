@@ -47,7 +47,6 @@ const PanelToggleWrapper = props => {
   };
 
   const handleBack = () => {
-    console.log('o back');
     history.push("/app");
     window.location.reload();
   }
