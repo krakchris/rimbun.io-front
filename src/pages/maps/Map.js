@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
 import { toast } from "react-toastify";
-import KeplerGlSchema from "kepler.gl/schemas";
-import Processors from 'kepler.gl/processors';
 import { visStateLens } from "kepler.gl/reducers";
 import {
   injectComponents,
@@ -16,7 +14,7 @@ import {
 import CustomPanelToggleFactory from "./Panel-toggle";
 import CustomPanelHeaderFactory from "./Panel-header";
 import './App.css';
-import { MAPBOX_ACCESS_TOKEN } from '../../constants';
+import { MAPBOX_ACCESS_TOKEN,EDIT_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 
 import { getMapDataById } from "../../actions/map";
 import Loader from "../../components/Loader";
@@ -44,6 +42,7 @@ class Map extends React.Component {
     tagNames: [],
     mapData: null
   };
+  
 
   constructor(props) {
     super(props);
@@ -56,7 +55,9 @@ class Map extends React.Component {
   loadMapData = () => {
     const mapId = this.props.match.params.id;
     mapId
-      ? this.props.dispatch(getMapDataById({ mapId }))
+      ? this.props.dispatch(
+          getMapDataById({ mapId, mapInstanceId: EDIT_MAP_INSTANCE_ID })
+        )
       : toast.error("Please Specify a valid Mapid", {
           position: toast.POSITION.TOP_RIGHT
         });
@@ -72,7 +73,7 @@ class Map extends React.Component {
             {({ height, width }) => (
               <KeplerGl
                 mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-                id="editMap"
+                id={EDIT_MAP_INSTANCE_ID}
                 width={width}
                 height={height}
               />
