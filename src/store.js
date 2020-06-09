@@ -3,12 +3,14 @@ import { combinedUpdaters } from 'kepler.gl/reducers';
 import { enhanceReduxMiddleware } from "kepler.gl/middleware";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
+// import { composeWithDevTools } from "redux-devtools-extension";
 
 const composedReducer = (state, action) => {
     switch (action.type) {
         // add data to map after receiving data from remote sources
         case 'LOAD_REMOTE_RESOURCE_SUCCESS':
             console.log("LOAD_REMOTE_RESOURCE_SUCCESS", action.payload.instance)
+            console.log("payload", action.payload)
             if (action.payload.instance === 'viewMap') {
                 return {
                     ...state,
@@ -33,8 +35,8 @@ const composedReducer = (state, action) => {
                     keplerGl: {
                         ...state.keplerGl,
                         // pass in kepler.gl instance state to combinedUpdaters
-                        map: combinedUpdaters.addDataToMapUpdater(
-                            state.keplerGl.map,
+                        editMap: combinedUpdaters.addDataToMapUpdater(
+                            state.keplerGl.editMap,
                             {
                                 payload: {
                                     datasets: action.payload.datasets,

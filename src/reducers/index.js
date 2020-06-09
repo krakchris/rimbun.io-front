@@ -14,7 +14,7 @@ const customizedKeplerGlReducer = keplerGlReducer
   .initialState({
     uiState: {
       // hide side panel to disallower user customize the map
-
+      currentModal: null
     }
   })
   // handle additional actions
@@ -23,8 +23,7 @@ const customizedKeplerGlReducer = keplerGlReducer
       ...state,
       uiState: {
         ...state.uiState,
-        readOnly: true,
-        currentModal: null
+        readOnly: true
       }
     })
   });

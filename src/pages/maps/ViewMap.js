@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { visStateLens } from 'kepler.gl/reducers';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import { injectComponents, PanelToggleFactory, PanelHeaderFactory, MapPopoverFactory, withState } from 'kepler.gl/components';
-import { toggleModal, toggleSidePanel, wrapTo } from 'kepler.gl/actions'
+import { wrapTo } from 'kepler.gl/actions'
 import CustomPanelToggleFactory from './Panel-toggle';
 import CustomPanelHeaderFactory from './Panel-header';
 import CustomPopOverFactory from './Pop-over'
@@ -20,9 +20,7 @@ import './viewMap.css';
 
 
 const KeplerGl = injectComponents([
-    // [MapPopoverFactory, CustomPopOverFactory],
-    [PanelHeaderFactory, CustomPanelHeaderFactory],
-    [PanelToggleFactory, CustomPanelToggleFactory]
+    [MapPopoverFactory, CustomPopOverFactory],
 ]);
 
 //to check empty object
@@ -44,8 +42,6 @@ class Official extends React.Component {
 
 
     componentDidMount() {
-        // this.props.dispatch(toggleModal(null));
-        // this.props.dispatch(toggleSidePanel(null));
         this.props.dispatch(wrapTo('viewMap', hideSidePanel()))
         this.viewMapData();
     }
@@ -68,33 +64,32 @@ class Official extends React.Component {
         return (
             <React.Fragment>
                 <Loader visible={this.props.isFetching} />
-                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <div style={{ width: '900px' }}>
+                <div style={{ display: 'flex' }}>
+                    <div style={{ width: '80%' }}>
                         <AutoSizer>
-                            {({ width }) => (
+                            {({ height, width }) => (
                                 <KeplerGl
                                     id="viewMap"
                                     mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-                                    width={window.innerWidth}
+                                    width={width}
                                     height={window.innerHeight}
                                 />
                             )}
                         </AutoSizer>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'grey', flexGrow: 1, width: '250px', height: '580px', zIndex: 9999 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexGrow: 1, width: '25%', height: '579px', background: 'grey' }}>
 
                         {this.props.mapState ?
                             (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
                                 ? <Chart data={this.props.mapState.visState.layerData[0].data} coord={this.props.mapState.visState.layerData[1].data} />
-                                : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px 25px' }}>Please draw layer on map to view data visualization on chart </span>
+                                : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px 18px' }}>Please draw layer on map to view data visualization on chart </span>
                             : null}
 
                         {this.props.mapState ?
                             (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
                                 ? <div style={{ background: '#ccc', textAlign: 'center' }}>
                                     <button onClick={this.handleBack} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
-                                        {/* <i className="glyphicon glyphicon-refresh text-success mb-xs" style={{ marginTop: '5px' }} >*/}
-                            Back </button>
+                                        Back </button>
                                 </div> : null : null}
                     </div>
                 </div>
@@ -106,7 +101,7 @@ class Official extends React.Component {
 function mapStateToProps(state) {
     return {
         isVisible: state.chart.isVisible,
-        isFetching: state.map.isFetching
+        isFetching: state.map.isFetching,
     };
 }
 

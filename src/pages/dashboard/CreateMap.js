@@ -59,13 +59,18 @@ class CreateMap extends Component {
     if (this.handleFormValidation()) {
       const { mapName, selectedtagName } = this.state;
       this.props.createMap({ mapName, selectedtagName });
-      setTimeout(this.toggle, 4000);
+      setTimeout(() => this.toggle('AUTO'), 4000);
     }
   };
 
-  toggle = () => {
+  toggle = (autoFlag="") => { 
     this.setState((prevState, props) => {
-      return { modal: !prevState.modal };
+      let modalStatus;
+      modalStatus =
+        autoFlag === "AUTO" && !prevState.modal
+          ? prevState.modal
+          : !prevState.modal;
+      return { modal: modalStatus };
     });
   };
 
@@ -101,6 +106,7 @@ class CreateMap extends Component {
           keyboard={false}
           unmountOnClose
           onClosed={this.onClosed}
+          returnFocusAfterClose={false}
         >
           <Form onSubmit={this.onSubmit}>
             <ModalHeader toggle={this.toggle}>Create Map</ModalHeader>
@@ -151,9 +157,9 @@ class CreateMap extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="success">Create</Button>{" "}
-              <Button color="secondary" onClick={this.toggle}>
+              {/* <Button color="secondary" onClick={this.toggle}>
                 Cancel
-              </Button>
+                </Button>*/}
             </ModalFooter>
           </Form>
         </Modal>
