@@ -30,6 +30,7 @@ import {
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import * as dashboardConst from './constant';
+import DeleteMap from './DeleteMap';
 
 class Dashboard extends PureComponent {
   static propTypes = {
@@ -95,11 +96,15 @@ class Dashboard extends PureComponent {
     this.props.dispatch(clearDashboardState());
   };
 
-  handleCardAction = ({id,action}) => {
-    if(action==='edit') this.props.history.push(`/map/${id}`);
-    if(action==='view') alert('In progress');
+  // viewMap Route --> this.props.history.push(`/viewMap/${id}`);
+
+  handleCardAction = ({ id, action }) => {
+    if (action === 'edit') this.props.history.push(`/map/${id}`);
+    if (action === 'view') alert('In progress');
     if (action === 'share') alert('In progress');
   }
+
+
 
   render() {
     const { isFetching, mapList, tagNames, totalMapCount } = this.props;
@@ -118,16 +123,23 @@ class Dashboard extends PureComponent {
           </a>
           <CardBody>
             <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
-            <div className={s.alignEnd}>
+            <div className={s.actionIcons}>
+              <div>
+                <DeleteMap />
+              </div>
 
-              <i onClick={()=>this.handleCardAction({id:item._id,action:'view'})}
-                className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs" />
+              <div className={s.alignEnd}>
 
-              <i onClick={()=>this.handleCardAction({id:item._id,action:'edit'})}            className="glyphicon glyphicon-pencil text-success mr-sm mb-xs" />
+                <i onClick={() => this.handleCardAction({ id: item._id, action: 'view' })}
+                  className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs" />
 
-              <i onClick={() => this.handleCardAction({ id: item._id, action: 'share' })} className="glyphicon glyphicon-share text-success mb-xs" />
+                <i onClick={() => this.handleCardAction({ id: item._id, action: 'edit' })} className="glyphicon glyphicon-pencil text-success mr-sm mb-xs" />
 
+                <i onClick={() => this.handleCardAction({ id: item._id, action: 'share' })} className="glyphicon glyphicon-share text-success mb-xs" />
+
+              </div>
             </div>
+
           </CardBody>
         </Card>
       );
@@ -162,8 +174,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-            )}
+                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+              )}
           </Row>
         </Container>
       </section>
