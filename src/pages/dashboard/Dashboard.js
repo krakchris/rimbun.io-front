@@ -100,7 +100,7 @@ class Dashboard extends PureComponent {
 
   handleCardAction = ({ id, action }) => {
     if (action === 'edit') this.props.history.push(`/map/${id}`);
-    if (action === 'view') alert('In progress');
+    if (action === 'view') this.props.history.push(`/viewMap/${id}`);
     if (action === 'share') alert('In progress');
   }
 

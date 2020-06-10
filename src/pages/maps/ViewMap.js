@@ -14,7 +14,7 @@ import Loader from "../../components/Loader";
 import { getMapDataById } from '../../actions/map'
 import { getChart, chartFailure } from '../../actions/chart';
 import { hideSidePanel } from '../../actions/map';
-import { MAPBOX_ACCESS_TOKEN } from '../../constants';
+import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 import './viewMap.css';
 
 
@@ -42,7 +42,7 @@ class Official extends React.Component {
 
 
     componentDidMount() {
-        this.props.dispatch(wrapTo('viewMap', hideSidePanel()))
+        this.props.dispatch(wrapTo(VIEW_MAP_INSTANCE_ID, hideSidePanel()))
         this.viewMapData();
     }
 
@@ -50,7 +50,9 @@ class Official extends React.Component {
         const mapId = this.props.match.params.id;
         const instance = 'viewMap';
         mapId
-            ? this.props.dispatch(getMapDataById({ mapId, instance }))
+            ? this.props.dispatch(
+                getMapDataById({ mapId, mapInstanceId: VIEW_MAP_INSTANCE_ID })
+            )
             : toast.error("Please Specify a valid Mapid", {
                 position: toast.POSITION.TOP_RIGHT
             });

@@ -6,4 +6,4 @@ export const CLOSE_SIDEBAR = 'CLOSE_SIDEBAR';
 
 export const OFFICIAL_ROLE_TAG = 'official';
 
-export const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
+
