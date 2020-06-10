@@ -135,7 +135,7 @@ class Dashboard extends PureComponent {
       render: "Deletion Cancelled",
       type: toast.TYPE.SUCCESS,
       closeOnClick: true,
-      autoClose: 2000
+      autoClose: 1000
     });
 
   render() {
