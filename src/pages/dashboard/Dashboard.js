@@ -33,7 +33,7 @@ import {
 } from "../../actions/dashboard";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
-import * as dashboardConst from './constant';
+import * as dashboardConst from '../../constants';
 import DeleteMap from './DeleteMap';
 
 class Dashboard extends PureComponent {
@@ -109,31 +109,12 @@ class Dashboard extends PureComponent {
   };
 
   deleteConfirm = (mapId) => {
-    console.log('delete clicked');
     toast(
-      <div>
-        <div className="d-flex flex-column align-items-center">
-          <b>Are you sure, you want to delete this map permanently?</b>
-        </div>
-        <Button
-          onClick={() => this.deleteMap(mapId)}
-          outline
-          color="danger"
-          size="sm"
-          className="width-50 mb-xs mr-xs mt-1 ml-4"
-        >
-          yes
-        </Button>
-        <Button
-          onClick={() => this.launchNotification(mapId)}
-          outline
-          color="success"
-          size="sm"
-          className="width-50 mb-xs mr-xs mt-1 ml-4"
-        >
-          no
-        </Button>
-      </div>,
+      <DeleteMap
+        mapId={mapId}
+        deleteMap={this.deleteMap}
+        cancelDelete={this.cancelDelete}
+      />,
       {
         autoClose: 7000,
         closeOnClick: false,
@@ -146,13 +127,11 @@ class Dashboard extends PureComponent {
   };
 
   deleteMap = mapId => {
-    this.props.dispatch(deleteMapById({mapId}));
+    this.props.dispatch(deleteMapById({ mapId }))
   }
-   
 
-  launchNotification = id =>
+  cancelDelete = id =>
     toast.update(id, {
-      ...this.state.options,
       render: "Deletion Cancelled",
       type: toast.TYPE.SUCCESS,
       closeOnClick: true,
@@ -184,7 +163,7 @@ class Dashboard extends PureComponent {
                     border: "none",
                     outline: "none"
                   }}
-                  onClick={()=>this.deleteConfirm(item._id)}
+                  onClick={() => this.deleteConfirm(item._id)}
                 >
                   <i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" />
                 </button>
@@ -247,8 +226,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-            )}
+                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+              )}
           </Row>
         </Container>
       </section>

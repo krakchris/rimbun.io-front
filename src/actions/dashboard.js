@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { endPoints } from "../api";
-
+import * as mapPageConst from '../constants';
 export const CREATE_MAP_INITIAL = "CREATE_MAP_INITIAL";
 export const CREATE_MAP_REQUEST = "CREATE_MAP_REQUEST";
 export const CREATE_MAP_SUCCESS = "CREATE_MAP_SUCCESS";
@@ -58,7 +58,7 @@ function createMapError(message) {
   return {
     type: CREATE_MAP_FAILURE,
     isFetching: false,
-    isError:true,
+    isError: true,
     message,
   };
 }
@@ -67,7 +67,7 @@ export function createMap(formData) {
   const master = formData.selectedtagName.map(item => {
     return item.value;
   });
-  const payload = { name: formData.mapName , master };
+  const payload = { name: formData.mapName, master };
   return dispatch => {
     dispatch(requestCreateMap());
     const paramEndpoint = endPoints.createMap;
@@ -130,7 +130,7 @@ export function fetchMaps(paginationParam) {
         dispatch(fetchMapsError(errorMessage));
       });
   };
-        
+
 }
 
 
@@ -211,21 +211,25 @@ function deleteMapFail(message) {
 
 
 export function deleteMapById(data) {
-  console.log(data);
   const { mapId } = data;
   return dispatch => {
     dispatch(requestDeleteMap());
     api(endPoints.deleteMap)
       .delete({ id: mapId })
       .then(response => {
-        console.log('delete api respone===>', response);
         toast.update(mapId, {
-          autoClose: 3000,
+          render: "Your map is deleted Successfully",
+          type: toast.TYPE.SUCCESS,
+          position: 'top-center',
           toastId: mapId,
-          position: "top-center",
-          type: toast.TYPE.SUCCESS
+          closeOnClick: true,
+          autoClose: 2000
         });
         dispatch(deleteMapSucess({ mapId }));
+        dispatch(fetchMaps({
+          pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
+          limit: mapPageConst.PAGE_MAP_LIMIT
+        }))
       })
       .catch(error => {
         const errorMessage = error.response
