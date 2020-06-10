@@ -1,42 +1,41 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 class DeleteMap extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            modal: false
-        }
     }
 
-    toggle = () => {
-        this.setState((prevState, props) => {
-            return { modal: !prevState.modal };
-        });
-    };
-
     render() {
+        const { mapId, deleteMap, launchNotification } = this.props;
         return (
-            <React.Fragment>
-                <button style={{ background: 'none', border: 'none', outline: 'none' }} onClick={this.toggle}><i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" /></button>
-                <Modal 
-                isOpen={this.state.modal} 
-                toggle={this.toggle}
-                backdrop={"static"}
-                keyboard={false} 
+            <div>
+                <div className="d-flex flex-column align-items-center">
+                    <b>Are you sure, you want to delete this map permanently?</b>
+                </div>
+                <Button
+                    onClick={() => deleteMap(mapId)}
+                    outline
+                    color="danger"
+                    size="sm"
+                    className="width-50 mb-xs mr-xs mt-1 ml-4"
                 >
-                    <ModalHeader toggle={this.toggle} >Delete Map</ModalHeader>
-                    <ModalBody>
-                        Are You Sure you want to
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="success" onClick={this.toggle}>Delete</Button>{' '}
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
-            </React.Fragment>
+                    yes
+                </Button>
+                <Button
+                    onClick={() => launchNotification(mapId)}
+                    outline
+                    color="success"
+                    size="sm"
+                    className="width-50 mb-xs mr-xs mt-1 ml-4"
+                >
+                    no
+                </Button>
+            </div>
         );
 
     }
 }
+
+
 export default DeleteMap;
