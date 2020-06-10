@@ -1,4 +1,5 @@
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api, { endPoints } from "../api";
 
 export const CREATE_MAP_INITIAL = "CREATE_MAP_INITIAL";
@@ -14,6 +15,12 @@ export const TAG_SUCCESS = "TAG_SUCCESS";
 export const TAG_FAILURE = "TAG_FAILURE";
 
 export const CLEAR_STATE = "CLEAR_STATE";
+
+
+export const DELETE_MAP_REQUEST = "DELETE_MAP_REQUEST";
+export const DELETE_MAP_SUCCESS = "DELETE_MAP_SUCCESS";
+export const DELETE_MAP_FAILURE = "DELETE_MAP_FAILURE";
+
 
 export function clearDashboardState() {
   return {
@@ -172,3 +179,68 @@ export function getTagNames() {
       });
   }
 }
+
+
+
+/**************** delete Map request *************/
+function requestDeleteMap() {
+  return {
+    type: DELETE_MAP_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function deleteMapSucess(data) {
+  return {
+    type: DELETE_MAP_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function deleteMapFail(message) {
+  return {
+    type: DELETE_MAP_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function deleteMapById(data) {
+  console.log(data);
+  const { mapId } = data;
+  return dispatch => {
+    dispatch(requestDeleteMap());
+    api(endPoints.deleteMap)
+      .delete({ id: mapId })
+      .then(response => {
+        console.log('delete api respone===>', response);
+        toast.update(mapId, {
+          autoClose: 3000,
+          toastId: mapId,
+          position: "top-center",
+          type: toast.TYPE.SUCCESS
+        });
+        dispatch(deleteMapSucess({ mapId }));
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(deleteMapFail());
+      });
+  }
+
+}
+

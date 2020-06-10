@@ -19,10 +19,15 @@ class DeleteMap extends React.Component {
         return (
             <React.Fragment>
                 <button style={{ background: 'none', border: 'none', outline: 'none' }} onClick={this.toggle}><i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" /></button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} >
+                <Modal 
+                isOpen={this.state.modal} 
+                toggle={this.toggle}
+                backdrop={"static"}
+                keyboard={false} 
+                >
                     <ModalHeader toggle={this.toggle} >Delete Map</ModalHeader>
                     <ModalBody>
-                        You are going to delete this map
+                        Are You Sure you want to
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.toggle}>Delete</Button>{' '}

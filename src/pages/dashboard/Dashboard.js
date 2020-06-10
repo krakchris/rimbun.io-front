@@ -17,6 +17,9 @@ import {
   Container,
   Col
 } from "reactstrap";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import uuid from "uuid/v4";
 import PropTypes from "prop-types";
 import CreateMap from './CreateMap';
 import mapImage from "../../images/map_placeholder.png";
@@ -25,7 +28,8 @@ import {
   fetchMaps,
   getTagNames,
   createMap,
-  clearDashboardState
+  clearDashboardState,
+  deleteMapById
 } from "../../actions/dashboard";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
@@ -99,12 +103,61 @@ class Dashboard extends PureComponent {
   // viewMap Route --> this.props.history.push(`/viewMap/${id}`);
 
   handleCardAction = ({ id, action }) => {
-    if (action === 'edit') this.props.history.push(`/map/${id}`);
-    if (action === 'view') alert('In progress');
-    if (action === 'share') alert('In progress');
+    if (action === "edit") this.props.history.push(`/map/${id}`);
+    if (action === "view") alert("In progress");
+    if (action === "share") alert("In progress");
+  };
+
+  deleteConfirm = (mapId) => {
+    console.log('delete clicked');
+    toast(
+      <div>
+        <div className="d-flex flex-column align-items-center">
+          <b>Are you sure, you want to delete this map permanently?</b>
+        </div>
+        <Button
+          onClick={() => this.deleteMap(mapId)}
+          outline
+          color="danger"
+          size="sm"
+          className="width-50 mb-xs mr-xs mt-1 ml-4"
+        >
+          yes
+        </Button>
+        <Button
+          onClick={() => this.launchNotification(mapId)}
+          outline
+          color="success"
+          size="sm"
+          className="width-50 mb-xs mr-xs mt-1 ml-4"
+        >
+          no
+        </Button>
+      </div>,
+      {
+        autoClose: 7000,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        toastId: mapId,
+        position: "top-center"
+      }
+    );
+  };
+
+  deleteMap = mapId => {
+    this.props.dispatch(deleteMapById({mapId}));
   }
+   
 
-
+  launchNotification = id =>
+    toast.update(id, {
+      ...this.state.options,
+      render: "Deletion Cancelled",
+      type: toast.TYPE.SUCCESS,
+      closeOnClick: true,
+      autoClose: 2000
+    });
 
   render() {
     const { isFetching, mapList, tagNames, totalMapCount } = this.props;
@@ -125,21 +178,41 @@ class Dashboard extends PureComponent {
             <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
             <div className={s.actionIcons}>
               <div>
-                <DeleteMap />
+                <button
+                  style={{
+                    background: "none",
+                    border: "none",
+                    outline: "none"
+                  }}
+                  onClick={()=>this.deleteConfirm(item._id)}
+                >
+                  <i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" />
+                </button>
               </div>
 
               <div className={s.alignEnd}>
+                <i
+                  onClick={() =>
+                    this.handleCardAction({ id: item._id, action: "view" })
+                  }
+                  className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs"
+                />
 
-                <i onClick={() => this.handleCardAction({ id: item._id, action: 'view' })}
-                  className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs" />
+                <i
+                  onClick={() =>
+                    this.handleCardAction({ id: item._id, action: "edit" })
+                  }
+                  className="glyphicon glyphicon-pencil text-success mr-sm mb-xs"
+                />
 
-                <i onClick={() => this.handleCardAction({ id: item._id, action: 'edit' })} className="glyphicon glyphicon-pencil text-success mr-sm mb-xs" />
-
-                <i onClick={() => this.handleCardAction({ id: item._id, action: 'share' })} className="glyphicon glyphicon-share text-success mb-xs" />
-
+                <i
+                  onClick={() =>
+                    this.handleCardAction({ id: item._id, action: "share" })
+                  }
+                  className="glyphicon glyphicon-share text-success mb-xs"
+                />
               </div>
             </div>
-
           </CardBody>
         </Card>
       );
@@ -174,8 +247,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-              )}
+              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+            )}
           </Row>
         </Container>
       </section>

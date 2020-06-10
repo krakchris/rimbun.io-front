@@ -13,8 +13,6 @@ export const SAVE_CONFIG_SUCCESS = "SAVE_CONFIG_SUCCESS";
 export const SAVE_CONFIG_FAILURE = "SAVE_CONFIG_FAILURE";
 
 
-
-
 function requestMapData() {
     return {
         type: MAP_REQUEST,
@@ -134,6 +132,8 @@ export function saveMapConfig(data) {
     }
 
 }
+
+
 
 
 
