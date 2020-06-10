@@ -184,7 +184,6 @@ export function getTagNames() {
 
 /**************** delete Map request *************/
 function requestDeleteMap() {
-  console.log('request Delete Map')
   return {
     type: DELETE_MAP_REQUEST,
     isFetching: true,
@@ -193,7 +192,6 @@ function requestDeleteMap() {
 }
 
 export function deleteMapSucess(data) {
-  console.log('Delete map Success')
   return {
     type: DELETE_MAP_SUCCESS,
     isFetching: false,
@@ -213,14 +211,12 @@ function deleteMapFail(message) {
 
 
 export function deleteMapById(data) {
-  console.log(data);
   const { mapId } = data;
   return dispatch => {
     dispatch(requestDeleteMap());
     api(endPoints.deleteMap)
       .delete({ id: mapId })
       .then(response => {
-        console.log('delete api respone===>', response);
         toast.update(mapId, {
           render: "Your map is deleted Successfully",
           type: toast.TYPE.SUCCESS,
@@ -231,7 +227,7 @@ export function deleteMapById(data) {
         });
         dispatch(deleteMapSucess({ mapId }));
         dispatch(fetchMaps({
-          pageNo: mapPageConst.CURRENT_PAGE_COUNT,
+          pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
           limit: mapPageConst.PAGE_MAP_LIMIT
         }))
       })

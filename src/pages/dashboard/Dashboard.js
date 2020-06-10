@@ -33,7 +33,7 @@ import {
 } from "../../actions/dashboard";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
-import * as dashboardConst from './constant';
+import * as dashboardConst from '../../constants';
 import DeleteMap from './DeleteMap';
 
 class Dashboard extends PureComponent {
@@ -109,12 +109,11 @@ class Dashboard extends PureComponent {
   };
 
   deleteConfirm = (mapId) => {
-    console.log('delete clicked');
     toast(
       <DeleteMap
         mapId={mapId}
         deleteMap={this.deleteMap}
-        launchNotification={this.launchNotification}
+        cancelDelete={this.cancelDelete}
       />,
       {
         autoClose: 7000,
@@ -131,7 +130,7 @@ class Dashboard extends PureComponent {
     this.props.dispatch(deleteMapById({ mapId }))
   }
 
-  launchNotification = id =>
+  cancelDelete = id =>
     toast.update(id, {
       render: "Deletion Cancelled",
       type: toast.TYPE.SUCCESS,

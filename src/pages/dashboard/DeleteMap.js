@@ -7,7 +7,7 @@ class DeleteMap extends React.Component {
     }
 
     render() {
-        const { mapId, deleteMap, launchNotification } = this.props;
+        const { mapId, deleteMap, cancelDelete } = this.props;
         return (
             <div>
                 <div className="d-flex flex-column align-items-center">
@@ -23,7 +23,7 @@ class DeleteMap extends React.Component {
                     yes
                 </Button>
                 <Button
-                    onClick={() => launchNotification(mapId)}
+                    onClick={() => cancelDelete(mapId)}
                     outline
                     color="success"
                     size="sm"
