@@ -5,6 +5,7 @@ import {
   SAVE_CONFIG_REQUEST,
   SAVE_CONFIG_SUCCESS,
   SAVE_CONFIG_FAILURE
+
 } from "../actions/map";
 import * as auth from "../lib/token";
 

@@ -13,6 +13,10 @@
    .alignEnd{
      text-align: end;
    }
+   .actionIcons{
+     display: flex;
+     justify-content: space-between;
+   }
  }
  
  .usersTable {

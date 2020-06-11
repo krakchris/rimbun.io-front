@@ -19,8 +19,6 @@ export function hideSidePanel() {
   }
 }
 
-
-
 function requestMapData() {
   return {
     type: MAP_REQUEST,
@@ -140,6 +138,8 @@ export function saveMapConfig(data) {
   }
 
 }
+
+
 
 
 

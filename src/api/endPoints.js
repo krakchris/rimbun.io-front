@@ -8,5 +8,6 @@ export default {
   getMapDataByID: "map/getMap",
   getMapList: "map/getUserAssocMap",
   createMap: "map",
-  saveMapConfig: "map"
+  saveMapConfig: "map",
+  deleteMap: "map"
 };

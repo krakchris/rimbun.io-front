@@ -49,9 +49,7 @@ class CreateMap extends Component {
   };
 
   handleSelectChange = selectedtagName => {
-    this.setState({ selectedtagName }, () =>
-      console.log(`Option selected:`, this.state.selectedtagName)
-    );
+    this.setState({ selectedtagName });
   };
 
   onSubmit = e => {
