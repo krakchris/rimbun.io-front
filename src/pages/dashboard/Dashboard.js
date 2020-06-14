@@ -19,7 +19,6 @@ import {
 } from "reactstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import uuid from "uuid/v4";
 import PropTypes from "prop-types";
 import CreateMap from './CreateMap';
 import mapImage from "../../images/map_placeholder.png";
