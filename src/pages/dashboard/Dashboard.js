@@ -31,10 +31,12 @@ import {
   clearDashboardState,
   deleteMapById
 } from "../../actions/dashboard";
+import { fetchUsers } from "../../actions/user";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import * as dashboardConst from '../../constants';
 import DeleteMap from './DeleteMap';
+import ShareMap from "./ShareMap";
 
 class Dashboard extends PureComponent {
   static propTypes = {
@@ -61,6 +63,7 @@ class Dashboard extends PureComponent {
 
   componentDidMount() {
     this.props.dispatch(getTagNames());
+    
     this.fetchMapList({
       pageNo: this.state.currentPage,
       limit: dashboardConst.PAGE_MAP_LIMIT
@@ -139,7 +142,13 @@ class Dashboard extends PureComponent {
     });
 
   render() {
-    const { isFetching, mapList, tagNames, totalMapCount } = this.props;
+    const {
+      isFetching,
+      mapList,
+      tagNames,
+      totalMapCount,
+      userList
+    } = this.props;
 
     const mapListComp = mapList.map(item => {
       return (
@@ -205,6 +214,13 @@ class Dashboard extends PureComponent {
               <h1 className="page-title">Maps</h1>
             </Col>
             <Col>
+              <ShareMap
+                users={userList}
+                createMap={this.handleCreateMap}
+                errorMessage={this.props.errorMessage}
+                mapCreateStatus={this.props.mapCreateStatus}
+                onModalClose={this.onModalClose}
+              />
               <CreateMap
                 tagNames={tagNames}
                 createMap={this.handleCreateMap}
@@ -226,8 +242,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-              )}
+              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+            )}
           </Row>
         </Container>
       </section>
@@ -243,7 +259,8 @@ function mapStateToProps(state) {
     errorMessage: state.dashboard.errorMessage,
     tagNames: state.dashboard.tagNames,
     mapCreateStatus: state.dashboard.mapCreateStatus,
-    totalMapCount: state.dashboard.totalMapCount
+    totalMapCount: state.dashboard.totalMapCount,
+    userList: state.auth.userList
   };
 }
 

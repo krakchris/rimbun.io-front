@@ -21,6 +21,12 @@ export const DELETE_MAP_REQUEST = "DELETE_MAP_REQUEST";
 export const DELETE_MAP_SUCCESS = "DELETE_MAP_SUCCESS";
 export const DELETE_MAP_FAILURE = "DELETE_MAP_FAILURE";
 
+export const SHARE_MAP_REQUEST = "SHARE_MAP_REQUEST";
+export const SHARE_MAP_SUCCESS = "SHARE_MAP_SUCCESS";
+export const SHARE_MAP_FAILURE = "SHARE_MAP_FAILURE";
+
+
+
 
 export function clearDashboardState() {
   return {
@@ -243,6 +249,77 @@ export function deleteMapById(data) {
           draggable: true
         });
         dispatch(deleteMapFail());
+      });
+  }
+
+}
+
+
+
+/**************** share Map request *************/
+function requestShareMap() {
+  return {
+    type: SHARE_MAP_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function shareMapSucess(data) {
+  return {
+    type: SHARE_MAP_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function shareMapFail(message) {
+  return {
+    type: SHARE_MAP_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function shareMapToOfficials(data) {
+  const { mapId } = data;
+  return dispatch => {
+    dispatch(requestShareMap());
+    const endPoint = `${endPoints.shareMap}/${mapId}`;
+    api(endPoint)
+      .post(data)
+      .then(response => {
+        toast.update(mapId, {
+          render: "Your map is shared Successfully",
+          type: toast.TYPE.SUCCESS,
+          position: "top-center",
+          toastId: mapId,
+          closeOnClick: true,
+          autoClose: 2000
+        });
+        dispatch(shareMapSucess({ mapId }));
+        dispatch(
+          fetchMaps({
+            pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
+            limit: mapPageConst.PAGE_MAP_LIMIT
+          })
+        );
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(shareMapFail());
       });
   }
 

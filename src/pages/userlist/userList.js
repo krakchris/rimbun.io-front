@@ -13,6 +13,7 @@ import Widget from '../../components/Widget';
 import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
 import s from './Userlist.module.scss';
+import Loader from '../../components/Loader';
 
 
 
@@ -35,8 +36,10 @@ class Userlist extends PureComponent {
   }
 
   render() {
+
     return (
       <div className={s.root}>
+      <Loader visible={this.props.isFetching} />
         {/*<h3 className="mb-lg">
           <span className="glyphicon glyphicon-user" />
             User List:
@@ -63,8 +66,8 @@ class Userlist extends PureComponent {
                 </div>
               }
             >
-              {this.props.fetchData ? (
-                <TableComponent data={this.props.fetchData} />
+              {this.props.userList ? (
+                <TableComponent data={this.props.userList} />
               ) : null}
             </Widget>
           </Col>
@@ -76,7 +79,8 @@ class Userlist extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    fetchData: state.auth.fetchData,
+    userList: state.auth.userList,
+    isFetching: state.auth.isFetching
   };
 }
 

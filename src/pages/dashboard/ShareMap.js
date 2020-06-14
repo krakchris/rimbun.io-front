@@ -4,18 +4,19 @@ import React, { Component } from 'react';
 import {
     Button, Modal, ModalHeader, ModalBody, ModalFooter, Form,
   FormGroup, Label, Input, Alert } from 'reactstrap';
-import Select from '../../components/SelectDropdown';
+import Select from '../../components/SelectDropdown/SelectDropdown';
 import s from "./Dashboard.module.scss";
 
 
 
-class CreateMap extends Component {
+class ShareMap extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
       mapName: "",
-      selectedtagName: null,
+      selectedUser: null,
       formErrors: {}
     };
 
@@ -23,7 +24,7 @@ class CreateMap extends Component {
   }
 
   handleFormValidation() {
-    const { mapName, selectedtagName } = this.state;
+    const { mapName, selectedUser } = this.state;
     let formErrors = {};
     let formIsValid = true;
 
@@ -34,9 +35,9 @@ class CreateMap extends Component {
     }
 
     //Tag Name
-    if (!selectedtagName) {
+    if (!selectedUser) {
       formIsValid = false;
-      formErrors["tagNameErr"] = "Select atleast one Tag Name";
+      formErrors["UserErr"] = "Select atleast one Tag Name";
     }
 
     this.setState({ formErrors: formErrors });
@@ -48,15 +49,15 @@ class CreateMap extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSelectChange = selectedtagName => {
-    this.setState({ selectedtagName });
+  handleSelectChange = selectedUser => {
+    this.setState({ selectedUser });
   };
 
   onSubmit = e => {
     e.preventDefault();
     if (this.handleFormValidation()) {
-      const { mapName, selectedtagName } = this.state;
-      this.props.createMap({ mapName, selectedtagName });
+      const { mapName, selectedUser } = this.state;
+      this.props.createMap({ mapName, selectedUser });
       setTimeout(() => this.toggle('AUTO'), 4000);
     }
   };
@@ -78,16 +79,16 @@ class CreateMap extends Component {
   }
 
   render() {
+    console.log("usrs====>", this.props.users);
     const {
-      formErrors: { mapNameErr, tagNameErr },
-      selectedtagName,
+      formErrors: { mapNameErr, UserErr },
+      selectedUser,
       mapName
     } = this.state;
 
-    console.log("inside craete map", this.props.tagNames);
-    const selectOptions = this.props.tagNames.map(item => {
+    const selectOptions = this.props.users.map(item => {
       return {
-        label: item.tagName,
+        label: `${item.name} (${item.email})`,
         value: item._id,
         key: item._id
       };
@@ -96,7 +97,7 @@ class CreateMap extends Component {
     return (
       <div className={s.alignEnd}>
         <Button color="success" size="lg" onClick={this.toggle}>
-          Create Map
+          Share Map
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -108,7 +109,7 @@ class CreateMap extends Component {
           returnFocusAfterClose={false}
         >
           <Form onSubmit={this.onSubmit}>
-            <ModalHeader toggle={this.toggle}>Create Map</ModalHeader>
+            <ModalHeader toggle={this.toggle}>Share Map</ModalHeader>
             <ModalBody>
               {this.props.errorMessage && (
                 <Alert className="alert-sm" color="danger">
@@ -117,45 +118,32 @@ class CreateMap extends Component {
               )}
               {this.props.mapCreateStatus && (
                 <Alert className="alert-sm" color="success">
-                  Map Created Sucessfully!
+                  Map shared with selected users Sucessfully!
                 </Alert>
               )}
               <FormGroup>
                 <Label for="map-name">Name</Label>
-                <Input
-                  bsSize="lg"
-                  type="text"
-                  name="mapName"
-                  id="map-name"
-                  value={mapName}
-                  onChange={this.handleChange}
-                  className={mapNameErr ? " showError" : ""}
-                />
-                {mapNameErr && (
-                  <div style={{ color: "red", paddingBottom: 10 }}>
-                    {mapNameErr}
-                  </div>
-                )}
+                {mapName ? mapName : '' }
               </FormGroup>
               <FormGroup>
-                <Label for="input-email">Tag Name</Label>
+                <Label for="input-email">Official Users</Label>
                 <Select
-                  value={this.props.selectedtagName}
-                  selectedOptions={selectedtagName}
+                  value={this.props.selectedUser}
+                  selectedOptions={selectedUser}
                   selectOptions={selectOptions}
                   isMulti
                   handleSelectChange={this.handleSelectChange}
-                  className={tagNameErr ? " showError" : ""}
+                  className={UserErr ? " showError" : ""}
                 />
-                {tagNameErr && (
+                {UserErr && (
                   <div style={{ color: "red", paddingBottom: 10 }}>
-                    {tagNameErr}
+                    {UserErr}
                   </div>
                 )}
               </FormGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="success">Create</Button>{" "}
+              <Button color="success">Share</Button>{" "}
               {/* <Button color="secondary" onClick={this.toggle}>
                 Cancel
                 </Button>*/}
@@ -167,4 +155,4 @@ class CreateMap extends Component {
   }
 }
 
-export default CreateMap;
+export default ShareMap;
