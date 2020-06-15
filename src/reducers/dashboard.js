@@ -9,7 +9,10 @@ import {
   TAG_REQUEST,
   TAG_SUCCESS,
   TAG_FAILURE,
-  CLEAR_STATE
+  CLEAR_STATE,
+  DELETE_MAP_REQUEST,
+  DELETE_MAP_SUCCESS,
+  DELETE_MAP_FAILURE
 } from "../actions/dashboard";
 
 export default function dashboard(
@@ -81,6 +84,22 @@ export default function dashboard(
     case CLEAR_STATE:
       return Object.assign({}, state, {
         errorMessage: null
+      });
+    case DELETE_MAP_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+    case DELETE_MAP_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        errorMessage: null,
+        mapId: action.data
+      });
+    case DELETE_MAP_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isError: true,
+        errorMessage: action.message
       });
     default:
       return state;

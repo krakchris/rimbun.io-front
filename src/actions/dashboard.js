@@ -1,6 +1,7 @@
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api, { endPoints } from "../api";
-
+import * as mapPageConst from '../constants';
 export const CREATE_MAP_INITIAL = "CREATE_MAP_INITIAL";
 export const CREATE_MAP_REQUEST = "CREATE_MAP_REQUEST";
 export const CREATE_MAP_SUCCESS = "CREATE_MAP_SUCCESS";
@@ -14,6 +15,12 @@ export const TAG_SUCCESS = "TAG_SUCCESS";
 export const TAG_FAILURE = "TAG_FAILURE";
 
 export const CLEAR_STATE = "CLEAR_STATE";
+
+
+export const DELETE_MAP_REQUEST = "DELETE_MAP_REQUEST";
+export const DELETE_MAP_SUCCESS = "DELETE_MAP_SUCCESS";
+export const DELETE_MAP_FAILURE = "DELETE_MAP_FAILURE";
+
 
 export function clearDashboardState() {
   return {
@@ -51,7 +58,7 @@ function createMapError(message) {
   return {
     type: CREATE_MAP_FAILURE,
     isFetching: false,
-    isError:true,
+    isError: true,
     message,
   };
 }
@@ -60,7 +67,7 @@ export function createMap(formData) {
   const master = formData.selectedtagName.map(item => {
     return item.value;
   });
-  const payload = { name: formData.mapName , master };
+  const payload = { name: formData.mapName, master };
   return dispatch => {
     dispatch(requestCreateMap());
     const paramEndpoint = endPoints.createMap;
@@ -123,7 +130,7 @@ export function fetchMaps(paginationParam) {
         dispatch(fetchMapsError(errorMessage));
       });
   };
-        
+
 }
 
 
@@ -172,3 +179,72 @@ export function getTagNames() {
       });
   }
 }
+
+
+
+/**************** delete Map request *************/
+function requestDeleteMap() {
+  return {
+    type: DELETE_MAP_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function deleteMapSucess(data) {
+  return {
+    type: DELETE_MAP_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function deleteMapFail(message) {
+  return {
+    type: DELETE_MAP_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function deleteMapById(data) {
+  const { mapId } = data;
+  return dispatch => {
+    dispatch(requestDeleteMap());
+    api(endPoints.deleteMap)
+      .delete({ id: mapId })
+      .then(response => {
+        toast.update(mapId, {
+          render: "Your map is deleted Successfully",
+          type: toast.TYPE.SUCCESS,
+          position: 'top-center',
+          toastId: mapId,
+          closeOnClick: true,
+          autoClose: 2000
+        });
+        dispatch(deleteMapSucess({ mapId }));
+        dispatch(fetchMaps({
+          pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
+          limit: mapPageConst.PAGE_MAP_LIMIT
+        }))
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(deleteMapFail());
+      });
+  }
+
+}
+
