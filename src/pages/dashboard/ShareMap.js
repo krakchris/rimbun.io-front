@@ -18,19 +18,12 @@ class ShareMap extends PureComponent {
     this.initialState = this.state;
   }
 
-  componentDidMount(){
-    console.log('=======>',this.props.users);
-    const selectedUser= this.props.mapData.userIds;
-    this.setState({ selectedUser });
-  }
-
   handleFormValidation() {
     const { selectedUser } = this.state;
     let formErrors = {};
     let formIsValid = true;
-
     //Official User
-    if (!selectedUser) {
+    if (!selectedUser || (selectedUser && !selectedUser.length)) {
       formIsValid = false;
       formErrors["UserErr"] = "Select atleast one User";
     }
@@ -115,7 +108,7 @@ class ShareMap extends PureComponent {
                   Select Users below to share your Map:
                 </Label>
                 <Select
-                  selectedOptions={(selectedUser) ? selectedUser : mapData.selectedOptions}
+                  selectedOptions={(selectedUser) ? selectedUser: mapData.selectedOptions}
                   selectOptions={selectOptions}
                   isMulti
                   handleSelectChange={this.handleSelectChange}

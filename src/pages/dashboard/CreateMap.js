@@ -83,8 +83,7 @@ class CreateMap extends PureComponent {
       selectedtagName,
       mapName
     } = this.state;
-
-    console.log("inside craete map", this.props.tagNames);
+    
     const selectOptions = this.props.tagNames.map(item => {
       return {
         label: item.tagName,

@@ -295,7 +295,6 @@ export function shareMap(data) {
     api(endPoint)
       .post({userIds})
       .then(response => {
-        console.log('response from share map==>', response);
         dispatch(shareMapSucess());
         dispatch(
           fetchMaps({
