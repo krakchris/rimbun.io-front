@@ -1,6 +1,6 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from "react";
 import {
     Button, Modal, ModalHeader, ModalBody, ModalFooter, Form,
   FormGroup, Label, Input, Alert } from 'reactstrap';
@@ -9,7 +9,7 @@ import s from "./Dashboard.module.scss";
 
 
 
-class CreateMap extends Component {
+class CreateMap extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,11 +57,11 @@ class CreateMap extends Component {
     if (this.handleFormValidation()) {
       const { mapName, selectedtagName } = this.state;
       this.props.createMap({ mapName, selectedtagName });
-      setTimeout(() => this.toggle('AUTO'), 4000);
+      setTimeout(() => this.toggle("AUTO"), 4000);
     }
   };
 
-  toggle = (autoFlag="") => { 
+  toggle = (autoFlag = "") => {
     this.setState((prevState, props) => {
       let modalStatus;
       modalStatus =
@@ -75,7 +75,7 @@ class CreateMap extends Component {
   onClosed = () => {
     this.setState(this.initialState);
     this.props.onModalClose();
-  }
+  };
 
   render() {
     const {

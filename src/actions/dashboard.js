@@ -284,23 +284,19 @@ function shareMapFail(message) {
 }
 
 
-export function shareMapToOfficials(data) {
-  const { mapId } = data;
+export function shareMap(data) {
+  const { mapId, selectedUser } = data;
+  const userIds = selectedUser.map(item => {
+    return item.value;
+  });
   return dispatch => {
     dispatch(requestShareMap());
     const endPoint = `${endPoints.shareMap}/${mapId}`;
     api(endPoint)
-      .post(data)
+      .post({userIds})
       .then(response => {
-        toast.update(mapId, {
-          render: "Your map is shared Successfully",
-          type: toast.TYPE.SUCCESS,
-          position: "top-center",
-          toastId: mapId,
-          closeOnClick: true,
-          autoClose: 2000
-        });
-        dispatch(shareMapSucess({ mapId }));
+        console.log('response from share map==>', response);
+        dispatch(shareMapSucess());
         dispatch(
           fetchMaps({
             pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
@@ -312,14 +308,7 @@ export function shareMapToOfficials(data) {
         const errorMessage = error.response
           ? error.response.data.message
           : "Server error Occurred";
-        toast.error(errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true
-        });
-        dispatch(shareMapFail());
+        dispatch(shareMapFail(errorMessage));
       });
   }
 

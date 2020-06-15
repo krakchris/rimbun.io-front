@@ -19,7 +19,6 @@ import {
 } from "reactstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import uuid from "uuid/v4";
 import PropTypes from "prop-types";
 import CreateMap from './CreateMap';
 import mapImage from "../../images/map_placeholder.png";
@@ -29,7 +28,8 @@ import {
   getTagNames,
   createMap,
   clearDashboardState,
-  deleteMapById
+  deleteMapById,
+  shareMap
 } from "../../actions/dashboard";
 import { fetchUsers } from "../../actions/user";
 import Loader from '../../components/Loader';
@@ -57,17 +57,21 @@ class Dashboard extends PureComponent {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: "1",
-      currentPage: dashboardConst.CURRENT_PAGE_COUNT
+      currentPage: dashboardConst.CURRENT_PAGE_COUNT,
+      isShareModalOpen: false,
+      activeShareMapData: {}
     };
   }
 
   componentDidMount() {
     this.props.dispatch(getTagNames());
-    
+
     this.fetchMapList({
       pageNo: this.state.currentPage,
       limit: dashboardConst.PAGE_MAP_LIMIT
     });
+
+    this.props.dispatch(fetchUsers());
   }
 
   fetchMapList = PaginationParam => {
@@ -81,8 +85,35 @@ class Dashboard extends PureComponent {
     );
   };
 
+  shareModalToggle = (data) => {
+    
+    const { userIds, name } = data;
+    const { userList } = this.props;
+    let selectedOptions = [];
+    userList.map((item)=>{
+      if (userIds.indexOf(item._id) !== -1)
+        selectedOptions.push({
+        label: `${item.name} (${item.email})`,
+        value: item._id,
+        key: item._id
+      });
+      return true;
+    });
+    const activeShareMapData = { id: data._id, name, selectedOptions};
+    this.setState((prevState, props) => {
+      return {
+        isShareModalOpen: !prevState.isShareModalOpen,
+        activeShareMapData
+      };
+    });
+  }
+
   handleCreateMap = formData => {
     this.props.dispatch(createMap(formData));
+  };
+
+  handleShareMap = formData => {
+    this.props.dispatch(shareMap(formData));
   };
 
   toggle(tab) {
@@ -99,7 +130,7 @@ class Dashboard extends PureComponent {
         pageNo: this.state.currentPage,
         limit: dashboardConst.PAGE_MAP_LIMIT
       });
-
+    this.setState({ isShareModalOpen: false });
     this.props.dispatch(clearDashboardState());
   };
 
@@ -111,7 +142,7 @@ class Dashboard extends PureComponent {
     if (action === "share") alert("In progress");
   };
 
-  deleteConfirm = (mapId) => {
+  deleteConfirm = mapId => {
     toast(
       <DeleteMap
         mapId={mapId}
@@ -130,8 +161,8 @@ class Dashboard extends PureComponent {
   };
 
   deleteMap = mapId => {
-    this.props.dispatch(deleteMapById({ mapId }))
-  }
+    this.props.dispatch(deleteMapById({ mapId }));
+  };
 
   cancelDelete = id =>
     toast.update(id, {
@@ -194,9 +225,7 @@ class Dashboard extends PureComponent {
                 />
 
                 <i
-                  onClick={() =>
-                    this.handleCardAction({ id: item._id, action: "share" })
-                  }
+                  onClick={() => this.shareModalToggle(item)}
                   className="glyphicon glyphicon-share text-success mb-xs"
                 />
               </div>
@@ -215,10 +244,12 @@ class Dashboard extends PureComponent {
             </Col>
             <Col>
               <ShareMap
+                isShareModalOpen={this.state.isShareModalOpen}
                 users={userList}
-                createMap={this.handleCreateMap}
+                mapData={this.state.activeShareMapData}
+                shareMap={this.handleShareMap}
                 errorMessage={this.props.errorMessage}
-                mapCreateStatus={this.props.mapCreateStatus}
+                mapShareStatus={this.props.mapShareStatus}
                 onModalClose={this.onModalClose}
               />
               <CreateMap
@@ -259,6 +290,7 @@ function mapStateToProps(state) {
     errorMessage: state.dashboard.errorMessage,
     tagNames: state.dashboard.tagNames,
     mapCreateStatus: state.dashboard.mapCreateStatus,
+    mapShareStatus: state.dashboard.mapShareStatus,
     totalMapCount: state.dashboard.totalMapCount,
     userList: state.auth.userList
   };

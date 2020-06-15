@@ -25,6 +25,7 @@ export default function dashboard(
     mapList: [],
     tagNames: [],
     mapCreateStatus: false,
+    mapShareStatus: false,
     totalMapCount: 0,
     errorMessage: null
   },
@@ -106,19 +107,22 @@ export default function dashboard(
       });
     case SHARE_MAP_REQUEST:
       return Object.assign({}, state, {
-        isFetching: true
+        isFetching: true,
+        mapShareStatus: false
       });
     case SHARE_MAP_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
         errorMessage: null,
-        mapId: action.data
+        mapId: action.data,
+        mapShareStatus: true
       });
     case SHARE_MAP_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         isError: true,
-        errorMessage: action.message
+        errorMessage: action.message,
+        mapShareStatus: false
       });
     default:
       return state;

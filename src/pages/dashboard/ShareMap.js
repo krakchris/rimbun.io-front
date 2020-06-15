@@ -1,21 +1,16 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from "react";
 import {
     Button, Modal, ModalHeader, ModalBody, ModalFooter, Form,
-  FormGroup, Label, Input, Alert } from 'reactstrap';
+  FormGroup, Label, Alert } from 'reactstrap';
 import Select from '../../components/SelectDropdown/SelectDropdown';
-import s from "./Dashboard.module.scss";
 
-
-
-class ShareMap extends Component {
-  
+class ShareMap extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
-      mapName: "",
+      modal: true,
       selectedUser: null,
       formErrors: {}
     };
@@ -23,31 +18,26 @@ class ShareMap extends Component {
     this.initialState = this.state;
   }
 
+  componentDidMount(){
+    console.log('=======>',this.props.users);
+    const selectedUser= this.props.mapData.userIds;
+    this.setState({ selectedUser });
+  }
+
   handleFormValidation() {
-    const { mapName, selectedUser } = this.state;
+    const { selectedUser } = this.state;
     let formErrors = {};
     let formIsValid = true;
 
-    //user name
-    if (!mapName) {
-      formIsValid = false;
-      formErrors["mapNameErr"] = "Map Name is required.";
-    }
-
-    //Tag Name
+    //Official User
     if (!selectedUser) {
       formIsValid = false;
-      formErrors["UserErr"] = "Select atleast one Tag Name";
+      formErrors["UserErr"] = "Select atleast one User";
     }
 
     this.setState({ formErrors: formErrors });
     return formIsValid;
   }
-
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
 
   handleSelectChange = selectedUser => {
     this.setState({ selectedUser });
@@ -56,13 +46,14 @@ class ShareMap extends Component {
   onSubmit = e => {
     e.preventDefault();
     if (this.handleFormValidation()) {
-      const { mapName, selectedUser } = this.state;
-      this.props.createMap({ mapName, selectedUser });
-      setTimeout(() => this.toggle('AUTO'), 4000);
+      const { selectedUser } = this.state;
+      const mapId = this.props.mapData ? this.props.mapData.id : null;
+      this.props.shareMap({ mapId, selectedUser });
+      setTimeout(() => this.toggle("AUTO"), 4000);
     }
   };
 
-  toggle = (autoFlag="") => { 
+  toggle = (autoFlag = "") => {
     this.setState((prevState, props) => {
       let modalStatus;
       modalStatus =
@@ -76,15 +67,14 @@ class ShareMap extends Component {
   onClosed = () => {
     this.setState(this.initialState);
     this.props.onModalClose();
-  }
+  };
 
   render() {
-    console.log("usrs====>", this.props.users);
     const {
-      formErrors: { mapNameErr, UserErr },
-      selectedUser,
-      mapName
+      formErrors: { UserErr },
+      selectedUser
     } = this.state;
+    const { mapData, isShareModalOpen } = this.props;
 
     const selectOptions = this.props.users.map(item => {
       return {
@@ -93,14 +83,10 @@ class ShareMap extends Component {
         key: item._id
       };
     });
-
     return (
-      <div className={s.alignEnd}>
-        <Button color="success" size="lg" onClick={this.toggle}>
-          Share Map
-        </Button>
+      <React.Fragment>
         <Modal
-          isOpen={this.state.modal}
+          isOpen={!!isShareModalOpen && !!this.state.modal}
           toggle={this.toggle}
           backdrop={"static"}
           keyboard={false}
@@ -116,20 +102,20 @@ class ShareMap extends Component {
                   {this.props.errorMessage}
                 </Alert>
               )}
-              {this.props.mapCreateStatus && (
+              {this.props.mapShareStatus && (
                 <Alert className="alert-sm" color="success">
                   Map shared with selected users Sucessfully!
                 </Alert>
               )}
               <FormGroup>
-                <Label for="map-name">Name</Label>
-                {mapName ? mapName : '' }
+                <b>{mapData.name ? mapData.name : ""}</b>
               </FormGroup>
               <FormGroup>
-                <Label for="input-email">Official Users</Label>
+                <Label for="input-email">
+                  Select Users below to share your Map:
+                </Label>
                 <Select
-                  value={this.props.selectedUser}
-                  selectedOptions={selectedUser}
+                  selectedOptions={(selectedUser) ? selectedUser : mapData.selectedOptions}
                   selectOptions={selectOptions}
                   isMulti
                   handleSelectChange={this.handleSelectChange}
@@ -143,14 +129,11 @@ class ShareMap extends Component {
               </FormGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="success">Share</Button>{" "}
-              {/* <Button color="secondary" onClick={this.toggle}>
-                Cancel
-                </Button>*/}
+              <Button color="success">Share</Button>
             </ModalFooter>
           </Form>
         </Modal>
-      </div>
+      </React.Fragment>
     );
   }
 }
