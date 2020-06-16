@@ -296,12 +296,6 @@ export function shareMap(data) {
       .post({userIds})
       .then(response => {
         dispatch(shareMapSucess());
-        dispatch(
-          fetchMaps({
-            pageNo: mapPageConst.DEFAULT_CURRENT_PAGE_COUNT,
-            limit: mapPageConst.PAGE_MAP_LIMIT
-          })
-        );
       })
       .catch(error => {
         const errorMessage = error.response

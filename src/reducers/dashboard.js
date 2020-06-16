@@ -60,6 +60,7 @@ export default function dashboard(
       return Object.assign({}, state, {
         isFetching: false,
         mapCreateStatus: false,
+        mapShareStatus: false,
         mapList: action.mapData.data.data,
         totalMapCount: action.mapData.results
       });

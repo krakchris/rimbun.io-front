@@ -9,7 +9,6 @@ import ErrorPage from '../pages/error';
 
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';
-//import DocumentationLayoutComponent from '../documentation/DocumentationLayout';
 import { isLoggedIn } from '../lib/token';
 import Login from "../pages/login";
 import Register from '../pages/register';
@@ -49,7 +48,6 @@ class App extends React.PureComponent {
                     <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
                     <Route path="/documentation" exact
                            render={() => <Redirect to="/documentation/getting-started/overview"/>}/>
-                    {/* <Route path="/documentation" component={DocumentationLayoutComponent}/> */}
                     <Route path="/register" exact component={Register}/>
                     <Route path="/login" exact component={Login}/>
                     <Route path="/error" exact component={ErrorPage}/>

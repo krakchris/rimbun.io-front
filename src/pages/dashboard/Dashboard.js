@@ -125,7 +125,7 @@ class Dashboard extends PureComponent {
   }
 
   onModalClose = () => {
-    if (this.props.mapCreateStatus)
+    if (this.props.mapCreateStatus || this.props.mapShareStatus)
       this.fetchMapList({
         pageNo: this.state.currentPage,
         limit: dashboardConst.PAGE_MAP_LIMIT

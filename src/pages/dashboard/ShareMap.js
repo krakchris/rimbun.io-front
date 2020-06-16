@@ -63,6 +63,7 @@ class ShareMap extends PureComponent {
   };
 
   render() {
+    console.log('props in share map', this.props);
     const {
       formErrors: { UserErr },
       selectedUser
