@@ -9,5 +9,6 @@ export default {
   getMapList: "map/getUserAssocMap",
   createMap: "map",
   saveMapConfig: "map",
-  deleteMap: "map"
+  deleteMap: "map",
+  shareMap: "map/share"
 };

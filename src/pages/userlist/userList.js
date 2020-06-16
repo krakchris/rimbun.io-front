@@ -14,6 +14,7 @@ import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
 import Loader from '../../components/Loader'
 import s from './Userlist.module.scss';
+import Loader from '../../components/Loader';
 
 
 
@@ -37,9 +38,9 @@ class Userlist extends PureComponent {
 
   render() {
 
-    const { isFetching, fetchData } = this.props;
     return (
       <div className={s.root}>
+      <Loader visible={this.props.isFetching} />
         {/*<h3 className="mb-lg">
           <span className="glyphicon glyphicon-user" />
             User List:
@@ -66,9 +67,9 @@ class Userlist extends PureComponent {
                 </div>
               }
             >
-              {fetchData && fetchData.length !== 0 ? (
-                <TableComponent data={fetchData} />
-              ) : <h5>{isFetching ? `Loading....` : `No User Available!`}</h5>}
+              {this.props.userList ? (
+                <TableComponent data={this.props.userList} />
+              ) : null}
             </Widget>
           </Col>
         </Row>
@@ -79,7 +80,7 @@ class Userlist extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    fetchData: state.auth.fetchData,
+    userList: state.auth.userList,
     isFetching: state.auth.isFetching
   };
 }

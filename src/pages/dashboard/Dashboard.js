@@ -28,12 +28,15 @@ import {
   getTagNames,
   createMap,
   clearDashboardState,
-  deleteMapById
+  deleteMapById,
+  shareMap
 } from "../../actions/dashboard";
+import { fetchUsers } from "../../actions/user";
 import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import * as dashboardConst from '../../constants';
 import DeleteMap from './DeleteMap';
+import ShareMap from "./ShareMap";
 
 
 class Dashboard extends PureComponent {
@@ -55,16 +58,21 @@ class Dashboard extends PureComponent {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: "1",
-      currentPage: dashboardConst.CURRENT_PAGE_COUNT
+      currentPage: dashboardConst.CURRENT_PAGE_COUNT,
+      isShareModalOpen: false,
+      activeShareMapData: {}
     };
   }
 
   componentDidMount() {
     this.props.dispatch(getTagNames());
+
     this.fetchMapList({
       pageNo: this.state.currentPage,
       limit: dashboardConst.PAGE_MAP_LIMIT
     });
+
+    this.props.dispatch(fetchUsers());
   }
 
   fetchMapList = PaginationParam => {
@@ -78,8 +86,35 @@ class Dashboard extends PureComponent {
     );
   };
 
+  shareModalToggle = (data) => {
+    
+    const { userIds, name } = data;
+    const { userList } = this.props;
+    let selectedOptions = [];
+    userList.map((item)=>{
+      if (userIds.indexOf(item._id) !== -1)
+        selectedOptions.push({
+        label: `${item.name} (${item.email})`,
+        value: item._id,
+        key: item._id
+      });
+      return true;
+    });
+    const activeShareMapData = { id: data._id, name, selectedOptions};
+    this.setState((prevState, props) => {
+      return {
+        isShareModalOpen: !prevState.isShareModalOpen,
+        activeShareMapData
+      };
+    });
+  }
+
   handleCreateMap = formData => {
     this.props.dispatch(createMap(formData));
+  };
+
+  handleShareMap = formData => {
+    this.props.dispatch(shareMap(formData));
   };
 
   toggle(tab) {
@@ -91,12 +126,12 @@ class Dashboard extends PureComponent {
   }
 
   onModalClose = () => {
-    if (this.props.mapCreateStatus)
+    if (this.props.mapCreateStatus || this.props.mapShareStatus)
       this.fetchMapList({
         pageNo: this.state.currentPage,
         limit: dashboardConst.PAGE_MAP_LIMIT
       });
-
+    this.setState({ isShareModalOpen: false });
     this.props.dispatch(clearDashboardState());
   };
 
@@ -108,7 +143,7 @@ class Dashboard extends PureComponent {
     if (action === "share") alert("In progress");
   };
 
-  deleteConfirm = (mapId) => {
+  deleteConfirm = mapId => {
     toast(
       <DeleteMap
         mapId={mapId}
@@ -127,8 +162,8 @@ class Dashboard extends PureComponent {
   };
 
   deleteMap = mapId => {
-    this.props.dispatch(deleteMapById({ mapId }))
-  }
+    this.props.dispatch(deleteMapById({ mapId }));
+  };
 
   cancelDelete = id =>
     toast.update(id, {
@@ -139,7 +174,13 @@ class Dashboard extends PureComponent {
     });
 
   render() {
-    const { isFetching, mapList, tagNames, totalMapCount } = this.props;
+    const {
+      isFetching,
+      mapList,
+      tagNames,
+      totalMapCount,
+      userList
+    } = this.props;
 
     const mapListComp = mapList.map(item => {
       return (
@@ -185,9 +226,7 @@ class Dashboard extends PureComponent {
                 />
 
                 <i
-                  onClick={() =>
-                    this.handleCardAction({ id: item._id, action: "share" })
-                  }
+                  onClick={() => this.shareModalToggle(item)}
                   className="glyphicon glyphicon-share text-success mb-xs"
                 />
               </div>
@@ -205,6 +244,15 @@ class Dashboard extends PureComponent {
               <h1 className="page-title">Maps</h1>
             </Col>
             <Col>
+              <ShareMap
+                isShareModalOpen={this.state.isShareModalOpen}
+                users={userList}
+                mapData={this.state.activeShareMapData}
+                shareMap={this.handleShareMap}
+                errorMessage={this.props.errorMessage}
+                mapShareStatus={this.props.mapShareStatus}
+                onModalClose={this.onModalClose}
+              />
               <CreateMap
                 tagNames={tagNames}
                 createMap={this.handleCreateMap}
@@ -226,8 +274,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-              )}
+              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+            )}
           </Row>
         </Container>
       </section>
@@ -243,7 +291,9 @@ function mapStateToProps(state) {
     errorMessage: state.dashboard.errorMessage,
     tagNames: state.dashboard.tagNames,
     mapCreateStatus: state.dashboard.mapCreateStatus,
-    totalMapCount: state.dashboard.totalMapCount
+    mapShareStatus: state.dashboard.mapShareStatus,
+    totalMapCount: state.dashboard.totalMapCount,
+    userList: state.auth.userList
   };
 }
 

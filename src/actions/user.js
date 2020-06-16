@@ -14,15 +14,17 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
 export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
 export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
+<<<<<<< HEAD
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const REQUEST_USER_DETAILS = 'REQUEST_USER_DATA';
+=======
 
-function fetchUserSuccess(payload) {
-  return {
-    type: FETCH_USER_SUCCESS,
-    payload
-  }
-}
+export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST'
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
+export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
+
+>>>>>>> 64280e2e7e522d5ee5356105df9a76bd6c0b3999
+
 
 function requestUserDetails() {
   return {
@@ -170,8 +172,39 @@ export function createUser(payload) {
 
 }
 
+
+
+/****** fetch user listing  *******/
+
+function fetchUserRequest() {
+  return {
+    type: FETCH_USER_REQUEST,
+    isFetching: true,
+  };
+}
+
+function fetchUserSuccess(payload) {
+  return {
+    type: FETCH_USER_SUCCESS,
+    isFetching: false,
+    payload
+  };
+}
+
+export function fetchUsersFailure(message) {
+  return {
+    type: FETCH_USER_FAILURE,
+    isFetching: false,
+    isError: true,
+    data: message
+  };
+}
+
+
+
 export function fetchUsers() {
   return dispatch => {
+    dispatch(fetchUserRequest());
     const paramEndpoint = `${endPoints.getAllUsers}?role=${OFFICIAL_ROLE_TAG}`;
     dispatch(requestUserDetails())
     api(paramEndpoint)
@@ -190,6 +223,7 @@ export function fetchUsers() {
           pauseOnHover: false,
           draggable: true
         });
+        dispatch(fetchUsersFailure(errorMessage));
       })
   }
 }

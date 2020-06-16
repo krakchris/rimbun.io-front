@@ -12,7 +12,10 @@ import {
   CLEAR_STATE,
   DELETE_MAP_REQUEST,
   DELETE_MAP_SUCCESS,
-  DELETE_MAP_FAILURE
+  DELETE_MAP_FAILURE,
+  SHARE_MAP_REQUEST,
+  SHARE_MAP_SUCCESS,
+  SHARE_MAP_FAILURE
 } from "../actions/dashboard";
 
 export default function dashboard(
@@ -22,6 +25,7 @@ export default function dashboard(
     mapList: [],
     tagNames: [],
     mapCreateStatus: false,
+    mapShareStatus: false,
     totalMapCount: 0,
     errorMessage: null
   },
@@ -56,6 +60,7 @@ export default function dashboard(
       return Object.assign({}, state, {
         isFetching: false,
         mapCreateStatus: false,
+        mapShareStatus: false,
         mapList: action.mapData.data.data,
         totalMapCount: action.mapData.results
       });
@@ -100,6 +105,25 @@ export default function dashboard(
         isFetching: false,
         isError: true,
         errorMessage: action.message
+      });
+    case SHARE_MAP_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        mapShareStatus: false
+      });
+    case SHARE_MAP_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        errorMessage: null,
+        mapId: action.data,
+        mapShareStatus: true
+      });
+    case SHARE_MAP_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isError: true,
+        errorMessage: action.message,
+        mapShareStatus: false
       });
     default:
       return state;
