@@ -14,7 +14,7 @@ import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
 import Loader from '../../components/Loader'
 import s from './Userlist.module.scss';
-import Loader from '../../components/Loader';
+
 
 
 
@@ -45,7 +45,7 @@ class Userlist extends PureComponent {
           <span className="glyphicon glyphicon-user" />
             User List:
         </h3>*/}
-        <Loader visible={isFetching} />
+        
         <Row>
           <Col sm={12} md={6}>
             <Widget

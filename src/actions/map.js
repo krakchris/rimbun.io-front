@@ -13,18 +13,12 @@ export const SAVE_CONFIG_SUCCESS = "SAVE_CONFIG_SUCCESS";
 export const SAVE_CONFIG_FAILURE = "SAVE_CONFIG_FAILURE";
 export const LOAD_REMOTE_RESOURCE_SUCCESS = "LOAD_REMOTE_RESOURCE_SUCCESS";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 939196f231e04b008f6de92818eeacbdee495ae5
 export function hideSidePanel() {
   return {
     type: HIDE_SIDE_PANEL
   }
 }
 
-<<<<<<< HEAD
-=======
 export function loadRemoteResourceSuccess(options) {
   return {
     type: LOAD_REMOTE_RESOURCE_SUCCESS,
@@ -32,8 +26,6 @@ export function loadRemoteResourceSuccess(options) {
   };
 }
 
-
->>>>>>> 939196f231e04b008f6de92818eeacbdee495ae5
 function requestMapData() {
   return {
     type: MAP_REQUEST,
