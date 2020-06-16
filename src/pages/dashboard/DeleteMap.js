@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-const DeleteMap = () => {
-        const { mapId, deleteMap, cancelDelete } = this.props;
+const DeleteMap = (props) => {
+        const { mapId, deleteMap, cancelDelete } = props;
         return (
             <div>
                 <div className="d-flex flex-column align-items-center">
