@@ -1,17 +1,28 @@
 import { createStore, applyMiddleware, compose } from "redux";
+import { processGeojson, processCsvData } from 'kepler.gl/processors';
+import KeplerGlSchema from 'kepler.gl/schemas';
 import { combinedUpdaters } from 'kepler.gl/reducers';
 import { enhanceReduxMiddleware } from "kepler.gl/middleware";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
-// import { composeWithDevTools } from "redux-devtools-extension";
 
 const composedReducer = (state, action) => {
     switch (action.type) {
         // add data to map after receiving data from remote sources
         case 'LOAD_REMOTE_RESOURCE_SUCCESS':
-            console.log("LOAD_REMOTE_RESOURCE_SUCCESS", action.payload.instance)
-            console.log("payload", action.payload)
-            if (action.payload.instance === 'viewMap') {
+            let processorMethod = processCsvData;
+            let datasets = action.options.dataset.map(item => {
+                // create helper to determine file ext eligibility
+                if (item.dataUrl.includes('.json') || item.dataUrl.includes('.geojson')) {
+                    processorMethod = processGeojson;
+                }
+                return ({
+                    info: item.info,
+                    data: processorMethod(item.data)
+                })
+            })
+            const config = action.options.config;
+            if (action.options.mapInstanceId === 'viewMap') {
                 return {
                     ...state,
                     keplerGl: {
@@ -21,8 +32,8 @@ const composedReducer = (state, action) => {
                             state.keplerGl.viewMap,
                             {
                                 payload: {
-                                    datasets: action.payload.datasets,
-                                    config: action.payload.config
+                                    datasets: datasets,
+                                    config: config
                                 }
                             }
                         )
@@ -39,8 +50,8 @@ const composedReducer = (state, action) => {
                             state.keplerGl.editMap,
                             {
                                 payload: {
-                                    datasets: action.payload.datasets,
-                                    config: action.payload.config
+                                    datasets: datasets,
+                                    config: config
                                 }
                             }
                         )

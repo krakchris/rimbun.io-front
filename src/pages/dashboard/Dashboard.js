@@ -162,8 +162,13 @@ class Dashboard extends PureComponent {
   };
 
   deleteMap = mapId => {
+<<<<<<< HEAD
     this.props.dispatch(deleteMapById({ mapId }));
   };
+=======
+    this.props.dispatch(deleteMapById({ mapId }))
+  }
+>>>>>>> 939196f231e04b008f6de92818eeacbdee495ae5
 
   cancelDelete = id =>
     toast.update(id, {

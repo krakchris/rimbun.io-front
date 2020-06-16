@@ -8,7 +8,7 @@ class Chart extends React.Component {
         super(props);
     }
     render() {
-        console.log('data', this.props.data);
+        
 
         /* code for coordinates plotting */
         // let cooordData = this.props.coord.map((item, index) => {

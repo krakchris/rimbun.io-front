@@ -20,6 +20,7 @@
     "classnames": "^2.2.6",
     "cookie-parser": "^1.4.4",
     "css-loader": "2.1.1",
+    "d3-request": "^1.0.6",
     "dotenv": "^8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^6.1.0",
