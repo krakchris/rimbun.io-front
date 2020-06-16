@@ -26,7 +26,6 @@ export function loadRemoteResourceSuccess(options) {
   };
 }
 
-
 function requestMapData() {
   return {
     type: MAP_REQUEST,

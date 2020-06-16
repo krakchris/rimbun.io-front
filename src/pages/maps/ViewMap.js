@@ -33,7 +33,8 @@ class Official extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {}
+            data: [],
+            isChartVisible: false
         }
     }
 
@@ -58,6 +59,32 @@ class Official extends React.Component {
     handleBack = () => {
         this.props.history.push('/app');
     }
+
+    loadChart = () => {
+        if (this.props.mapState) {
+            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
+                this.setState({ data: this.props.mapState.visState.layerData[0].data, isChartVisible: true })
+            else
+                toast.error("Please do the layer selection", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                })
+        }
+    }
+
+    downloadFile = () => {
+        if (this.props.mapState) {
+            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
+                console.log('downLoad File', this.props.mapState.visState.layerData[0].data)
+            else
+                toast.error("Please do the layer selection", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 2000,
+                    closeOnClick: true,
+                })
+        }
+    }
     render() {
 
         return (
@@ -76,20 +103,37 @@ class Official extends React.Component {
                             )}
                         </AutoSizer>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexGrow: 1, width: '25%', height: '579px', background: 'grey' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', flexGrow: 1, width: '25%', height: '100vh', background: 'grey' }}>
 
                         {this.props.mapState ?
-                            (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
-                                ? <Chart data={this.props.mapState.visState.layerData[0].data} coord={this.props.mapState.visState.layerData[1].data} />
-                                : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px 18px' }}>Please draw layer on map to view data visualization on chart </span>
+                            this.state.isChartVisible
+                                ? <Chart data={this.state.data} />
+                                : <div style={{ height: '60%', display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                    <p>Please draw layer on map to view data visualization on chart</p>
+                                </div>
                             : null}
 
                         {this.props.mapState ?
-                            (!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)
-                                ? <div style={{ background: '#ccc', textAlign: 'center' }}>
-                                    <button onClick={this.handleBack} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
-                                        Back </button>
-                                </div> : null : null}
+                            <>
+                                <div style={{ background: '#ccc', textAlign: 'center' }}>
+                                    <button onClick={this.loadChart} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
+                                        <i className="glyphicon glyphicon-repeat" style={{ verticalAlign: 'middle', padding: '8px', fontSize: '24px' }}></i>
+                                        Update </button>
+                                </div>
+
+                                <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
+                                    <button onClick={this.downloadFile} style={{ background: 'none', border: 'none', fontSize: '24px', outline: 'none' }}>
+                                        <i className="glyphicon glyphicon-file" style={{ verticalAlign: 'middle', padding: '8px' }}></i>
+                                    </button>
+
+                                    <button style={{ background: 'none', border: 'none', fontSize: '24px', outline: 'none' }}>
+                                        <i className="glyphicon glyphicon-download" style={{ verticalAlign: 'middle', padding: '8px' }}></i>
+                                    </button>
+                                </div>
+
+
+                            </>
+                            : null}
                     </div>
                 </div>
             </React.Fragment>

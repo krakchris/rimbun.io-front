@@ -1,29 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-// import { Bar, Scatter, Line } from 'react-chartjs-2';
-
 
 class Chart extends React.Component {
     render() {
-        
-
-        /* code for coordinates plotting */
-        // let cooordData = this.props.coord.map((item, index) => {
-        //     return item.geometry.coordinates
-        // })
-        // let tempCoord = cooordData.flat(Infinity);
-        // console.log('coordData', tempCoord)
-
-        // let xcoord = tempCoord.filter((item, index) => {
-        //     return (index % 2 === 0) ? item : null
-        // })
-
-        // let ycoord = tempCoord.filter((item, index) => {
-        //     return (index % 2 !== 0) ? item : null;
-        // })
-
-        // console.log('x', xcoord)
-        // console.log('y', ycoord)
 
         let green_area_data = this.props.data.map((item, index) => {
             return {
@@ -32,7 +11,6 @@ class Chart extends React.Component {
                 y: eval(item.data[8]),
                 "mode": "lines",
                 "type": "scattergl",
-                //    "name": `trace${index + 1}`
             }
         })
 
@@ -43,19 +21,18 @@ class Chart extends React.Component {
                 y: eval(item.data[7]),
                 "mode": "lines",
                 "type": "scattergl",
-                // "name": `trace${index + 1}`
             }
         })
 
         const green_area_layout = {
             autosize: true,
             width: 220,
-            height: 180,
+            height: 160,
             margin: {
                 l: 25,
                 r: 10,
-                b: 50,
-                t: 50,
+                b: 20,
+                t: 20,
                 pad: 2
             },
             title: ' Visualization green area change',
@@ -66,8 +43,9 @@ class Chart extends React.Component {
             },
             showlegend: false,
             xaxis: {
-                'type': 'category',
                 'title': 'time',
+                'showticklabels': false,
+                'type': 'category',
                 'tickangle': 60,
                 'showspikes': true,
                 'spikethickness': 2,
@@ -88,12 +66,12 @@ class Chart extends React.Component {
         const water_area_layout = {
             autosize: true,
             width: 220,
-            height: 180,
+            height: 160,
             margin: {
                 l: 25,
                 r: 10,
-                b: 50,
-                t: 50,
+                b: 20,
+                t: 20,
                 pad: 2
             },
             title: ' Visualization water area over time',
@@ -104,8 +82,9 @@ class Chart extends React.Component {
             },
             showlegend: false,
             xaxis: {
-                'type': 'category',
                 'title': 'time',
+                'showticklabels': false,
+                'type': 'category',
                 'tickangle': 60,
                 'showspikes': true,
                 'spikethickness': 2,
@@ -124,7 +103,7 @@ class Chart extends React.Component {
         };
 
         return (
-            <React.Fragment>
+            <div style={{ height: '60%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around' }}>
                 <div style={{ margin: '25px' }}>
                     <Plot
                         data={green_area_data}
@@ -138,7 +117,7 @@ class Chart extends React.Component {
                         layout={water_area_layout}
                     />
                 </div>
-            </React.Fragment>
+            </div>
         )
     }
 }
