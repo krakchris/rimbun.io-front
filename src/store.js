@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { processGeojson, processCsvData } from 'kepler.gl/processors';
-import KeplerGlSchema from 'kepler.gl/schemas';
 import { combinedUpdaters } from 'kepler.gl/reducers';
 import { enhanceReduxMiddleware } from "kepler.gl/middleware";
 import thunk from "redux-thunk";

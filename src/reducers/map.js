@@ -7,9 +7,7 @@ import {
   SAVE_CONFIG_FAILURE
 
 } from "../actions/map";
-import * as auth from "../lib/token";
 
-const token = auth.getToken();
 export default function (state = {
     isFetching: false,
     isError: false,

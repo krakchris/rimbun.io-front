@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
-
 import {
   Row,
   Col,
   Button,
 
 } from 'reactstrap';
-
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Widget from '../../components/Widget';
@@ -14,19 +12,8 @@ import { fetchUsers } from '../../actions/user'
 import TableComponent from './Table';
 import Loader from '../../components/Loader'
 import s from './Userlist.module.scss';
-import Loader from '../../components/Loader';
-
-
-
-
 
 class Userlist extends PureComponent {
-
-
-  constructor(props) {
-    super(props);
-
-  }
 
   componentDidMount() {
     this.props.dispatch(fetchUsers());
@@ -41,11 +28,6 @@ class Userlist extends PureComponent {
     return (
       <div className={s.root}>
       <Loader visible={this.props.isFetching} />
-        {/*<h3 className="mb-lg">
-          <span className="glyphicon glyphicon-user" />
-            User List:
-        </h3>*/}
-        <Loader visible={isFetching} />
         <Row>
           <Col sm={12} md={6}>
             <Widget
@@ -57,7 +39,6 @@ class Userlist extends PureComponent {
                       className="mr-sm mb-xs bg-success text-white"
                       onClick={this.createUser}
                     >
-                      {/* <span className="glyphicon glyphicon-plus" /> */}
                       Create User
                     </Button>
                   </div>

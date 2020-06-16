@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { 
   Alert, 
@@ -70,15 +70,6 @@ class Login extends React.Component {
   }
 
   render() {
-    const {from} = this.props.location.state || {
-      from: {pathname: '/app'},
-    };
-
-    // if (this.props.isAuthenticated) {
-    //   // cant access login page while logged in
-    //   return <Redirect to={from} />;
-    // }
-
         return (
           <div className={s.root}>
             <Row>

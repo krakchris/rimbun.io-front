@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ToastContainer } from 'react-toastify';
 import { PanelToggleFactory, Button, Icons, withState } from 'kepler.gl/components';
 import { visStateLens } from 'kepler.gl/reducers';
 import { saveMapConfig } from "../../actions/map";

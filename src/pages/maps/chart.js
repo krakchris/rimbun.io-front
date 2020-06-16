@@ -4,9 +4,6 @@ import Plot from 'react-plotly.js';
 
 
 class Chart extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         
 

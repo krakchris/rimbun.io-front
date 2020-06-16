@@ -2,15 +2,9 @@ import React, { PureComponent } from "react";
 import { connect } from 'react-redux';
 import s from './Dashboard.module.scss';
 import {
-  Alert,
-  Button,
   Card,
   CardImg,
   CardTitle,
-  CardText,
-  CardDeck,
-  CardSubtitle,
-  CardGroup,
   CardColumns,
   CardBody,
   Row,
@@ -139,8 +133,7 @@ class Dashboard extends PureComponent {
 
   handleCardAction = ({ id, action }) => {
     if (action === "edit") this.props.history.push(`/map/${id}`);
-    if (action === "view") alert("In progress");
-    if (action === "share") alert("In progress");
+    if (action === "view") this.props.history.push(`/viewMap/${id}`);
   };
 
   deleteConfirm = mapId => {
@@ -162,13 +155,8 @@ class Dashboard extends PureComponent {
   };
 
   deleteMap = mapId => {
-<<<<<<< HEAD
-    this.props.dispatch(deleteMapById({ mapId }));
-  };
-=======
     this.props.dispatch(deleteMapById({ mapId }))
   }
->>>>>>> 939196f231e04b008f6de92818eeacbdee495ae5
 
   cancelDelete = id =>
     toast.update(id, {
@@ -196,7 +184,7 @@ class Dashboard extends PureComponent {
               "glyphicon glyphicon-folder-close text-success mt-sm mr-sm float-right"
             )}
           />
-          <a href="#" target="_blank" title="View Map">
+          <a href={`/viewmap/${item._id}`} target="_blank" title="View Map">
             <CardImg top width="100%" src={mapImage} alt="Card image cap" />
           </a>
           <CardBody>

@@ -99,7 +99,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "node scripts/start.js",
-    "build": "cross-env PUBLIC_URL='/' node --max-old-space-size=4000  scripts/build.js",
+    "build": "cross-env PUBLIC_URL='/' node scripts/build.js",
     "test": "node scripts/test.js",
     "dev": "cross-env NODE_ENV=development run-p server start"
   },

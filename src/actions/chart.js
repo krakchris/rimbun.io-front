@@ -20,8 +20,8 @@ function chartLoaded() {
 export function getChart() {
     return dispatch => {
         dispatch(requestChart());
-        dispatch(chartSuccess()).
-            then(res => {
+        dispatch(chartSuccess())
+            .then(res => {
                 dispatch(chartLoaded())
             })
     }

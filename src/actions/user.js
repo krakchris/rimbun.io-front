@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
 import * as context from "../lib/localData";
@@ -14,23 +13,11 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST';
 export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
 export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
-<<<<<<< HEAD
-export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
-export const REQUEST_USER_DETAILS = 'REQUEST_USER_DATA';
-=======
 
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST'
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
 export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
 
->>>>>>> 64280e2e7e522d5ee5356105df9a76bd6c0b3999
-
-
-function requestUserDetails() {
-  return {
-    type: REQUEST_USER_DETAILS
-  }
-}
 
 function requestCreateUser(payload) {
   return {
@@ -206,7 +193,6 @@ export function fetchUsers() {
   return dispatch => {
     dispatch(fetchUserRequest());
     const paramEndpoint = `${endPoints.getAllUsers}?role=${OFFICIAL_ROLE_TAG}`;
-    dispatch(requestUserDetails())
     api(paramEndpoint)
       .get({})
       .then(reponse => {

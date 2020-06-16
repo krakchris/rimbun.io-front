@@ -5,7 +5,6 @@ import auth from './auth';
 import runtime from './runtime';
 import navigation from './navigation';
 import dashboard from './dashboard';
-import posts from './posts';
 import chart from './chart'
 import map from './map';
 
@@ -34,7 +33,6 @@ export default combineReducers({
   runtime,
   navigation,
   dashboard,
-  posts,
   keplerGl: customizedKeplerGlReducer,
   map,
   chart

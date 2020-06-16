@@ -43,11 +43,6 @@ class Map extends React.Component {
     mapData: null
   };
 
-
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.loadMapData();
   }

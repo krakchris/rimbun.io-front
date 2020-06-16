@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 import { withRouter } from "react-router-dom";
 import * as context from '../../lib/localData';
+import { login } from '../../constants/routes';
 
 import photo from '../../images/user.png';
 import { logoutUser } from '../../actions/user';
@@ -38,7 +39,7 @@ class Header extends React.Component {
 
   doLogout = () => {
     this.props.dispatch(logoutUser());
-    this.props.history.push({ pathname: "/login" });
+    this.props.history.push({ pathname: {login} });
     window.location.reload();
   }
 

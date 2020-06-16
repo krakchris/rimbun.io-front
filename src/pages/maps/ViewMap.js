@@ -4,15 +4,12 @@ import { toast } from 'react-toastify';
 import { withRouter } from "react-router-dom";
 import { visStateLens } from 'kepler.gl/reducers';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import { injectComponents, PanelToggleFactory, PanelHeaderFactory, MapPopoverFactory, withState } from 'kepler.gl/components';
+import { injectComponents, MapPopoverFactory, withState } from 'kepler.gl/components';
 import { wrapTo } from 'kepler.gl/actions'
-import CustomPanelToggleFactory from './Panel-toggle';
-import CustomPanelHeaderFactory from './Panel-header';
 import CustomPopOverFactory from './Pop-over'
 import Chart from './chart';
 import Loader from "../../components/Loader";
 import { getMapDataById } from '../../actions/map'
-import { getChart, chartFailure } from '../../actions/chart';
 import { hideSidePanel } from '../../actions/map';
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 import './viewMap.css';
