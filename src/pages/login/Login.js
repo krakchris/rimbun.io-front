@@ -75,7 +75,6 @@ class Login extends React.Component {
     };
 
     // if (this.props.isAuthenticated) {
-    //   console.log('this does the redirection');
     //   // cant access login page while logged in
     //   return <Redirect to={from} />;
     // }

@@ -21,6 +21,12 @@ export const DELETE_MAP_REQUEST = "DELETE_MAP_REQUEST";
 export const DELETE_MAP_SUCCESS = "DELETE_MAP_SUCCESS";
 export const DELETE_MAP_FAILURE = "DELETE_MAP_FAILURE";
 
+export const SHARE_MAP_REQUEST = "SHARE_MAP_REQUEST";
+export const SHARE_MAP_SUCCESS = "SHARE_MAP_SUCCESS";
+export const SHARE_MAP_FAILURE = "SHARE_MAP_FAILURE";
+
+
+
 
 export function clearDashboardState() {
   return {
@@ -243,6 +249,59 @@ export function deleteMapById(data) {
           draggable: true
         });
         dispatch(deleteMapFail());
+      });
+  }
+
+}
+
+
+
+/**************** share Map request *************/
+function requestShareMap() {
+  return {
+    type: SHARE_MAP_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function shareMapSucess(data) {
+  return {
+    type: SHARE_MAP_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function shareMapFail(message) {
+  return {
+    type: SHARE_MAP_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function shareMap(data) {
+  const { mapId, selectedUser } = data;
+  const userIds = selectedUser.map(item => {
+    return item.value;
+  });
+  return dispatch => {
+    dispatch(requestShareMap());
+    const endPoint = `${endPoints.shareMap}/${mapId}`;
+    api(endPoint)
+      .post({userIds})
+      .then(response => {
+        dispatch(shareMapSucess());
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        dispatch(shareMapFail(errorMessage));
       });
   }
 

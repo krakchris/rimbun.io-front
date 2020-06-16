@@ -6,7 +6,9 @@ import {
   USER_CREATE_REQUEST,
   USER_CREATE_FAILURE,
   USER_CREATE_SUCCESS,
-  FETCH_USER_SUCCESS
+  FETCH_USER_REQUEST,
+  FETCH_USER_SUCCESS,
+  FETCH_USER_FAILURE
 } from "../actions/user";
 import * as auth from "../lib/token";
 
@@ -15,7 +17,9 @@ export default function (state = {
   isFetching: false,
   isAuthenticated: !!token,
   isLoading: false,
-  isError: false
+  isError: false,
+  userList: [],
+  errorMessage: null
 }, action) {
   switch (action.type) {
     case LOGIN_REQUEST:
@@ -27,7 +31,7 @@ export default function (state = {
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: true,
-        errorMessage: "",
+        errorMessage: ""
       });
     case LOGIN_FAILURE:
       return Object.assign({}, state, {
@@ -40,24 +44,40 @@ export default function (state = {
         isAuthenticated: false
       });
     case USER_CREATE_REQUEST:
-        return Object.assign({}, state, {
-            isLoading: true,
-            isError: false,
-        });
+      return Object.assign({}, state, {
+        isLoading: true,
+        isError: false
+      });
     case USER_CREATE_FAILURE:
-    return Object.assign({}, state, {
+      return Object.assign({}, state, {
         isLoading: false,
-        isError: true,
-    });
+        isError: true
+      });
     case USER_CREATE_SUCCESS:
-    return Object.assign({}, state, {
+      return Object.assign({}, state, {
         isLoading: false,
-        isError: false,
-    });
+        isError: false
+      });
+    case USER_CREATE_REQUEST:
+      return Object.assign({}, state, {
+        isLoading: true,
+        isError: false
+      });
+    case FETCH_USER_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
     case FETCH_USER_SUCCESS:
-      return Object.assign({},state,{
-        fetchData:action.payload
-      })
+      return Object.assign({}, state, {
+        isLoading: false,
+        isFetching: false,
+        userList: action.payload
+      });
+    case FETCH_USER_FAILURE:
+      return Object.assign({}, state, {
+        isError: true,
+        errorMessage: action.data
+      });
     default:
       return state;
   }
