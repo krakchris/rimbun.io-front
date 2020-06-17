@@ -201,7 +201,7 @@ function prepareKeplerData(data) {
     .catch(error => {
       const errorMessage = error.response
         ? error.response.data.message
-        : "Server error Occurred";
+        : "Server error Occurred. Please Try again later";
       toast.error(errorMessage, {
         position: "top-right",
         autoClose: 5000,
