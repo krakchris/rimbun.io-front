@@ -34,7 +34,7 @@ class CreateMap extends PureComponent {
     }
 
     //Tag Name
-    if (!selectedtagName) {
+    if (!selectedtagName || (selectedtagName && !selectedtagName.length)) {
       formIsValid = false;
       formErrors["tagNameErr"] = "Select atleast one Tag Name";
     }

@@ -46,7 +46,6 @@ class Official extends React.Component {
 
     viewMapData() {
         const mapId = this.props.match.params.id;
-        const instance = 'viewMap';
         mapId
             ? this.props.dispatch(
                 getMapDataById({ mapId, mapInstanceId: VIEW_MAP_INSTANCE_ID })
@@ -76,7 +75,7 @@ class Official extends React.Component {
     downloadFile = () => {
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
-                console.log('downLoad File', this.props.mapState.visState.layerData[0].data)
+                console.log('downLoad File', this.props.mapState.visState)
             else
                 toast.error("Please do the layer selection", {
                     position: toast.POSITION.TOP_RIGHT,
@@ -120,6 +119,13 @@ class Official extends React.Component {
                                         <i className="glyphicon glyphicon-repeat" style={{ verticalAlign: 'middle', padding: '8px', fontSize: '24px' }}></i>
                                         Update </button>
                                 </div>
+
+                                <div style={{ background: '#ccc', textAlign: 'center' }}>
+                                    <button onClick={this.handleBack} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
+                                        <i className="glyphicon glyphicon-repeat" style={{ verticalAlign: 'middle', padding: '8px', fontSize: '24px' }}></i>
+                                        Back </button>
+                                </div>
+
 
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
                                     <button onClick={this.downloadFile} style={{ background: 'none', border: 'none', fontSize: '24px', outline: 'none' }}>
