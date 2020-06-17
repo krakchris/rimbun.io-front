@@ -2,8 +2,9 @@
 
 import React, { PureComponent } from "react";
 import {
-    Button, Modal, ModalHeader, ModalBody, ModalFooter, Form,
-  FormGroup, Label, Input, Alert } from 'reactstrap';
+  Button, Modal, ModalHeader, ModalBody, ModalFooter, Form,
+  FormGroup, Label, Input, Alert
+} from 'reactstrap';
 import Select from '../../components/SelectDropdown';
 import s from "./Dashboard.module.scss";
 
@@ -24,6 +25,7 @@ class CreateMap extends PureComponent {
 
   handleFormValidation() {
     const { mapName, selectedtagName } = this.state;
+
     let formErrors = {};
     let formIsValid = true;
 
@@ -37,6 +39,11 @@ class CreateMap extends PureComponent {
     if (!selectedtagName || (selectedtagName && !selectedtagName.length)) {
       formIsValid = false;
       formErrors["tagNameErr"] = "Select atleast one Tag Name";
+    }
+
+    if (selectedtagName && selectedtagName.length > 2) {
+      formIsValid = false;
+      formErrors["tagNameErr"] = " Maximum two tag names are allowed";
     }
 
     this.setState({ formErrors: formErrors });
@@ -83,7 +90,7 @@ class CreateMap extends PureComponent {
       selectedtagName,
       mapName
     } = this.state;
-    
+
     const selectOptions = this.props.tagNames.map(item => {
       return {
         label: item.tagName,
