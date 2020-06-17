@@ -1,13 +1,8 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-class DeleteMap extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { mapId, deleteMap, cancelDelete } = this.props;
+const DeleteMap = (props) => {
+        const { mapId, deleteMap, cancelDelete } = props;
         return (
             <div>
                 <div className="d-flex flex-column align-items-center">
@@ -33,8 +28,6 @@ class DeleteMap extends React.Component {
                 </Button>
             </div>
         );
-
-    }
 }
 
 

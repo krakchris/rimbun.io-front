@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { lazy, Suspense } from "react";
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
-import * as auth from '../lib/token';
 
 import ErrorPage from '../pages/error';
+import NotFound from "../pages/notFound";
 
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';
+import Loader from '../components/Loader';
 import { isLoggedIn } from '../lib/token';
 import Login from "../pages/login";
 import Register from '../pages/register';
-import Maps from '../pages/maps/Map';
 import { logoutUser } from '../actions/user';
+import * as Routes from '../constants/routes';
 
-const PrivateRoute = ({dispatch, component, ...rest }) => {
+const ViewMap = lazy(() => import('../pages/maps/ViewMap'));
+const EditMap = lazy(() => import('../pages/maps/Map'));
+
+
+
+const PrivateRoute = ({ dispatch, component, ...rest }) => {
   if (!isLoggedIn()) {
-      dispatch(logoutUser());
-      return <Redirect to="/login" />;
-    } else {
-      return (
-        // eslint-disable-line
-        <Route
-          {...rest}
-          render={props => React.createElement(component, props)}
-        />
-      );
-    }
+    dispatch(logoutUser());
+    return <Redirect to={Routes.login} />;
+  } else {
+    return (
+      // eslint-disable-line
+      <Route
+        {...rest}
+        render={props => React.createElement(component, props)}
+      />
+    );
+  }
 };
 
-const CloseButton = ({closeToast}) => <i onClick={closeToast} className="la la-close notifications-close"/>
+const CloseButton = ({ closeToast }) => <i onClick={closeToast} className="la la-close notifications-close" />
+
+
 
 class App extends React.PureComponent {
   render() {
@@ -41,19 +49,23 @@ class App extends React.PureComponent {
                 hideProgressBar
                 closeButton={<CloseButton/>}
             />
-            <HashRouter>
+        <BrowserRouter>
                 <Switch>
-                    <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
-                    <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
-                    <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
-                    <Route path="/documentation" exact
+                    <Route path={Routes.root} exact render={() => <Redirect to={Routes.dashboard} />}/>
+                    <Route path={Routes.app} exact render={() => <Redirect to={Routes.dashboard} />}/>
+                    <PrivateRoute path={Routes.app} dispatch={this.props.dispatch} component={LayoutComponent}/>
+                    <Route path={Routes.documentation} exact
                            render={() => <Redirect to="/documentation/getting-started/overview"/>}/>
-                    <Route path="/register" exact component={Register}/>
-                    <Route path="/login" exact component={Login}/>
-                    <Route path="/error" exact component={ErrorPage}/>
-                    <Route path="/map/:id" exact component={Maps}/>
+                    <Route path={Routes.register} exact component={Register}/>
+                    <Route path={Routes.login} exact component={Login}/>
+                    <Route path={Routes.error} exact component={ErrorPage}/>
+                    <Suspense fallback={<Loader visible/>}>
+                      <Route path={Routes.editMap} exact component={EditMap}/>
+                      <Route path={Routes.viewMap} exact component={ViewMap} />
+                    </Suspense>
+                    <Route component={NotFound} />
                 </Switch>
-            </HashRouter>
+        </BrowserRouter>
         </div>
 
     );

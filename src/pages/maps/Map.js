@@ -14,7 +14,7 @@ import {
 import CustomPanelToggleFactory from "./Panel-toggle";
 import CustomPanelHeaderFactory from "./Panel-header";
 import './App.css';
-import { MAPBOX_ACCESS_TOKEN,EDIT_MAP_INSTANCE_ID } from '../../constants/mapConstant';
+import { MAPBOX_ACCESS_TOKEN, EDIT_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 
 import { getMapDataById } from "../../actions/map";
 import Loader from "../../components/Loader";
@@ -42,11 +42,6 @@ class Map extends React.Component {
     tagNames: [],
     mapData: null
   };
-  
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     this.loadMapData();
@@ -56,13 +51,12 @@ class Map extends React.Component {
     const mapId = this.props.match.params.id;
     mapId
       ? this.props.dispatch(
-          getMapDataById({ mapId, mapInstanceId: EDIT_MAP_INSTANCE_ID })
-        )
+        getMapDataById({ mapId, mapInstanceId: EDIT_MAP_INSTANCE_ID })
+      )
       : toast.error("Please Specify a valid Mapid", {
-          position: toast.POSITION.TOP_RIGHT
-        });
-  };
-
+        position: toast.POSITION.TOP_RIGHT
+      });
+  }
 
   render() {
     return (
@@ -86,13 +80,13 @@ class Map extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
-        tagNames: state.map.tagNames,
-        isFetching: state.map.isFetching,
-        isError: state.map.isAuthenticated,
-        errorMessage: state.map.errorMessage,
-        mapData: state.map.mapData
-    };
+  return {
+    tagNames: state.map.tagNames,
+    isFetching: state.map.isFetching,
+    isError: state.map.isAuthenticated,
+    errorMessage: state.map.errorMessage,
+    mapData: state.map.mapData,
+  };
 }
 
 const dispatchToProps = dispatch => ({ dispatch });
@@ -106,7 +100,7 @@ export default withRouter(
       // lenses
       [visStateLens],
       // mapStateToProps
-      state => ({ 
+      state => ({
         mapState: state.keplerGl,
       })
     )(Map)

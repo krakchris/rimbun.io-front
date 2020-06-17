@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import appConfig from '../config';
 import api, { endPoints } from "../api";
 import * as auth from "../lib/token";
 import * as context from "../lib/localData";
@@ -18,7 +17,6 @@ export const USER_CREATE_FAILURE = "USER_CREATE_FAILURE";
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST'
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
 export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
-
 
 
 function requestCreateUser(payload) {

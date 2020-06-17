@@ -58,11 +58,6 @@ export default function (state = {
         isLoading: false,
         isError: false
       });
-    case USER_CREATE_REQUEST:
-      return Object.assign({}, state, {
-        isLoading: true,
-        isError: false
-      });
     case FETCH_USER_REQUEST:
       return Object.assign({}, state, {
         isFetching: true

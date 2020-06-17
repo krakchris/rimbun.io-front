@@ -18,17 +18,12 @@ import Sidebar from '../Sidebar';
 
 // Dashboard component is loaded directly as an example of server side rendering
 import Dashboard from '../../pages/dashboard'
-import Buttons from '../../pages/buttons'
-import Charts from '../../pages/charts'
 import NotFound from '../../pages/notFound'
-import Icons from '../../pages/icons'
-import Typography from '../../pages/typography'
-import Tables from '../../pages/tables'
 import Notifications from '../../pages/notifications'
-import Posts from '../../pages/posts'
 import Profile from '../../pages/profile'
 import userList from '../../pages/userlist/userList'
-import Privacy from '../../pages/privacy'
+import Privacy from '../../pages/privacy';
+import * as Routes from "../../constants/routes";
 
 class Layout extends React.Component {
   constructor(props) {
@@ -44,28 +39,22 @@ class Layout extends React.Component {
       <div className={s.root}>
         <Sidebar />
         <div
-          className={cx(s.wrap, {[s.sidebarOpen]: this.state.sidebarOpen})}
+          className={cx(s.wrap, { [s.sidebarOpen]: this.state.sidebarOpen })}
         >
           <Header
             sidebarToggle={() =>
               this.setState({
-                sidebarOpen: !this.state.sidebarOpen,
+                sidebarOpen: !this.state.sidebarOpen
               })
             }
           />
           <main className={s.content}>
             <Switch>
-              <Route path="/app/main" exact component={Dashboard} />
-              <Route path="/app/typography" exact component={Typography} />
-              <Route path="/app/tables" exact component={Tables} />
-              <Route path="/app/posts" component={Posts} />
-              <Route path="/app/privacy" exact component={Privacy} />
-              <Route path="/app/userList" exact component={userList}/>
-              <Route path="/app/profile" exact component={Profile} />
-              <Route path="/app/notifications" exact component={Notifications} /> 
-              <Route path="/app/components/buttons" exact component={Buttons} />
-              <Route path="/app/components/charts" exact component={Charts} />
-              <Route path="/app/components/icons" exact component={Icons} />
+              <Route path={Routes.dashboard} exact component={Dashboard} />
+              <Route path={Routes.privacy} exact component={Privacy} />
+              <Route path={Routes.userList} exact component={userList} />
+              <Route path={Routes.profile} exact component={Profile} />
+              <Route path={Routes.notifications} exact component={Notifications} />
               <Route component={NotFound} />
             </Switch>
           </main>

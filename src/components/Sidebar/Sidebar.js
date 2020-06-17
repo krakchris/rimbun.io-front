@@ -1,6 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter, Link } from 'react-router-dom';
 
 import Icon from '../Icon';
 import LinksGroup from './LinksGroup/LinksGroup';
@@ -17,7 +17,7 @@ const Sidebar = () => (
     <ul className={s.nav}>
       <LinksGroup header="Dashboard" headerLink="/app/main" glyph="dashboard" />
       <LinksGroup header="User Management" headerLink="/app/userList" glyph="user" />
-      <LinksGroup header="Map" headerLink="/maps" glyph="components"/>
+      {/* <LinksGroup header="Map" headerLink="/maps" glyph="components" /> */}
     </ul>
   </nav>
 );

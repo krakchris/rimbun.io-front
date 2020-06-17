@@ -35,13 +35,6 @@ export function clearDashboardState() {
 
 }
 
-function createPostInitial() {
-  return {
-    type: CREATE_MAP_INITIAL,
-    isFetching: false
-  };
-}
-
 function requestCreateMap(map) {
   return {
     type: CREATE_MAP_REQUEST,
