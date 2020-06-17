@@ -9,7 +9,8 @@ import {
   CardBody,
   Row,
   Container,
-  Col
+  Col,
+  UncontrolledTooltip
 } from "reactstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -54,7 +55,7 @@ class Dashboard extends PureComponent {
       activeTab: "1",
       currentPage: dashboardConst.CURRENT_PAGE_COUNT,
       isShareModalOpen: false,
-      activeShareMapData: {}
+      activeShareMapData: {},
     };
   }
 
@@ -81,20 +82,20 @@ class Dashboard extends PureComponent {
   };
 
   shareModalToggle = (data) => {
-    
+
     const { userIds, name } = data;
     const { userList } = this.props;
     let selectedOptions = [];
-    userList.map((item)=>{
+    userList.map((item) => {
       if (userIds.indexOf(item._id) !== -1)
         selectedOptions.push({
-        label: `${item.name} (${item.email})`,
-        value: item._id,
-        key: item._id
-      });
+          label: `${item.name} (${item.email})`,
+          value: item._id,
+          key: item._id
+        });
       return true;
     });
-    const activeShareMapData = { id: data._id, name, selectedOptions};
+    const activeShareMapData = { id: data._id, name, selectedOptions };
     this.setState((prevState, props) => {
       return {
         isShareModalOpen: !prevState.isShareModalOpen,
@@ -166,6 +167,7 @@ class Dashboard extends PureComponent {
       autoClose: 1000
     });
 
+
   render() {
     const {
       isFetching,
@@ -178,12 +180,40 @@ class Dashboard extends PureComponent {
     const mapListComp = mapList.map(item => {
       return (
         <Card key={item._id}>
-          <i
-            className={cx(
-              s.alignEnd,
-              "glyphicon glyphicon-folder-close text-success mt-sm mr-sm float-right"
-            )}
-          />
+          {item.isShared ? (
+            <React.Fragment>
+              <i
+                className={cx(
+                  s.alignEnd,
+                  "glyphicon glyphicon-user text-success mt-sm mr-sm float-right"
+                )}
+                id={"Tooltip-" + item._id}
+              />
+              <UncontrolledTooltip
+                placement="bottom"
+                target={"Tooltip-" + item._id}
+              >
+                Shared with Officials
+              </UncontrolledTooltip>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <i
+                className={cx(
+                  s.lockIcon,
+                  "fa fa-lock text-success mt-sm mr-sm float-right"
+                )}
+                id={"Tooltip-" + item._id}
+              />
+              <UncontrolledTooltip
+                placement="bottom"
+                target={"Tooltip-" + item._id}
+              >
+                Shared with no one
+              </UncontrolledTooltip>
+            </React.Fragment>
+          )}
+
           <a href={`/viewmap/${item._id}`} target="_blank" title="View Map">
             <CardImg top width="100%" src={mapImage} alt="Card image cap" />
           </a>
@@ -267,8 +297,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-            )}
+                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+              )}
           </Row>
         </Container>
       </section>
