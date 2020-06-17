@@ -49,7 +49,6 @@ class CreateMap extends PureComponent {
   };
 
   handleSelectChange = selectedtagName => {
-    console.log("selectedtagName", selectedtagName);
     this.setState({ selectedtagName });
   };
 
