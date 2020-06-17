@@ -178,23 +178,10 @@ class Dashboard extends PureComponent {
     } = this.props;
 
     const mapListComp = mapList.map(item => {
-      let shareUserList = [];
-      let tooltipMsg;
-      userList.map((user) => {
-        if (item.userIds.indexOf(user._id) !== -1)
-          shareUserList.push(`${user.name} `)
-      })
-      if (shareUserList && shareUserList.length > 2)
-        tooltipMsg = `shared with ${shareUserList[0]}, ${shareUserList[1]} and ${shareUserList.length - 2} others`
-      else if (shareUserList && shareUserList.length === 2)
-        tooltipMsg = `shared with ${shareUserList[0]} and ${shareUserList[1]} `
-      else
-        tooltipMsg = `shared with ${shareUserList[0]}`
-
       return (
         <Card key={item._id}>
-          {item.isShared ?
-            <>
+          {item.isShared ? (
+            <React.Fragment>
               <i
                 className={cx(
                   s.alignEnd,
@@ -203,13 +190,14 @@ class Dashboard extends PureComponent {
                 id={"Tooltip-" + item._id}
               />
               <UncontrolledTooltip
-                placement='bottom'
+                placement="bottom"
                 target={"Tooltip-" + item._id}
               >
-                {tooltipMsg}
+                Shared with Officials
               </UncontrolledTooltip>
-            </> :
-            <>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
               <i
                 className={cx(
                   s.lockIcon,
@@ -218,13 +206,13 @@ class Dashboard extends PureComponent {
                 id={"Tooltip-" + item._id}
               />
               <UncontrolledTooltip
-                placement='bottom'
+                placement="bottom"
                 target={"Tooltip-" + item._id}
               >
-                shared with no one
+                Shared with no one
               </UncontrolledTooltip>
-            </>
-          }
+            </React.Fragment>
+          )}
 
           <a href={`/viewmap/${item._id}`} target="_blank" title="View Map">
             <CardImg top width="100%" src={mapImage} alt="Card image cap" />
