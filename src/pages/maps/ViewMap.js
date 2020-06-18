@@ -12,7 +12,8 @@ import Loader from "../../components/Loader";
 import { getMapDataById } from '../../actions/map'
 import { hideSidePanel } from '../../actions/map';
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
-import './viewMap.css';
+import cx from "classnames";
+import s from './ViewMap.module.scss';
 
 
 
@@ -61,8 +62,9 @@ class Official extends React.Component {
 
     loadChart = () => {
         if (this.props.mapState) {
-            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
+            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)) {
                 this.setState({ data: this.props.mapState.visState.layerData[0].data, isChartVisible: true })
+            }
             else
                 toast.error("Please do the layer selection", {
                     position: toast.POSITION.TOP_RIGHT,
@@ -102,42 +104,52 @@ class Official extends React.Component {
                             )}
                         </AutoSizer>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', flexGrow: 1, width: '25%', height: '100vh', background: 'grey' }}>
+                    <div className={s.chartContainer}>
 
                         {this.props.mapState ?
                             this.state.isChartVisible
                                 ? <Chart data={this.state.data} />
-                                : <div style={{ height: '60%', display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                : <div className={s.defaultMsg}>
                                     <p>Please draw layer on map to view data visualization on chart</p>
                                 </div>
                             : null}
 
                         {this.props.mapState ?
                             <>
-                                <div style={{ background: '#ccc', textAlign: 'center' }}>
-                                    <button onClick={this.loadChart} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
-                                        <i className="glyphicon glyphicon-repeat" style={{ verticalAlign: 'middle', padding: '8px', fontSize: '24px' }}></i>
+                                <div className={s.actionContainer}>
+                                    <button onClick={this.loadChart} className={s.chartButton}>
+                                        <i className={cx(
+                                            "glyphicon glyphicon-repeat",
+                                            s.alignIcons
+                                        )} />
                                         Update </button>
                                 </div>
 
-                                <div style={{ background: '#ccc', textAlign: 'center' }}>
-                                    <button onClick={this.handleBack} style={{ background: 'none', border: 'none', fontSize: '18px' }}>
-                                        <i className="glyphicon glyphicon-repeat" style={{ verticalAlign: 'middle', padding: '8px', fontSize: '24px' }}></i>
+                                <div className={s.actionContainer}>
+                                    <button onClick={this.handleBack} className={s.chartButton}>
+                                        <i className={cx(
+                                            "glyphicon glyphicon-repeat",
+                                            s.alignIcons
+                                        )} />
                                         Back </button>
                                 </div>
 
 
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
-                                    <button onClick={this.downloadFile} style={{ background: 'none', border: 'none', fontSize: '24px', outline: 'none' }}>
-                                        <i className="glyphicon glyphicon-file" style={{ verticalAlign: 'middle', padding: '8px' }}></i>
+                                    <button onClick={this.downloadFile} className={s.chartButton}>
+                                        <i className={cx(
+                                            "glyphicon glyphicon-file",
+                                            s.alignIcons
+                                        )} />
                                     </button>
 
-                                    <button style={{ background: 'none', border: 'none', fontSize: '24px', outline: 'none' }}>
-                                        <i className="glyphicon glyphicon-download" style={{ verticalAlign: 'middle', padding: '8px' }}></i>
+                                    <button className={s.chartButton}>
+                                        <i className={cx(
+                                            "glyphicon glyphicon-download",
+                                            s.alignIcons
+                                        )} />
                                     </button>
                                 </div>
-
-
                             </>
                             : null}
                     </div>

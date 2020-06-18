@@ -1,28 +1,31 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import s from './chart.module.scss';
 
 class Chart extends React.Component {
+
     render() {
+ 
+            let green_area_data = this.props.data.map((item, index) => {
+                return {
+                    index: index,
+                    x: eval(item.data[6]),
+                    y: eval(item.data[8]),
+                    "mode": "lines",
+                    "type": "scattergl",
+                }
+            })
 
-        let green_area_data = this.props.data.map((item, index) => {
-            return {
-                index: index,
-                x: eval(item.data[6]),
-                y: eval(item.data[8]),
-                "mode": "lines",
-                "type": "scattergl",
-            }
-        })
-
-        let water_area_data = this.props.data.map((item, index) => {
-            return {
-                index: index,
-                x: eval(item.data[6]),
-                y: eval(item.data[7]),
-                "mode": "lines",
-                "type": "scattergl",
-            }
-        })
+            let water_area_data = this.props.data.map((item, index) => {
+                return {
+                    index: index,
+                    x: eval(item.data[6]),
+                    y: eval(item.data[7]),
+                    "mode": "lines",
+                    "type": "scattergl",
+                }
+            })
+           
 
         const green_area_layout = {
             autosize: true,
@@ -38,24 +41,14 @@ class Chart extends React.Component {
             title: ' Visualization green area change',
             font: {
                 family: "monospace",
-                size: 8,
+                size: 7,
                 color: "#7f7f7f"
             },
             showlegend: false,
             xaxis: {
                 'title': 'time',
                 'showticklabels': false,
-                'type': 'category',
-                'tickangle': 60,
-                'showspikes': true,
-                'spikethickness': 2,
-                'spikemode': "toaxis+across+marker",
-                'ticks': 'outside',
-                'showgrid': true,
-                'tickfont': {
-                    'family': 'Balto',
-                    'size': 6,
-                }
+                'ticks': 'outside'
             },
             yaxis: {
                 autorange: "true",
@@ -78,23 +71,13 @@ class Chart extends React.Component {
             font: {
                 family: "monospace",
                 size: 7,
-                color: "#7f7f7f"
+                color: "#7f7f7f",
             },
             showlegend: false,
             xaxis: {
                 'title': 'time',
                 'showticklabels': false,
-                'type': 'category',
-                'tickangle': 60,
-                'showspikes': true,
-                'spikethickness': 2,
-                'spikemode': "toaxis+across+marker",
-                'ticks': 'outside',
-                'showgrid': true,
-                'tickfont': {
-                    'family': 'Balto',
-                    'size': 6,
-                }
+                'ticks': 'outside'
             },
             yaxis: {
                 autorange: "true",
@@ -103,15 +86,15 @@ class Chart extends React.Component {
         };
 
         return (
-            <div style={{ height: '60%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around' }}>
-                <div style={{ margin: '25px' }}>
+            <div className={s.charts}>
+                <div className={s.chartMargin}>
                     <Plot
                         data={green_area_data}
                         layout={green_area_layout}
                     />
                 </div>
 
-                <div style={{ margin: '25px' }}>
+                <div className={s.chartMargin}>
                     <Plot
                         data={water_area_data}
                         layout={water_area_layout}
