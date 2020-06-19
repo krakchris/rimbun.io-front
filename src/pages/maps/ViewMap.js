@@ -125,16 +125,6 @@ class Official extends React.Component {
                                         Update </button>
                                 </div>
 
-                                <div className={s.actionContainer}>
-                                    <button onClick={this.handleBack} className={s.chartButton}>
-                                        <i className={cx(
-                                            "glyphicon glyphicon-repeat",
-                                            s.alignIcons
-                                        )} />
-                                        Back </button>
-                                </div>
-
-
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
                                     <button onClick={this.downloadFile} className={s.chartButton}>
                                         <i className={cx(
