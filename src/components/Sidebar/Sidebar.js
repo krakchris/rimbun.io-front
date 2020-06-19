@@ -15,9 +15,9 @@ const Sidebar = () => (
       </Link>
     </header>
     <ul className={s.nav}>
-      <LinksGroup header="Dashboard" headerLink="/app/main" glyph="dashboard" />
+      <LinksGroup header="Maps" headerLink="/app/main" glyph="dashboard" />
       <LinksGroup header="User Management" headerLink="/app/userList" glyph="user" />
-      {/* <LinksGroup header="Map" headerLink="/maps" glyph="components" /> */}
+      <LinksGroup header="Stories" headerLink="/app/stories" glyph="components" />
     </ul>
   </nav>
 );

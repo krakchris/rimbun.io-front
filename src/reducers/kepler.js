@@ -1,44 +1,62 @@
-import { createAction, handleActions } from 'redux-actions';
-import KeplerGlSchema from 'kepler.gl/schemas';
-import { setExportFiltered } from 'kepler.gl/actions'
-import { toast } from 'react-toastify';
-// CONSTANTS
-export const SAVE_CONFIG = 'SAVE_CONFIG';
-export const CHANGE_NOTIFY = 'CHANGE_NOTIFY';
 
-// ACTIONS
-export const saveConfig = createAction(SAVE_CONFIG);
+import { processGeojson, processCsvData } from "kepler.gl/processors";
+import { combinedUpdaters } from "kepler.gl/reducers";
+import reducers from "./index";
 
-
-export const setMapConfig = (payload) => {
-
-    return async (dispatch) => {
-        dispatch(saveConfig(payload));
-        toast.success("Config is saved !", {
-            position: toast.POSITION.TOP_RIGHT,
-        });
-        dispatch(setExportFiltered(true));
-    }
-}
-
-
-// INITIAL_STATE
-const initialState = {
-    appName: 'example'
+const composedReducer = (state, action) => {
+  switch (action.type) {
+    // add data to map after receiving data from remote sources
+    case 'LOAD_REMOTE_RESOURCE_SUCCESS':
+      let processorMethod = processCsvData;
+      let datasets = action.options.dataset.map(item => {
+        // create helper to determine file ext eligibility
+        if (item.dataUrl.includes('.json') || item.dataUrl.includes('.geojson')) {
+          processorMethod = processGeojson;
+        }
+        return ({
+          info: item.info,
+          data: processorMethod(item.data)
+        })
+      })
+      const config = action.options.config;
+      if (action.options.mapInstanceId === 'viewMap') {
+        return {
+          ...state,
+          keplerGl: {
+            ...state.keplerGl,
+            // pass in kepler.gl instance state to combinedUpdaters
+            viewMap: combinedUpdaters.addDataToMapUpdater(
+              state.keplerGl.viewMap,
+              {
+                payload: {
+                  datasets: datasets,
+                  config: config
+                }
+              }
+            )
+          }
+        }
+      }
+      else {
+        return {
+          ...state,
+          keplerGl: {
+            ...state.keplerGl,
+            // pass in kepler.gl instance state to combinedUpdaters
+            editMap: combinedUpdaters.addDataToMapUpdater(
+              state.keplerGl.editMap,
+              {
+                payload: {
+                  datasets: datasets,
+                  config: config
+                }
+              }
+            )
+          }
+        }
+      }
+  }
+  return reducers(state, action);
 };
 
-// REDUCER
-const keplerReducer = handleActions(
-  {
-    [SAVE_CONFIG]: (state, action) => ({
-      ...state,
-      mapConfig: localStorage.setItem(
-        "data",
-        JSON.stringify(KeplerGlSchema.save(action.payload))
-      )
-    })
-  },
-  initialState
-);
-
-export default keplerReducer;
+export default composedReducer;

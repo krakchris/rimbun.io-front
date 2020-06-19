@@ -11,6 +11,7 @@ export const documentation = "/documentation";
 
 export const dashboard = `${app}/main`;
 export const privacy = `${app}/privacy`;
+export const stories = `${app}/stories`;
 export const userList = `${app}/userList`;
 export const profile = `${app}/profile`;
 export const notifications = `${app}/notifications`;
