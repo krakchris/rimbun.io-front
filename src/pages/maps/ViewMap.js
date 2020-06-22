@@ -12,6 +12,7 @@ import Loader from "../../components/Loader";
 import { getMapDataById } from '../../actions/map'
 import { hideSidePanel } from '../../actions/map';
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
+import Icon from "../../components/Icon";
 import cx from "classnames";
 import s from './ViewMap.module.scss';
 
@@ -105,15 +106,20 @@ class Official extends React.Component {
                         </AutoSizer>
                     </div>
                     <div className={s.chartContainer}>
+                        <div className={s.chartLayout}>
+                            <div className={s.keplerLogo}>
+                                <Icon glyph="logo" onClick={this.handleBack} />
+                                <p><span>{(this.props.mapData) ? this.props.mapData.name : 'Loading....'}</span></p>
+                            </div>
+                            {this.props.mapState ?
+                                this.state.isChartVisible
+                                    ? <Chart data={this.state.data} />
+                                    : <div className={s.defaultMsg}>
+                                        <p>Please draw layer on map to view data visualization on chart</p>
+                                    </div>
 
-                        {this.props.mapState ?
-                            this.state.isChartVisible
-                                ? <Chart data={this.state.data} />
-                                : <div className={s.defaultMsg}>
-                                    <p>Please draw layer on map to view data visualization on chart</p>
-                                </div>
-                            : null}
-
+                                : null}
+                        </div>
                         {this.props.mapState ?
                             <>
                                 <div className={s.actionContainer}>
@@ -153,6 +159,7 @@ function mapStateToProps(state) {
     return {
         isVisible: state.chart.isVisible,
         isFetching: state.map.isFetching,
+        mapData: state.map.mapData
     };
 }
 

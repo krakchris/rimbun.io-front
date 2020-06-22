@@ -1,7 +1,5 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { connect } from 'react-redux';
-import Icon from "../../components/Icon";
 import s from './chart.module.scss';
 
 class Chart extends React.Component {
@@ -128,12 +126,7 @@ class Chart extends React.Component {
             displaylogo: false
         }
         return (
-            <div className={s.charts}>
-                <div className={s.keplerLogo}>
-                    <Icon glyph="logo" />
-                    <p><span>{(this.props.mapData) ? this.props.mapData.name : 'Loading....'}</span></p>
-                </div>
-
+            <React.Fragment>
                 <div className={s.chartMargin}>
                     <Plot
                         data={green_area_data}
@@ -149,15 +142,11 @@ class Chart extends React.Component {
                         config={config}
                     />
                 </div>
-            </div>
+            </React.Fragment>
         )
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        mapData: state.map.mapData
-    };
-}
 
-export default connect(mapStateToProps)(Chart);
+
+export default Chart;
