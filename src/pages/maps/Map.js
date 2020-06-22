@@ -19,6 +19,9 @@ import { MAPBOX_ACCESS_TOKEN, EDIT_MAP_INSTANCE_ID } from '../../constants/mapCo
 import CustomButtonFactory from './AddDataButton'
 import { getMapDataById } from "../../actions/map";
 import Loader from "../../components/Loader";
+import { getLoggedInUser } from '../../lib/localData';
+import { ADMIN_ROLE_TAG } from '../../constants';
+import { dashboard } from "../../constants/routes";
 
 
 const KeplerGl = injectComponents([
@@ -45,8 +48,9 @@ class Map extends React.Component {
     mapData: null
   };
 
-  componentDidMount() {
-    this.loadMapData();
+  componentDidMount() {  
+    if (getLoggedInUser().role === ADMIN_ROLE_TAG) this.loadMapData();
+    else this.props.history.push({ pathname: dashboard }); 
   }
 
   loadMapData = () => {

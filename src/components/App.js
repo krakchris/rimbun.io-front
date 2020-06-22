@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, withRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 
 import ErrorPage from '../pages/error';
@@ -56,14 +56,17 @@ class App extends React.PureComponent {
                     <PrivateRoute path={Routes.app} dispatch={this.props.dispatch} component={LayoutComponent}/>
                     <Route path={Routes.documentation} exact
                            render={() => <Redirect to="/documentation/getting-started/overview"/>}/>
-                    <Route path={Routes.register} exact component={Register}/>
+                    <PrivateRoute path={Routes.register} exact dispatch={this.props.dispatch} component={Register}/>
+
                     <Route path={Routes.login} exact component={Login}/>
                     <Route path={Routes.error} exact component={ErrorPage}/>
+
                     <Suspense fallback={<Loader visible/>}>
-                      <Route path={Routes.editMap} exact component={EditMap}/>
-                      <Route path={Routes.viewMap} exact component={ViewMap} />
+                      <PrivateRoute path={Routes.editMap} exact dispatch={this.props.dispatch} component={EditMap}/>
+                      <PrivateRoute path={Routes.viewMap} exact dispatch={this.props.dispatch} component={ViewMap} />
                     </Suspense>
-                    <Route component={NotFound} />
+                    
+                      <PrivateRoute dispatch={this.props.dispatch} component={NotFound} />
                 </Switch>
         </BrowserRouter>
         </div>
