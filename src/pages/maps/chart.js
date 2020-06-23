@@ -23,42 +23,68 @@ class Chart extends React.Component {
         }
     }
 
+roundUp = (num, precision) => {
+    precision = Math.pow(10, precision)
+    return Math.ceil(num * precision) / precision
+}
+
+
+
+ sumArrays = (reqArrays) => {
+     let finalArray = reqArrays[0];
+     for (var i = 1; i < reqArrays.length; i++) {
+       finalArray = finalArray.map(function(num, idx) {
+           return num + reqArrays[i][idx];
+       });
+     }
+     return finalArray;
+}
+
     render() {
         let green_area = [];
         let time = [];
+        let lat = [];
+        let long = [];
+        let parcel= [];
+        
         this.props.data.map((item, index) => {
             time.push(eval(item.data[6]));
             green_area.push(eval(item.data[8]))
-        })
+            lat.push(eval(item.data[0]));
+            long.push(eval(item.data[1]));
+            parcel.push(item.data[10]);
+        });
 
-        let green_data = this.sortArrays([green_area.flat(Infinity), time.flat(Infinity)])
+    
+        let sumPoints = []
+
+        sumPoints = this.sumArrays(green_area);
+
+       
 
         let green_area_data = [{
-            x: green_data[1],
-            y: green_data[0],
+            x: time[0],
+            y: sumPoints,
             "mode": "lines",
             "type": "scattergl",
         }];
 
-        /* uncomment it for without merge green_area_data :)*/
 
-        // let green_area_data = [{
-        //     x: time.flat(Infinity),
-        //     y: green_area.flat(Infinity),
-        //     "mode": "lines",
-        //     "type": "scattergl",
-        // }];
+        let parcelX = [];
+        let parcelY = [];
+        let parcelTemp = {};
+        parcelTemp = JSON.parse(parcel[0]);
+        parcelX = Object.keys(parcelTemp);
+        parcelY = Object.values(parcelTemp);
 
+    
+        let water_area_data = [{
+            x: parcelX,
+            y: parcelY,
+              mode: "lines",
+              type: "bar"
+            }];
 
-        let water_area_data = this.props.data.map((item, index) => {
-            return {
-                index: index,
-                x: eval(item.data[6]),
-                y: eval(item.data[9]),
-                "mode": "lines",
-                "type": "bar",
-            }
-        })
 
 
         const green_area_layout = {
@@ -112,7 +138,7 @@ class Chart extends React.Component {
             },
             showlegend: false,
             xaxis: {
-                'title': 'time',
+                'title': 'Area',
                 'showticklabels': false,
                 'ticks': 'outside'
             },
