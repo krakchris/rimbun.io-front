@@ -250,16 +250,10 @@ class Dashboard extends PureComponent {
             <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
             <div className={s.actionIcons}>
               <div>
-                <button
-                  style={{
-                    background: "none",
-                    border: "none",
-                    outline: "none"
-                  }}
-                  onClick={() => this.deleteConfirm(item._id)}
-                >
-                  <i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" />
-                </button>
+                  <i
+                    onClick={() => this.deleteConfirm(item._id)}
+                    className="glyphicon glyphicon-trash text-success mr-sm mb-xs"
+                  />
               </div>
 
               <div className={s.alignEnd}>
@@ -269,7 +263,7 @@ class Dashboard extends PureComponent {
                   }
                   className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs"
                 />
-    
+
                 <i
                   onClick={() =>
                     this.handleCardAction({ id: item._id, action: "edit" })
