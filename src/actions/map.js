@@ -199,7 +199,7 @@ function prepareKeplerData(data) {
     .then((res) => {
       dispatch(loadRemoteResourceSuccess({ dataset, config, mapInstanceId }))
       dispatch(mapDataSucess({ mapId, name }));
-      dispatch(updateMap(config.config.mapState));
+      if(config && config.config) dispatch(updateMap(config.config.mapState));
 
     })
     .catch(error => {
