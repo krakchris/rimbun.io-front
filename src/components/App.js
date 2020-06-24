@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router';
 import { BrowserRouter, withRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 
-import ErrorPage from '../pages/error';
+import ErrorBoundary from '../pages/error';
 import NotFound from "../pages/notFound";
 
 import '../styles/theme.scss';
@@ -43,6 +43,7 @@ const CloseButton = ({ closeToast }) => <i onClick={closeToast} className="la la
 class App extends React.PureComponent {
   render() {
     return (
+      <ErrorBoundary>
         <div>
             <ToastContainer
                 autoClose={5000}
@@ -59,7 +60,7 @@ class App extends React.PureComponent {
                     <PrivateRoute path={Routes.register} exact dispatch={this.props.dispatch} component={Register}/>
 
                     <Route path={Routes.login} exact component={Login}/>
-                    <Route path={Routes.error} exact component={ErrorPage}/>
+                    {/*<Route path={Routes.error} exact component={ErrorBoundary}/>*/}
 
                     <Suspense fallback={<Loader visible/>}>
                       <PrivateRoute path={Routes.editMap} exact dispatch={this.props.dispatch} component={EditMap}/>
@@ -70,6 +71,7 @@ class App extends React.PureComponent {
                 </Switch>
         </BrowserRouter>
         </div>
+      </ErrorBoundary>
 
     );
   }
