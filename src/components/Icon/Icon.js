@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import icons from './icons';
 
-const Icon = ({glyph}) => (
-  icons[glyph] ? <img src={icons[glyph]} alt={`${glyph}-icon`} /> : null
+const Icon = ({glyph,onClick}) => (
+  icons[glyph] ? <img src={icons[glyph]} alt={`${glyph}-icon`} onClick={onClick}/> : null
 );
 
 Icon.propTypes = {

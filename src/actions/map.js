@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import api, { endPoints } from "../api";
 import { request } from 'd3-request';
+import { updateMap } from 'kepler.gl/actions';
+
 import { S3_BUCKET_URL } from '../constants';
 
 export const MAP_REQUEST = "MAP_REQUEST";
@@ -197,6 +199,8 @@ function prepareKeplerData(data) {
     .then((res) => {
       dispatch(loadRemoteResourceSuccess({ dataset, config, mapInstanceId }))
       dispatch(mapDataSucess({ mapId, name }));
+      dispatch(updateMap(config.config.mapState));
+
     })
     .catch(error => {
       const errorMessage = error.response

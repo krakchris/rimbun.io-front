@@ -32,6 +32,8 @@ import Pagination from '../../components/Pagination';
 import * as dashboardConst from '../../constants';
 import DeleteMap from './DeleteMap';
 import ShareMap from "./ShareMap";
+import {getLoggedInUser} from '../../lib/localData';
+
 
 
 class Dashboard extends PureComponent {
@@ -56,18 +58,20 @@ class Dashboard extends PureComponent {
       currentPage: dashboardConst.CURRENT_PAGE_COUNT,
       isShareModalOpen: false,
       activeShareMapData: {},
+      role: getLoggedInUser().role
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getTagNames());
-
     this.fetchMapList({
       pageNo: this.state.currentPage,
       limit: dashboardConst.PAGE_MAP_LIMIT
     });
+    if (this.state.role === dashboardConst.ADMIN_ROLE_TAG){
+      this.props.dispatch(fetchUsers());
+      this.props.dispatch(getTagNames());
+    }
 
-    this.props.dispatch(fetchUsers());
   }
 
   fetchMapList = PaginationParam => {
@@ -177,6 +181,31 @@ class Dashboard extends PureComponent {
       userList
     } = this.props;
 
+    const { role } = this.state;
+
+    const isAdmin = (role === dashboardConst.ADMIN_ROLE_TAG);
+
+    const mapListCompOfficial = mapList.map(item => {
+      return (
+        <Card key={item._id}>
+          <a href={`/viewmap/${item._id}`} target="_blank" title="View Map">
+            <CardImg top width="100%" src={mapImage} alt="Card image cap" />
+          </a>
+          <CardBody>
+            <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
+            <div className={s.alignEnd}>
+              <i
+                onClick={() =>
+                  this.handleCardAction({ id: item._id, action: "view" })
+                }
+                className="glyphicon glyphicon-eye-open text-success mr-sm mb-xs"
+              />
+            </div>
+          </CardBody>
+        </Card>
+      );
+    });
+
     const mapListComp = mapList.map(item => {
       return (
         <Card key={item._id}>
@@ -221,16 +250,10 @@ class Dashboard extends PureComponent {
             <CardTitle className="fw-semi-bold">{item.name}</CardTitle>
             <div className={s.actionIcons}>
               <div>
-                <button
-                  style={{
-                    background: "none",
-                    border: "none",
-                    outline: "none"
-                  }}
-                  onClick={() => this.deleteConfirm(item._id)}
-                >
-                  <i className="glyphicon glyphicon-trash text-success mr-sm mb-xs" />
-                </button>
+                  <i
+                    onClick={() => this.deleteConfirm(item._id)}
+                    className="glyphicon glyphicon-trash text-success mr-sm mb-xs"
+                  />
               </div>
 
               <div className={s.alignEnd}>
@@ -267,28 +290,34 @@ class Dashboard extends PureComponent {
               <h1 className="page-title">Maps</h1>
             </Col>
             <Col>
-              <ShareMap
-                isShareModalOpen={this.state.isShareModalOpen}
-                users={userList}
-                mapData={this.state.activeShareMapData}
-                shareMap={this.handleShareMap}
-                errorMessage={this.props.errorMessage}
-                mapShareStatus={this.props.mapShareStatus}
-                onModalClose={this.onModalClose}
-              />
-              <CreateMap
-                tagNames={tagNames}
-                createMap={this.handleCreateMap}
-                errorMessage={this.props.errorMessage}
-                mapCreateStatus={this.props.mapCreateStatus}
-                onModalClose={this.onModalClose}
-              />
+              {isAdmin && (
+                <React.Fragment>
+                  <ShareMap
+                    isShareModalOpen={this.state.isShareModalOpen}
+                    users={userList}
+                    mapData={this.state.activeShareMapData}
+                    shareMap={this.handleShareMap}
+                    errorMessage={this.props.errorMessage}
+                    mapShareStatus={this.props.mapShareStatus}
+                    onModalClose={this.onModalClose}
+                  />
+                  <CreateMap
+                    tagNames={tagNames}
+                    createMap={this.handleCreateMap}
+                    errorMessage={this.props.errorMessage}
+                    mapCreateStatus={this.props.mapCreateStatus}
+                    onModalClose={this.onModalClose}
+                  />
+                </React.Fragment>
+              )}
             </Col>
           </Row>
           <Row>
             {mapList && mapList.length != 0 ? (
               <React.Fragment>
-                <CardColumns className="mt-20">{mapListComp}</CardColumns>
+                <CardColumns className="mt-20">
+                  {isAdmin ? mapListComp : mapListCompOfficial}
+                </CardColumns>
                 <Pagination
                   count={totalMapCount}
                   limit={dashboardConst.PAGE_MAP_LIMIT}
@@ -297,8 +326,8 @@ class Dashboard extends PureComponent {
                 />
               </React.Fragment>
             ) : (
-                <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
-              )}
+              <h5>{isFetching ? `Loading....` : `No Maps Available!`}</h5>
+            )}
           </Row>
         </Container>
       </section>

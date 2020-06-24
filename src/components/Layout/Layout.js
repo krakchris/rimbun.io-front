@@ -23,6 +23,7 @@ import Notifications from '../../pages/notifications'
 import Profile from '../../pages/profile'
 import userList from '../../pages/userlist/userList'
 import Privacy from '../../pages/privacy';
+import Stories from '../../pages/stories';
 import * as Routes from "../../constants/routes";
 
 class Layout extends React.Component {
@@ -52,6 +53,7 @@ class Layout extends React.Component {
             <Switch>
               <Route path={Routes.dashboard} exact component={Dashboard} />
               <Route path={Routes.privacy} exact component={Privacy} />
+              <Route path={Routes.stories} exact component={Stories} />
               <Route path={Routes.userList} exact component={userList} />
               <Route path={Routes.profile} exact component={Profile} />
               <Route path={Routes.notifications} exact component={Notifications} />

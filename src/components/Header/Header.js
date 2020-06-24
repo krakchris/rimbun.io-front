@@ -44,7 +44,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const loggedInUserName = context.getLoggedInUser().data.user.name;
+    const loggedInUserName = context.getLoggedInUser().name;
     const {isOpen} = this.state;
     return (
       <Navbar className={s.root}>

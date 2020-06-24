@@ -1,0 +1,55 @@
+@import '../../styles/app';
+
+.chartContainer{
+     display:flex;
+     flex-direction: column; 
+     justify-content: space-evenly; 
+     flex-grow: 1;
+     width: 25%;
+     height: 100vh; 
+     background: grey;
+}
+
+.chartLayout{
+    height: 60%;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.defaultMsg {
+    margin-top: 36%; 
+    margin-bottom: 55%;
+}
+
+.chartButton {
+    background: none;
+     border: none;
+    font-size: 18px;
+}
+
+.actionContainer {
+     background: #ccc;
+     text-align: center;   
+}
+
+.alignIcons{
+    vertical-align: middle;
+     padding: 8px;
+    font-size: 24px;
+}
+
+.keplerLogo {
+    text-align: center;
+ }
+ 
+ .keplerLogo img {
+     width: 50%;
+ }
+ 
+ .keplerLogo span {
+     color: white;
+     margin-left: 2%;
+   }

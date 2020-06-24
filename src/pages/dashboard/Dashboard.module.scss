@@ -16,11 +16,18 @@
    .actionIcons{
      display: flex;
      justify-content: space-between;
+     i {
+       cursor: pointer;
+     }
+
+     
+
    }
    .lockIcon {
      text-align: end;
      font-size: 19px;
    }
+   
  }
  
  .usersTable {
