@@ -67,7 +67,7 @@ class Map extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Loader visible={this.props.isFetching} />
+        <Loader visible={this.props.isFetching} isPercentage={true}/>
         <div style={{ position: "absolute", width: "100%", height: "100%" }}>
           <AutoSizer>
             {({ height, width }) => (

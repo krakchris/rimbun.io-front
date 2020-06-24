@@ -5,48 +5,56 @@ import { toast } from "react-toastify";
 
 class Chart extends React.PureComponent {
 
-roundUp = (num, precision) => {
-    precision = Math.pow(10, precision)
-    return Math.ceil(num * precision) / precision
-}
+    roundUp = (num, precision) => {
+        precision = Math.pow(10, precision)
+        return Math.ceil(num * precision) / precision
+    }
 
-sumArrays = (reqArrays) => {
-     let finalArray = reqArrays[0];
-     for (var i = 1; i < reqArrays.length; i++) {
-       finalArray = finalArray.map(function(num, idx) {
-           return num + reqArrays[i][idx];
-       });
-     }
-     return finalArray;
-}
+    sumArrays = (reqArrays) => {
+        let finalArray = reqArrays[0];
+        for (var i = 1; i < reqArrays.length; i++) {
+            finalArray = finalArray.map(function (num, idx) {
+                return num + reqArrays[i][idx];
+            });
+        }
+        return finalArray;
+    }
 
-averageParcelPointsCalculate = (parcel) => {
-    let averageParcelPoints = parcel[0];
-    for (var i = 0; i < parcel.length; i++) {
-        Object.keys(averageParcelPoints).map((key, value) => {
-            if (i > 0) averageParcelPoints[key] =
-                averageParcelPoints[key] + parcel[i][key];
-            if (i === parcel.length - 1)
-                averageParcelPoints[key] = averageParcelPoints[key] / parcel.length;
-        });
-    };
-    return averageParcelPoints;
-}
+    averageParcelPointsCalculate = (parcel) => {
+        let averageParcelPoints = parcel[0];
+        for (var i = 0; i < parcel.length; i++) {
+            Object.keys(averageParcelPoints).map((key, value) => {
+                if (i > 0) averageParcelPoints[key] =
+                    averageParcelPoints[key] + parcel[i][key];
+                if (i === parcel.length - 1)
+                    averageParcelPoints[key] = averageParcelPoints[key] / parcel.length;
+            });
+        };
+        return averageParcelPoints;
+    }
 
     render() {
         let green_area = [];
         let totalGreenAreaPoints = []; let averageParcelPoints = [];
         let time = []; let parcel = []; let parcel_area_data = [];
-        let green_area_data = []; 
+        let green_area_data = [];
 
         //extract required dataset information from kepler state
-        this.props.data.map((item, index) => {
-            time.push(eval(item.data[6])); // Time Stamp
-            green_area.push(eval(item.data[8])) // Green Area Distribution
-            parcel.push(JSON.parse(item.data[10])); // Parcel Area Overlap
-        });
+        for (let item of this.props.data) {
+            if (item.data !== undefined) {
+                time.push(eval(item.data[6])); // Time Stamp
+                green_area.push(eval(item.data[8])) // Green Area Distribution
+                parcel.push(JSON.parse(item.data[10])); // Parcel Area Overlap
+            }
+            else {
+                toast.error("Invalid Datasets for Charts Represntation!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                break;
+            }
+        };
 
-        if (green_area.length && parcel.length && time.length){
+        if (green_area.length && parcel.length && time.length) {
 
             // Add Green area points of selected area
             totalGreenAreaPoints = this.sumArrays(green_area);
@@ -72,24 +80,17 @@ averageParcelPointsCalculate = (parcel) => {
                 type: "bar"
             }];
 
-            
-        }else{
-            toast.error("Inavlid Datasets for Charts Represntation!", {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        }
 
+        } 
+        
         const green_area_layout = {
             autosize: true,
             hovermode: 'closest',
-            width: 220,
-            height: 140,
             margin: {
                 l: 25,
                 r: 10,
                 b: 20,
                 t: 20,
-                pad: 2
             },
             title: ' Visualization green area change',
             font: {
@@ -113,14 +114,11 @@ averageParcelPointsCalculate = (parcel) => {
         const parcel_area_layout = {
             autosize: true,
             hovermode: 'closest',
-            width: 220,
-            height: 140,
             margin: {
                 l: 25,
                 r: 10,
                 b: 20,
                 t: 20,
-                pad: 2
             },
             title: ' Visualization Partial overlap',
             font: {
@@ -141,26 +139,30 @@ averageParcelPointsCalculate = (parcel) => {
         };
 
         const config = {
-            displaylogo: false
+            displaylogo: false,
         }
         return (
-          <React.Fragment>
-            <div className={s.chartMargin}>
-              <Plot
-                data={green_area_data}
-                layout={green_area_layout}
-                config={config}
-              />
-            </div>
+            <React.Fragment>
+                <div className={s.chartMargin}>
+                    <Plot
+                        useResizeHandler
+                        className={s.chartResize}
+                        data={green_area_data}
+                        layout={green_area_layout}
+                        config={config}
+                    />
+                </div>
 
-            <div className={s.chartMargin}>
-              <Plot
-                data={parcel_area_data}
-                layout={parcel_area_layout}
-                config={config}
-              />
-            </div>
-          </React.Fragment>
+                <div className={s.chartMargin}>
+                    <Plot
+                        useResizeHandler
+                        className={s.chartResize}
+                        data={parcel_area_data}
+                        layout={parcel_area_layout}
+                        config={config}
+                    />
+                </div>
+            </React.Fragment>
         );
     }
 }

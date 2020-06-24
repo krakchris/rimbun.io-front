@@ -1,19 +1,22 @@
 @import '../../styles/app';
 
-
 .chartMargin {
    margin: 2%;
 }
 
-.keplerLogo {
-   text-align: center;
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) 
+{
+ .chartResize {
+    width:28vh;
+    height:25vh;
+ }
 }
 
-.keplerLogo img {
-    width: 50%;
+@media only screen and (min-device-width : 1366px) 
+{
+ .chartResize {
+   width:35vh;
+   height:25vh;
+ }
 }
-
-.keplerLogo span {
-    color: white;
-    margin-left: 2%;
-  }
