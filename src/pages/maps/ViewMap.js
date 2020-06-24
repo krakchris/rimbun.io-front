@@ -91,7 +91,7 @@ class Official extends React.Component {
 
         return (
             <React.Fragment>
-                <Loader visible={this.props.isFetching} />
+                <Loader visible={this.props.isFetching} isPercentage={true} />
                 <div style={{ display: 'flex' }}>
                     <div style={{ width: '80%' }}>
                         <AutoSizer>
@@ -175,4 +175,3 @@ export default withRouter(
         )(Official)
     )
 );
-
