@@ -91,9 +91,9 @@ class Official extends React.Component {
 
         return (
             <React.Fragment>
-                <Loader visible={this.props.isFetching} isPercentage={true} />
+                <Loader visible={this.props.isFetching} isPercentage />
                 <div style={{ display: 'flex' }}>
-                    <div style={{ width: '80%' }}>
+                    <div className={s.viewMap}>
                         <AutoSizer>
                             {({ height, width }) => (
                                 <KeplerGl

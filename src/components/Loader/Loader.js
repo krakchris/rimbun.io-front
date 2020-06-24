@@ -9,14 +9,15 @@ import s from './Loader.module.scss';
 const Loader = ({ visible, isPercentage }) => {
   return (
     <div className={s.root}>
-      {isPercentage ?
-        <Progress isActive={visible}>
-          {percent =>
-            <React.Fragment>
-              {percent === undefined ? percent = 0 : null}
-              {(Math.trunc(percent) > 0 && (Math.trunc(percent) <= 100) || visible) ?
-                <div className={s.cover}>
-                  <div className={s.loader}>
+
+      <Progress isActive={visible}>
+        {percent =>
+          <React.Fragment>
+            {percent === undefined ? percent = 0 : null}
+            {(Math.trunc(percent) > 0 && (Math.trunc(percent) <= 100) || visible) ?
+              <div className={s.cover}>
+                <div className={s.loader}>
+                  {isPercentage ?
                     <CircularProgressbar
                       value={percent}
                       minValue={1}
@@ -26,20 +27,7 @@ const Loader = ({ visible, isPercentage }) => {
                         pathColor: '#28a745',
                         textColor: '#28a745',
                       })}
-                    />
-                  </div>
-                </div>
-                : null}
-            </React.Fragment>
-          }
-        </Progress> :
-        <Progress isActive={visible}>
-          {percent =>
-            <React.Fragment>
-              {percent === undefined ? percent = 0 : null}
-              {(Math.trunc(percent) > 0 && (Math.trunc(percent) <= 100) || visible) ?
-                <div className={s.cover}>
-                  <div className={s.loader}>
+                    /> :
                     <CircularProgressbar
                       value={percent}
                       minValue={1}
@@ -47,14 +35,13 @@ const Loader = ({ visible, isPercentage }) => {
                       styles={buildStyles({
                         pathColor: '#28a745',
                       })}
-                    />
-                  </div>
+                    />}
                 </div>
-                : null}
-            </React.Fragment>
-          }
-        </Progress>
-      }
+              </div>
+              : null}
+          </React.Fragment>
+        }
+      </Progress>
     </div>
   );
 }

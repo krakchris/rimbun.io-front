@@ -53,3 +53,18 @@
      color: white;
      margin-left: 2%;
    }
+
+.viewMap {
+    width: 80%;
+}
+
+@media only screen and(max-width:767px) {
+    .chartContainer{
+        display:none;
+    }
+
+    .viewMap {
+    width: 100%;
+   }
+}
+
