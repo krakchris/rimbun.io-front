@@ -9,8 +9,7 @@ import { wrapTo } from 'kepler.gl/actions'
 import CustomPopOverFactory from './Pop-over'
 import Chart from './chart';
 import Loader from "../../components/Loader";
-import { getMapDataById } from '../../actions/map'
-import { hideSidePanel } from '../../actions/map';
+import { hideSidePanel, downloadData, getMapDataById } from "../../actions/map";
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 import Icon from "../../components/Icon";
 import cx from "classnames";
@@ -77,14 +76,36 @@ class Official extends React.Component {
 
     downloadFile = () => {
         if (this.props.mapState) {
-            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
-                console.log('downLoad File', this.props.mapState.visState)
-            else
+            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)){
+
+            const activeLayer = (this.props.mapState.visState.layers.length) ?this.props.mapState.visState.layers[0] : null; // by default first layer is the point layer for chart update
+
+            // get the datasetId of PointLayer 
+            const activePointLayerDataID = activeLayer.config.dataId;
+
+            // get all the data id points which falls under drawn polygon
+            let dataPoints = [];
+            activeLayer.data.map((item) => dataPoints.push(item.data[0]));
+
+            // active dataset information retrieved
+            const activeDataset = this.props.mapData.master.find((item)=> item._id === activePointLayerDataID);
+           
+            const apiPayload = {
+                "tagname": activeDataset.tagName,
+                "data_ids": dataPoints,
+                "filepath": activeDataset.file
+            }
+
+            //call the api here with this payload
+            this.props.dispatch(downloadData(apiPayload));
+
+            }else{
                 toast.error("Please do the layer selection", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 2000,
                     closeOnClick: true,
                 })
+            }
         }
     }
     render() {
