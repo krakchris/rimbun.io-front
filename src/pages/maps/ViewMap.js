@@ -78,14 +78,14 @@ class Official extends React.Component {
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)){
 
-            const activeLayer = (this.props.mapState.visState.layers.length) ?this.props.mapState.visState.layers[0] : null; // by default first layer is the point layer for chart update
+            const activeLayer = (this.props.mapState.visState.layers.length) ?this.props.mapState.visState : null; // by default first layer is the point layer for chart update
 
             // get the datasetId of PointLayer 
-            const activePointLayerDataID = activeLayer.config.dataId;
+            const activePointLayerDataID = activeLayer.layers[0].config.dataId;
 
             // get all the data id points which falls under drawn polygon
             let dataPoints = [];
-            activeLayer.data.map((item) => dataPoints.push(item.data[0]));
+            activeLayer.layerData[0].data.map((item) => dataPoints.push(item.data[0]));
 
             // active dataset information retrieved
             const activeDataset = this.props.mapData.master.find((item)=> item._id === activePointLayerDataID);
