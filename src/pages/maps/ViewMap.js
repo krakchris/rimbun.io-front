@@ -34,9 +34,14 @@ class Official extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            isChartVisible: false
-        }
+          data: [],
+          isChartVisible: false,
+          toastConfig: {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            closeOnClick: true
+          }
+        };
     }
 
 
@@ -66,15 +71,12 @@ class Official extends React.Component {
                 this.setState({ data: this.props.mapState.visState.layerData[0].data, isChartVisible: true })
             }
             else
-                toast.error("Please do the layer selection", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                })
+                toast.error("Please do the layer selection", this.state.toastConfig)
         }
     }
 
     downloadFile = () => {
+        const { toastConfig } = this.state;
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)){
 
@@ -95,16 +97,14 @@ class Official extends React.Component {
                 "data_ids": dataPoints,
                 "filepath": activeDataset.file
             }
+           
 
             //call the api here with this payload
-            this.props.dispatch(downloadData(apiPayload));
+            if (dataPoints.length) this.props.dispatch(downloadData(apiPayload));
+            else toast.error("No Points available under the layer!", toastConfig);
 
             }else{
-                toast.error("Please do the layer selection", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                })
+                toast.error("Please do the layer selection", toastConfig);
             }
         }
     }
@@ -142,32 +142,35 @@ class Official extends React.Component {
                                 : null}
                         </div>
                         {this.props.mapState ?
-                            <>
+                            <React.Fragment>
                                 <div className={s.actionContainer}>
-                                    <button onClick={this.loadChart} className={s.chartButton}>
+                                    <span onClick={this.loadChart} title="Click here to visualise Selected Data on the Charts" className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-repeat",
                                             s.alignIcons
                                         )} />
-                                        Update </button>
+                                        <b>Update</b></span>
                                 </div>
 
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
-                                    <button onClick={this.downloadFile} className={s.chartButton}>
+                                    <span title="Download Data of the selection on Map" onClick={this.downloadFile} className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-file",
                                             s.alignIcons
                                         )} />
-                                    </button>
+                                        <b>Data</b>
+                                    </span>
 
-                                    <button className={s.chartButton}>
+                                    <span title="Download Report of the selection on Map" className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-download",
                                             s.alignIcons
                                         )} />
-                                    </button>
+                                        <b>Report</b>
+                                    </span>
+                                  
                                 </div>
-                            </>
+                            </React.Fragment>
                             : null}
                     </div>
                 </div>
