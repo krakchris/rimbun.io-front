@@ -13,6 +13,10 @@ export const DOWNLOAD_DATA_REQUEST = "DOWNLOAD_DATA_REQUEST";
 export const DOWNLOAD_DATA_SUCCESS = "DOWNLOAD_DATA_SUCCESS";
 export const DOWNLOAD_DATA_FAILURE = "DOWNLOAD_DATA_FAILURE";
 
+export const DOWNLOAD_REPORT_REQUEST = "DOWNLOAD_REPORT_REQUEST";
+export const DOWNLOAD_REPORT_SUCCESS = "DOWNLOAD_REPORT_SUCCESS";
+export const DOWNLOAD_REPORT_FAILURE = "DOWNLOAD_REPORT_FAILURE";
+
 export const HIDE_SIDE_PANEL = "HIDE_SIDE_PANEL";
 export const SAVE_CONFIG_REQUEST = "SAVE_CONFIG_REQUEST";
 export const SAVE_CONFIG_SUCCESS = "SAVE_CONFIG_SUCCESS";
@@ -273,6 +277,62 @@ export function downloadData(data) {
           draggable: true
         });
         dispatch(downloadDataFail());
+      });
+  }
+
+}
+
+
+/******************************** Download Report ***********************************/
+function requestDownloadReport() {
+  return {
+    type: DOWNLOAD_DATA_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function downloadReportSucess(data) {
+  return {
+    type: DOWNLOAD_DATA_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function downloadReportFail(message) {
+  return {
+    type: DOWNLOAD_DATA_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function downloadReport(data) {
+
+  return dispatch => {
+    dispatch(requestDownloadReport());
+    awsApi(endPoints.downloadReport)
+      .post(data)
+      .then(response => {
+        window.location.href = response.data.dataUrl;
+        dispatch(downloadReportSucess());
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(downloadReportFail());
       });
   }
 

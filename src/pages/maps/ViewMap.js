@@ -9,7 +9,7 @@ import { wrapTo } from 'kepler.gl/actions'
 import CustomPopOverFactory from './Pop-over'
 import Chart from './chart';
 import Loader from "../../components/Loader";
-import { hideSidePanel, downloadData, getMapDataById } from "../../actions/map";
+import { hideSidePanel, downloadData, getMapDataById, downloadReport } from "../../actions/map";
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 import Icon from "../../components/Icon";
 import cx from "classnames";
@@ -65,6 +65,11 @@ class Official extends React.Component {
         this.props.history.push('/app');
     }
 
+    getTypebasedAction = (downloadType, apiPayload) => {
+        if (downloadType === 'DATA') return this.props.dispatch(downloadData(apiPayload));
+        else return this.props.dispatch(downloadReport(apiPayload));
+    }
+
     loadChart = () => {
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)) {
@@ -75,7 +80,7 @@ class Official extends React.Component {
         }
     }
 
-    downloadFile = () => {
+    downloadFile = (downloadType) => {
         const { toastConfig } = this.state;
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)){
@@ -100,7 +105,7 @@ class Official extends React.Component {
            
 
             //call the api here with this payload
-            if (dataPoints.length) this.props.dispatch(downloadData(apiPayload));
+            if (dataPoints.length) this.getTypebasedAction(downloadType, apiPayload);
             else toast.error("No Points available under the layer!", toastConfig);
 
             }else{
@@ -153,7 +158,7 @@ class Official extends React.Component {
                                 </div>
 
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
-                                    <span title="Download Data of the selection on Map" onClick={this.downloadFile} className={s.downloadButton}>
+                                    <span title="Download Data of the selection on Map" onClick={() => this.downloadFile('DATA')} className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-file",
                                             s.alignIcons
@@ -161,7 +166,7 @@ class Official extends React.Component {
                                         <b>Data</b>
                                     </span>
 
-                                    <span title="Download Report of the selection on Map" className={s.downloadButton}>
+                                    <span title="Download Report of the selection on Map" className={s.downloadButton} onClick={() => this.downloadFile('REPORT')}>
                                         <i className={cx(
                                             "glyphicon glyphicon-download",
                                             s.alignIcons

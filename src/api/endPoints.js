@@ -9,5 +9,6 @@ export default {
   saveMapConfig: "map",
   deleteMap: "map",
   shareMap: "map/share",
-  downloadData: "api/download/data"
+  downloadData: "api/download/data",
+  downloadReport: "api/download/report"
 };
