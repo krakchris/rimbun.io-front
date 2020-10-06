@@ -1,0 +1,22 @@
+ @import '../../styles/app';
+
+ .root {
+   // some styles
+   .loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 999999;
+   }
+   .cover {
+    position:fixed;
+    width:100%;
+    left:0;right:0;top:0;bottom:0;
+    background-color: rgba(255,255,255,0.7);
+    z-index:999;
+    display:block;
+  }
+
+
+}
+ 

@@ -1,0 +1,37 @@
+
+@import '../../styles/app';
+
+.MapContainer {
+  position: "absolute";
+  width: "100%";
+  height: "100%";
+}
+
+
+ .btnMargin {
+    margin-left:5%;
+  }
+  .backFooter {
+    margin-top:70%;
+    margin-left:60%;
+  }
+
+
+/* to  hide add button*/
+.shaRW {
+  display:none;
+}
+
+.keplerLogo img {
+  width: 50%;
+}
+
+.keplerLogo span {
+  color: white;
+  margin-left: 2%;
+}
+/* to customize 3-d panel, split view*/
+.GZqxj {
+  margin-right:249px;
+}
+
