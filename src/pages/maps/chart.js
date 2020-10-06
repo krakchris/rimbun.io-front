@@ -81,7 +81,11 @@ class Chart extends React.PureComponent {
             }];
 
 
-        } 
+        }else{
+            toast.error("No Points available under the layer!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
         
         const green_area_layout = {
             autosize: true,

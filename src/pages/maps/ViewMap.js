@@ -9,8 +9,7 @@ import { wrapTo } from 'kepler.gl/actions'
 import CustomPopOverFactory from './Pop-over'
 import Chart from './chart';
 import Loader from "../../components/Loader";
-import { getMapDataById } from '../../actions/map'
-import { hideSidePanel } from '../../actions/map';
+import { hideSidePanel, downloadData, getMapDataById, downloadReport } from "../../actions/map";
 import { MAPBOX_ACCESS_TOKEN, VIEW_MAP_INSTANCE_ID } from '../../constants/mapConstant';
 import Icon from "../../components/Icon";
 import cx from "classnames";
@@ -35,9 +34,14 @@ class Official extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            isChartVisible: false
-        }
+          data: [],
+          isChartVisible: false,
+          toastConfig: {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            closeOnClick: true
+          }
+        };
     }
 
 
@@ -61,30 +65,52 @@ class Official extends React.Component {
         this.props.history.push('/app');
     }
 
+    getTypebasedAction = (downloadType, apiPayload) => {
+        if (downloadType === 'DATA') return this.props.dispatch(downloadData(apiPayload));
+        else return this.props.dispatch(downloadReport(apiPayload));
+    }
+
     loadChart = () => {
         if (this.props.mapState) {
             if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)) {
                 this.setState({ data: this.props.mapState.visState.layerData[0].data, isChartVisible: true })
             }
             else
-                toast.error("Please do the layer selection", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                })
+                toast.error("Please do the layer selection", this.state.toastConfig)
         }
     }
 
-    downloadFile = () => {
+    downloadFile = (downloadType) => {
+        const { toastConfig } = this.state;
         if (this.props.mapState) {
-            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0))
-                console.log('downLoad File', this.props.mapState.visState)
-            else
-                toast.error("Please do the layer selection", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    closeOnClick: true,
-                })
+            if ((!isEmpty(this.props.mapState.visState.editor.selectedFeature) && this.props.mapState.visState.editor.features.length == 0)){
+
+            const activeLayer = (this.props.mapState.visState.layers.length) ?this.props.mapState.visState : null; // by default first layer is the point layer for chart update
+
+            // get the datasetId of PointLayer 
+            const activePointLayerDataID = activeLayer.layers[0].config.dataId;
+
+            // get all the data id points which falls under drawn polygon
+            let dataPoints = [];
+            activeLayer.layerData[0].data.map((item) => dataPoints.push(item.data[0]));
+
+            // active dataset information retrieved
+            const activeDataset = this.props.mapData.master.find((item)=> item._id === activePointLayerDataID);
+           
+            const apiPayload = {
+                "tagname": activeDataset.tagName,
+                "data_ids": dataPoints,
+                "filepath": activeDataset.file
+            }
+           
+
+            //call the api here with this payload
+            if (dataPoints.length) this.getTypebasedAction(downloadType, apiPayload);
+            else toast.error("No Points available under the layer!", toastConfig);
+
+            }else{
+                toast.error("Please do the layer selection", toastConfig);
+            }
         }
     }
     render() {
@@ -121,32 +147,35 @@ class Official extends React.Component {
                                 : null}
                         </div>
                         {this.props.mapState ?
-                            <>
+                            <React.Fragment>
                                 <div className={s.actionContainer}>
-                                    <button onClick={this.loadChart} className={s.chartButton}>
+                                    <span onClick={this.loadChart} title="Click here to visualise Selected Data on the Charts" className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-repeat",
                                             s.alignIcons
                                         )} />
-                                        Update </button>
+                                        <b>Update</b></span>
                                 </div>
 
                                 <div style={{ display: 'flex', justifyContent: 'space-around', background: '#ffe1e0' }}>
-                                    <button onClick={this.downloadFile} className={s.chartButton}>
+                                    <span title="Download Data of the selection on Map" onClick={() => this.downloadFile('DATA')} className={s.downloadButton}>
                                         <i className={cx(
                                             "glyphicon glyphicon-file",
                                             s.alignIcons
                                         )} />
-                                    </button>
+                                        <b>Data</b>
+                                    </span>
 
-                                    <button className={s.chartButton}>
+                                    <span title="Download Report of the selection on Map" className={s.downloadButton} onClick={() => this.downloadFile('REPORT')}>
                                         <i className={cx(
                                             "glyphicon glyphicon-download",
                                             s.alignIcons
                                         )} />
-                                    </button>
+                                        <b>Report</b>
+                                    </span>
+                                  
                                 </div>
-                            </>
+                            </React.Fragment>
                             : null}
                     </div>
                 </div>

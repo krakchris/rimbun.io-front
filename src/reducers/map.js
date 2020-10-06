@@ -4,8 +4,13 @@ import {
   MAP_FAILURE,
   SAVE_CONFIG_REQUEST,
   SAVE_CONFIG_SUCCESS,
-  SAVE_CONFIG_FAILURE
-
+  SAVE_CONFIG_FAILURE,
+  DOWNLOAD_DATA_REQUEST,
+  DOWNLOAD_DATA_SUCCESS,
+  DOWNLOAD_DATA_FAILURE,
+  DOWNLOAD_REPORT_REQUEST,
+  DOWNLOAD_REPORT_SUCCESS,
+  DOWNLOAD_REPORT_FAILURE
 } from "../actions/map";
 
 export default function (state = {
@@ -37,13 +42,43 @@ export default function (state = {
         return Object.assign({}, state, {
           isFetching: true
         });
-        case SAVE_CONFIG_SUCCESS:
+      case SAVE_CONFIG_SUCCESS:
         return Object.assign({}, state, {
           isFetching: false,
           tagNames: action.data,
           errorMessage: null
         });
-        case SAVE_CONFIG_FAILURE:
+      case SAVE_CONFIG_FAILURE:
+        return Object.assign({}, state, {
+          isFetching: false,
+          isError: true,
+          errorMessage: action.message
+        });
+      case DOWNLOAD_DATA_REQUEST:
+        return Object.assign({}, state, {
+          isFetching: true
+        });
+      case DOWNLOAD_DATA_SUCCESS:
+        return Object.assign({}, state, {
+          isFetching: false,
+          errorMessage: null
+        });
+      case DOWNLOAD_DATA_FAILURE:
+        return Object.assign({}, state, {
+          isFetching: false,
+          isError: true,
+          errorMessage: action.message
+        });
+      case DOWNLOAD_REPORT_REQUEST:
+        return Object.assign({}, state, {
+          isFetching: true
+        });
+      case DOWNLOAD_REPORT_SUCCESS:
+        return Object.assign({}, state, {
+          isFetching: false,
+          errorMessage: null
+        });
+      case DOWNLOAD_REPORT_FAILURE:
         return Object.assign({}, state, {
           isFetching: false,
           isError: true,

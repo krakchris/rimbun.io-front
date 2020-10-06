@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import api, { endPoints } from "../api";
+import api, { endPoints, awsApi } from "../api";
 import { request } from 'd3-request';
 import { updateMap } from 'kepler.gl/actions';
 
@@ -8,6 +8,14 @@ import { S3_BUCKET_URL } from '../constants';
 export const MAP_REQUEST = "MAP_REQUEST";
 export const MAP_SUCCESS = "MAP_SUCCESS";
 export const MAP_FAILURE = "MAP_FAILURE";
+
+export const DOWNLOAD_DATA_REQUEST = "DOWNLOAD_DATA_REQUEST";
+export const DOWNLOAD_DATA_SUCCESS = "DOWNLOAD_DATA_SUCCESS";
+export const DOWNLOAD_DATA_FAILURE = "DOWNLOAD_DATA_FAILURE";
+
+export const DOWNLOAD_REPORT_REQUEST = "DOWNLOAD_REPORT_REQUEST";
+export const DOWNLOAD_REPORT_SUCCESS = "DOWNLOAD_REPORT_SUCCESS";
+export const DOWNLOAD_REPORT_FAILURE = "DOWNLOAD_REPORT_FAILURE";
 
 export const HIDE_SIDE_PANEL = "HIDE_SIDE_PANEL";
 export const SAVE_CONFIG_REQUEST = "SAVE_CONFIG_REQUEST";
@@ -198,9 +206,8 @@ function prepareKeplerData(data) {
   Promise.all(finalData)
     .then((res) => {
       dispatch(loadRemoteResourceSuccess({ dataset, config, mapInstanceId }))
-      dispatch(mapDataSucess({ mapId, name }));
+      dispatch(mapDataSucess({ mapId, name, master  }));
       if(config && config.config) dispatch(updateMap(config.config.mapState));
-
     })
     .catch(error => {
       const errorMessage = error.response
@@ -215,4 +222,118 @@ function prepareKeplerData(data) {
       });
       dispatch(mapDataFail());
     });
+}
+
+
+
+
+/******************************** Download Data ***********************************/
+function requestDownloadData() {
+  return {
+    type: DOWNLOAD_DATA_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function downloadDataSucess(data) {
+  return {
+    type: DOWNLOAD_DATA_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function downloadDataFail(message) {
+  return {
+    type: DOWNLOAD_DATA_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function downloadData(data) {
+
+  return dispatch => {
+    dispatch(requestDownloadData());
+    awsApi(endPoints.downloadData)
+      .post(data)
+      .then(response => {
+        window.location.href = response.data.dataUrl;
+        dispatch(downloadDataSucess());
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(downloadDataFail());
+      });
+  }
+
+}
+
+
+/******************************** Download Report ***********************************/
+function requestDownloadReport() {
+  return {
+    type: DOWNLOAD_DATA_REQUEST,
+    isFetching: true,
+    isError: false,
+  };
+}
+
+export function downloadReportSucess(data) {
+  return {
+    type: DOWNLOAD_DATA_SUCCESS,
+    isFetching: false,
+    isError: false,
+    data
+  };
+}
+
+function downloadReportFail(message) {
+  return {
+    type: DOWNLOAD_DATA_FAILURE,
+    isFetching: false,
+    isError: true,
+    message
+  };
+}
+
+
+export function downloadReport(data) {
+
+  return dispatch => {
+    dispatch(requestDownloadReport());
+    awsApi(endPoints.downloadReport)
+      .post(data)
+      .then(response => {
+        window.location.href = response.data.dataUrl;
+        dispatch(downloadReportSucess());
+      })
+      .catch(error => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Server error Occurred";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true
+        });
+        dispatch(downloadReportFail());
+      });
+  }
+
 }
